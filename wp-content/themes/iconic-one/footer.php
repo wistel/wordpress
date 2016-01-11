@@ -21,5 +21,15 @@
 </div><!-- #page -->
 
 <?php wp_footer(); ?>
+<script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<!-- 2016 -->
+<ins class="adsbygoogle"
+     style="display:block"
+     data-ad-client="ca-pub-6477915256609367"
+     data-ad-slot="8879004337"
+     data-ad-format="auto"></ins>
+<script>
+    (adsbygoogle = window.adsbygoogle || []).push({});
+</script>
 </body>
 </html>
