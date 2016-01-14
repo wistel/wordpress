@@ -1,0 +1,398 @@
+<?xml version="1.0"?>
+<tables>
+    <adminnotification_inbox> official notification records</adminnotification_inbox>
+    <admin_assert>admin assert</admin_assert>
+    <admin_role>role in backend</admin_role>
+    <admin_rule>ACL resources in backend</admin_rule>
+    <admin_user>user in backend</admin_user>
+    <affiliate_admin_user>affiliate admin user</affiliate_admin_user>
+    <affiliate_sales>affiliate sales</affiliate_sales>
+    <affiliate_user>affiliate user</affiliate_user>
+    <affiliate_visitor>affiliate visitor</affiliate_visitor>
+    <api2_acl_attribute>api2 acl attribute</api2_acl_attribute>
+    <api2_acl_role>api2 acl role</api2_acl_role>
+    <api2_acl_rule>api2 acl rule</api2_acl_rule>
+    <api2_acl_user>api2 acl user</api2_acl_user>
+    <api_assert>api assert</api_assert>
+    <api_role>api role</api_role>
+    <api_rule>api rule</api_rule>
+    <api_session>api session</api_session>
+    <api_user>api user</api_user>
+    <aw_blog>aheadworks blog</aw_blog>
+    <aw_blog_cat>aheadworks blog cat</aw_blog_cat>
+    <aw_blog_cat_store>aheadworks blog cat store</aw_blog_cat_store>
+    <aw_blog_comment>aheadworks blog comment</aw_blog_comment>
+    <aw_blog_post_cat>aheadworks blog post cat</aw_blog_post_cat>
+    <aw_blog_store>aheadworks blog store</aw_blog_store>
+    <aw_blog_tags>aheadworks blog tags</aw_blog_tags>
+    <belvg_facebook_customer>belvg facebook customer</belvg_facebook_customer>
+    <block_store>block ID for store ID</block_store>
+    <captcha_log>captcha log</captcha_log>
+    <catalogindex_eav>catalog indexer Entity-Attribute-Value Model</catalogindex_eav>
+    <catalogindex_minimal_price>catalog indexer minimal price</catalogindex_minimal_price>
+    <catalogindex_price>catalog indexer price</catalogindex_price>
+    <cataloginventory_stock>catalog inventory stock value</cataloginventory_stock>
+    <cataloginventory_stock_item>catalog inventory stock item</cataloginventory_stock_item>
+    <cataloginventory_stock_status>catalog inventory stock status</cataloginventory_stock_status>
+    <cataloginventory_stock_status_idx>catalog inventory stock status idx</cataloginventory_stock_status_idx>
+    <cataloginventory_stock_status_tmp>catalog inventory stock status tmp</cataloginventory_stock_status_tmp>
+    <catalogrule>catalog rule</catalogrule>
+    <catalogrule_affected_product>catalog rule affected product</catalogrule_affected_product>
+    <catalogrule_group_website>catalog rule group website</catalogrule_group_website>
+    <catalogrule_product>catalog rule product</catalogrule_product>
+    <catalogrule_product_price>catalog rule product price</catalogrule_product_price>
+    <catalogrule_website>catalog rule website</catalogrule_website>
+    <catalogsearch_fulltext>catalog search fulltext(Catalog Search indexer generation)</catalogsearch_fulltext>
+    <catalogsearch_query>catalog search query</catalogsearch_query>
+    <catalogsearch_result>catalog search result</catalogsearch_result>
+    <catalog_category_anc_categs_index_idx>catalog category anc categs index idx</catalog_category_anc_categs_index_idx>
+    <catalog_category_anc_categs_index_tmp>catalog category anc categs index tmp</catalog_category_anc_categs_index_tmp>
+    <catalog_category_anc_products_index_idx>catalog category anc products index idx</catalog_category_anc_products_index_idx>
+    <catalog_category_anc_products_index_tmp>catalog category anc products index tmp</catalog_category_anc_products_index_tmp>
+    <catalog_category_entity>This table contains information about category entities.</catalog_category_entity>
+    <catalog_category_entity_datetime>Values of category attributes with the datatype “datetime”.</catalog_category_entity_datetime>
+    <catalog_category_entity_decimal> Values of category attributes with a floating point number content.</catalog_category_entity_decimal>
+    <catalog_category_entity_int>Values of category attributes with the datatype “integer”.</catalog_category_entity_int>
+    <catalog_category_entity_text>Values of category attributes with the datatype “text” (unlimited string).</catalog_category_entity_text>
+    <catalog_category_entity_varchar> Values of category attributes with the datatype “varchar” (limited string, maximum 255 characters)</catalog_category_entity_varchar>
+    <catalog_category_flat_store_1>catalog category flat store 1</catalog_category_flat_store_1>
+    <catalog_category_product>Connection beween category entity and product entity</catalog_category_product>
+    <catalog_category_product_index>Setting the store of category/product-connection</catalog_category_product_index>
+    <catalog_category_product_index_enbl_idx>catalog category product index enbl idx</catalog_category_product_index_enbl_idx>
+    <catalog_category_product_index_enbl_tmp>catalog category product index enbl tmp</catalog_category_product_index_enbl_tmp>
+    <catalog_category_product_index_idx>catalog category product index idx</catalog_category_product_index_idx>
+    <catalog_category_product_index_tmp>catalog category product index tmp</catalog_category_product_index_tmp>
+    <catalog_compare_item>catalog compare item</catalog_compare_item>
+    <catalog_eav_attribute>catalog eav attribute</catalog_eav_attribute>
+    <catalog_product_bundle_option>Bundleitems/-options of a product entity (producttype is bundle-product)</catalog_product_bundle_option>
+    <catalog_product_bundle_option_value>Naming of a bundleitem/-option.</catalog_product_bundle_option_value>
+    <catalog_product_bundle_price_index>catalog product bundle price index</catalog_product_bundle_price_index>
+    <catalog_product_bundle_selection>Bundlecombinations</catalog_product_bundle_selection>
+    <catalog_product_bundle_selection_price>catalog product bundle selection price</catalog_product_bundle_selection_price>
+    <catalog_product_bundle_stock_index>Stock values of bundleproducts.</catalog_product_bundle_stock_index>
+    <catalog_product_enabled_index>Defines the visibility status of a product entity in the Magento stores</catalog_product_enabled_index>
+    <catalog_product_entity>This table contains information about product entities.</catalog_product_entity>
+    <catalog_product_entity_datetime> Values of product attributes with the datatype “datetime”</catalog_product_entity_datetime>
+    <catalog_product_entity_decimal>Values of product attributes with a floating point number content.</catalog_product_entity_decimal>
+    <catalog_product_entity_gallery>catalog product entity pic</catalog_product_entity_gallery>
+    <catalog_product_entity_group_price> Values of product attributes with the datatype “integer”.</catalog_product_entity_group_price>
+    <catalog_product_entity_int>Values of product attributes with the datatype “integer”.</catalog_product_entity_int>
+    <catalog_product_entity_media_gallery> Linking of images to a specified product entity based on the attribute_id.</catalog_product_entity_media_gallery>
+    <catalog_product_entity_media_gallery_value>Defines the position and the visibility of a product-media.</catalog_product_entity_media_gallery_value>
+    <catalog_product_entity_text>Values of product attributes with the datatype “text” (unlimited string).</catalog_product_entity_text>
+    <catalog_product_entity_tier_price>Values of product tier prices. The datatype is a floating point number.</catalog_product_entity_tier_price>
+    <catalog_product_entity_varchar>Values of product attributes with the datatype “varchar” (limited string, maximum 255 characters).</catalog_product_entity_varchar>
+    <catalog_product_flat_1>catalog product flat 1</catalog_product_flat_1>
+    <catalog_product_index_eav>catalog product index eav</catalog_product_index_eav>
+    <catalog_product_index_eav_decimal>catalog product index eav decimal</catalog_product_index_eav_decimal>
+    <catalog_product_index_eav_decimal_idx>catalog product index eav decimal idx</catalog_product_index_eav_decimal_idx>
+    <catalog_product_index_eav_decimal_tmp>catalog product index eav decimal tmp</catalog_product_index_eav_decimal_tmp>
+    <catalog_product_index_eav_idx>catalog product index eav idx</catalog_product_index_eav_idx>
+    <catalog_product_index_eav_tmp>catalog product index eav tmp</catalog_product_index_eav_tmp>
+    <catalog_product_index_group_price>catalog product index group price</catalog_product_index_group_price>
+    <catalog_product_index_price>catalog product index price</catalog_product_index_price>
+    <catalog_product_index_price_bundle_idx>catalog product index price bundle idx</catalog_product_index_price_bundle_idx>
+    <catalog_product_index_price_bundle_opt_idx>catalog product index price bundle opt idx</catalog_product_index_price_bundle_opt_idx>
+    <catalog_product_index_price_bundle_opt_tmp>catalog product index price bundle opt tmp</catalog_product_index_price_bundle_opt_tmp>
+    <catalog_product_index_price_bundle_sel_idx>catalog product index price bundle sel idx</catalog_product_index_price_bundle_sel_idx>
+    <catalog_product_index_price_bundle_sel_tmp>catalog product index price bundle sel tmp</catalog_product_index_price_bundle_sel_tmp>
+    <catalog_product_index_price_bundle_tmp>catalog product index price bundle tmp</catalog_product_index_price_bundle_tmp>
+    <catalog_product_index_price_cfg_opt_agr_idx>catalog product index price cfg opt agr idx</catalog_product_index_price_cfg_opt_agr_idx>
+    <catalog_product_index_price_cfg_opt_agr_tmp>catalog product index price cfg opt agr tmp</catalog_product_index_price_cfg_opt_agr_tmp>
+    <catalog_product_index_price_cfg_opt_idx>catalog product index price cfg opt idx</catalog_product_index_price_cfg_opt_idx>
+    <catalog_product_index_price_cfg_opt_tmp>catalog product index price cfg opt tmp</catalog_product_index_price_cfg_opt_tmp>
+    <catalog_product_index_price_downlod_idx>catalog product index price downlod idx</catalog_product_index_price_downlod_idx>
+    <catalog_product_index_price_downlod_tmp>catalog product index price downlod tmp</catalog_product_index_price_downlod_tmp>
+    <catalog_product_index_price_final_idx>catalog product index price final idx</catalog_product_index_price_final_idx>
+    <catalog_product_index_price_final_tmp>catalog product index price final tmp</catalog_product_index_price_final_tmp>
+    <catalog_product_index_price_idx>catalog product index price idx</catalog_product_index_price_idx>
+    <catalog_product_index_price_opt_agr_idx>catalog product index price opt agr idx</catalog_product_index_price_opt_agr_idx>
+    <catalog_product_index_price_opt_agr_tmp>catalog product index price opt agr tmp</catalog_product_index_price_opt_agr_tmp>
+    <catalog_product_index_price_opt_idx>catalog product index price opt idx</catalog_product_index_price_opt_idx>
+    <catalog_product_index_price_opt_tmp>catalog product index price opt tmp</catalog_product_index_price_opt_tmp>
+    <catalog_product_index_price_tmp>catalog product index price tmp</catalog_product_index_price_tmp>
+    <catalog_product_index_tier_price>catalog product index tier price</catalog_product_index_tier_price>
+    <catalog_product_index_website>catalog product index website</catalog_product_index_website>
+    <catalog_product_link>catalog product link</catalog_product_link>
+    <catalog_product_link_attribute>catalog product link attribute</catalog_product_link_attribute>
+    <catalog_product_link_attribute_decimal>catalog product link attribute decimal</catalog_product_link_attribute_decimal>
+    <catalog_product_link_attribute_int>catalog product link attribute int</catalog_product_link_attribute_int>
+    <catalog_product_link_attribute_varchar>catalog product link attribute varchar</catalog_product_link_attribute_varchar>
+    <catalog_product_link_type>catalog product link type</catalog_product_link_type>
+    <catalog_product_option>catalog product option</catalog_product_option>
+    <catalog_product_option_price>catalog product option price</catalog_product_option_price>
+    <catalog_product_option_title>catalog product option title</catalog_product_option_title>
+    <catalog_product_option_type_price>catalog product option type price</catalog_product_option_type_price>
+    <catalog_product_option_type_title>catalog product option type title</catalog_product_option_type_title>
+    <catalog_product_option_type_value>catalog product option type value</catalog_product_option_type_value>
+    <catalog_product_relation>catalog product relation</catalog_product_relation>
+    <catalog_product_super_attribute>catalog product super attribute</catalog_product_super_attribute>
+    <catalog_product_super_attribute_label>catalog product super attribute label</catalog_product_super_attribute_label>
+    <catalog_product_super_attribute_pricing>catalog product super attribute pricing</catalog_product_super_attribute_pricing>
+    <catalog_product_super_link>catalog product super link</catalog_product_super_link>
+    <catalog_product_website>catalog product website</catalog_product_website>
+    <checkout_agreement>checkout agreement</checkout_agreement>
+    <checkout_agreement_store>checkout agreement store</checkout_agreement_store>
+    <cms_block>cms block</cms_block>
+    <cms_block_store>cms block store</cms_block_store>
+    <cms_page>cms page</cms_page>
+    <cms_page_store>cms page store</cms_page_store>
+    <contacts>contacts</contacts>
+    <contacts_feedback>contacts feedback</contacts_feedback>
+    <core_cache>core cache</core_cache>
+    <core_cache_option>core cache option</core_cache_option>
+    <core_cache_tag>core cache tag</core_cache_tag>
+    <core_config_data>core config data</core_config_data>
+    <core_config_data_bak>core config data bak</core_config_data_bak>
+    <core_email_template>core email template</core_email_template>
+    <core_flag>core flag</core_flag>
+    <core_layout_link>core layout link</core_layout_link>
+    <core_layout_update>core layout update</core_layout_update>
+    <core_resource>Value of module version</core_resource>
+    <core_session>core session</core_session>
+    <core_store>core store</core_store>
+    <core_store_group>core store group</core_store_group>
+    <core_translate>core translate</core_translate>
+    <core_url_rewrite>core url rewrite</core_url_rewrite>
+    <core_url_rewrite_new>core url rewrite new</core_url_rewrite_new>
+    <core_variable>core variable</core_variable>
+    <core_variable_value>core variable value</core_variable_value>
+    <core_website>core website</core_website>
+    <coupon_aggregated>coupon aggregated</coupon_aggregated>
+    <coupon_aggregated_order>coupon aggregated order</coupon_aggregated_order>
+    <coupon_aggregated_updated>coupon aggregated updated</coupon_aggregated_updated>
+    <cron_schedule>cron schedule</cron_schedule>
+    <customer_address_entity>customer address entity</customer_address_entity>
+    <customer_address_entity_datetime>customer address entity datetime</customer_address_entity_datetime>
+    <customer_address_entity_decimal>customer address entity decimal</customer_address_entity_decimal>
+    <customer_address_entity_int>customer address entity int</customer_address_entity_int>
+    <customer_address_entity_text>customer address entity text</customer_address_entity_text>
+    <customer_address_entity_varchar>customer address entity varchar</customer_address_entity_varchar>
+    <customer_eav_attribute>customer eav attribute</customer_eav_attribute>
+    <customer_eav_attribute_website>customer eav attribute website</customer_eav_attribute_website>
+    <customer_entity>customer entity</customer_entity>
+    <customer_entity_datetime>customer entity datetime</customer_entity_datetime>
+    <customer_entity_decimal>customer entity decimal</customer_entity_decimal>
+    <customer_entity_int>customer entity int</customer_entity_int>
+    <customer_entity_text>customer entity text</customer_entity_text>
+    <customer_entity_varchar>customer entity varchar</customer_entity_varchar>
+    <customer_form_attribute>customer form attribute</customer_form_attribute>
+    <customer_group>customer group</customer_group>
+    <dataflow_batch>dataflow batch</dataflow_batch>
+    <dataflow_batch_export>dataflow batch export</dataflow_batch_export>
+    <dataflow_batch_import>dataflow batch import</dataflow_batch_import>
+    <dataflow_import_data>dataflow import data</dataflow_import_data>
+    <dataflow_profile>dataflow profile</dataflow_profile>
+    <dataflow_profile_history>dataflow profile history</dataflow_profile_history>
+    <dataflow_session>dataflow session</dataflow_session>
+    <design_change>design change</design_change>
+    <directory_country>directory country</directory_country>
+    <directory_country_format>directory country format</directory_country_format>
+    <directory_country_region>directory country region</directory_country_region>
+    <directory_country_region_name>directory country region name</directory_country_region_name>
+    <directory_currency_rate>directory currency rate</directory_currency_rate>
+    <downloadable_link>downloadable link</downloadable_link>
+    <downloadable_link_price>downloadable link price</downloadable_link_price>
+    <downloadable_link_purchased>downloadable link purchased</downloadable_link_purchased>
+    <downloadable_link_purchased_item>downloadable link purchased item</downloadable_link_purchased_item>
+    <downloadable_link_title>downloadable link title</downloadable_link_title>
+    <downloadable_sample>downloadable sample</downloadable_sample>
+    <downloadable_sample_title>downloadable sample title</downloadable_sample_title>
+    <eav_attribute>eav attribute</eav_attribute>
+    <eav_attribute_group>eav attribute group</eav_attribute_group>
+    <eav_attribute_label>eav attribute label</eav_attribute_label>
+    <eav_attribute_option>eav attribute option</eav_attribute_option>
+    <eav_attribute_option_value>eav attribute option value</eav_attribute_option_value>
+    <eav_attribute_set>eav attribute set</eav_attribute_set>
+    <eav_entity>eav entity</eav_entity>
+    <eav_entity_attribute>eav entity attribute</eav_entity_attribute>
+    <eav_entity_datetime>eav entity datetime</eav_entity_datetime>
+    <eav_entity_decimal>eav entity decimal</eav_entity_decimal>
+    <eav_entity_int>eav entity int</eav_entity_int>
+    <eav_entity_store>eav entity store</eav_entity_store>
+    <eav_entity_text>eav entity text</eav_entity_text>
+    <eav_entity_type>eav entity type</eav_entity_type>
+    <eav_entity_varchar>eav entity varchar</eav_entity_varchar>
+    <eav_form_element>eav form element</eav_form_element>
+    <eav_form_fieldset>eav form fieldset</eav_form_fieldset>
+    <eav_form_fieldset_label>eav form fieldset label</eav_form_fieldset_label>
+    <eav_form_type>eav form type</eav_form_type>
+    <eav_form_type_entity>eav form type entity</eav_form_type_entity>
+    <errorpay>errorpay</errorpay>
+    <express_rates>express rates</express_rates>
+    <fox_quote_id>fox quote id</fox_quote_id>
+    <gift_message>gift message</gift_message>
+    <globalcollect_order_sent>globalcollect order sent</globalcollect_order_sent>
+    <globalcollect_payment_method>globalcollect payment method</globalcollect_payment_method>
+    <globalcollect_payment_product>globalcollect payment product</globalcollect_payment_product>
+    <globalcollect_payment_scope>globalcollect payment scope</globalcollect_payment_scope>
+    <globalcollect_token>globalcollect token</globalcollect_token>
+    <googlecheckout_notification>googlecheckout notification</googlecheckout_notification>
+    <importexport_importdata>importexport importdata</importexport_importdata>
+    <index_event>index event</index_event>
+    <index_process>index process</index_process>
+    <index_process_event>index process event</index_process_event>
+    <log_customer>log customer</log_customer>
+    <log_quote>log quote</log_quote>
+    <log_summary>log summary</log_summary>
+    <log_summary_type>log summary type</log_summary_type>
+    <log_url>log url</log_url>
+    <log_url_info>log url info</log_url_info>
+    <log_visitor>log visitor</log_visitor>
+    <log_visitor_info>log visitor info</log_visitor_info>
+    <log_visitor_online>log visitor online</log_visitor_online>
+    <mdg_giftregistry_entity>mdg giftregistry entity</mdg_giftregistry_entity>
+    <mdg_giftregistry_type>mdg giftregistry type</mdg_giftregistry_type>
+    <newfrog_catalog_relation>newfrog catalog relation</newfrog_catalog_relation>
+    <newfrog_category_new>newfrog category new</newfrog_category_new>
+    <newfrog_clearance>newfrog clearance</newfrog_clearance>
+    <newfrog_erorreport>newfrog erorreport</newfrog_erorreport>
+    <newfrog_lover>newfrog lover</newfrog_lover>
+    <newfrog_lover_click>newfrog lover click</newfrog_lover_click>
+    <newfrog_lover_remark>newfrog lover remark</newfrog_lover_remark>
+    <newfrog_newzone_entity>newfrog newzone item(Dailyspecials Page)</newfrog_newzone_entity>
+    <newfrog_newzone_type>newfrog newzone type(Dailyspecials Page)</newfrog_newzone_type>
+    <newfrog_online_price_tmp>newfrog online price tmp</newfrog_online_price_tmp>
+    <newfrog_pricematch>newfrog pricematch</newfrog_pricematch>
+    <newfrog_Saveproduct>newfrog Saveproduct</newfrog_Saveproduct>
+    <newfrog_save_product>newfrog save product</newfrog_save_product>
+    <newfrog_wholesale>newfrog wholesale</newfrog_wholesale>
+    <newsletter_problem>newsletter problem</newsletter_problem>
+    <newsletter_queue>newsletter queue</newsletter_queue>
+    <newsletter_queue_link>newsletter queue link</newsletter_queue_link>
+    <newsletter_queue_store_link>newsletter queue store link</newsletter_queue_store_link>
+    <newsletter_subscriber>newsletter subscriber</newsletter_subscriber>
+    <newsletter_template>newsletter template</newsletter_template>
+    <oauth_consumer>oauth consumer</oauth_consumer>
+    <oauth_nonce>oauth nonce</oauth_nonce>
+    <oauth_token>oauth token</oauth_token>
+    <outofstocksubscription_info>outofstocksubscription info</outofstocksubscription_info>
+    <paypal_cert>paypal cert</paypal_cert>
+    <paypal_payment_transaction>paypal payment transaction</paypal_payment_transaction>
+    <paypal_settlement_report>paypal settlement report</paypal_settlement_report>
+    <paypal_settlement_report_row>paypal settlement report row</paypal_settlement_report_row>
+    <persistent_session>persistent session</persistent_session>
+    <poll>poll</poll>
+    <poll_store>poll store</poll_store>
+    <poll_vote>poll vote</poll_vote>
+    <product_alert_price>product alert price</product_alert_price>
+    <product_alert_stock>product alert stock</product_alert_stock>
+    <rating>rating</rating>
+    <rating_entity>rating entity</rating_entity>
+    <rating_option>rating option</rating_option>
+    <rating_option_vote>rating option vote</rating_option_vote>
+    <rating_option_vote_aggregated>rating option vote aggregated</rating_option_vote_aggregated>
+    <rating_store>rating store</rating_store>
+    <rating_title>rating title</rating_title>
+    <report_compared_product_index>report compared product index</report_compared_product_index>
+    <report_event>report event</report_event>
+    <report_event_types>report event types</report_event_types>
+    <report_viewed_product_aggregated_daily>report viewed product aggregated daily</report_viewed_product_aggregated_daily>
+    <report_viewed_product_aggregated_monthly>report viewed product aggregated monthly</report_viewed_product_aggregated_monthly>
+    <report_viewed_product_aggregated_yearly>report viewed product aggregated yearly</report_viewed_product_aggregated_yearly>
+    <report_viewed_product_index>report viewed product index</report_viewed_product_index>
+    <review>review</review>
+    <review_detail>review detail</review_detail>
+    <review_entity>review entity</review_entity>
+    <review_entity_summary>review entity summary</review_entity_summary>
+    <review_photo>review photo</review_photo>
+    <review_photo_review>review photo review</review_photo_review>
+    <review_status>review status</review_status>
+    <review_store>review store</review_store>
+    <rewardpoints_account>rewardpoints account</rewardpoints_account>
+    <rewardpoints_referral>rewardpoints referral</rewardpoints_referral>
+    <rewardpoints_rule>rewardpoints rule</rewardpoints_rule>
+    <salesrule>salesrule</salesrule>
+    <salesrule_coupon>salesrule coupon</salesrule_coupon>
+    <salesrule_coupon_usage>salesrule coupon usage</salesrule_coupon_usage>
+    <salesrule_customer>salesrule customer</salesrule_customer>
+    <salesrule_customer_group>salesrule customer group</salesrule_customer_group>
+    <salesrule_label>salesrule label</salesrule_label>
+    <salesrule_product_attribute>salesrule product attribute</salesrule_product_attribute>
+    <salesrule_website>salesrule website</salesrule_website>
+    <sales_bestsellers_aggregated_daily>sales bestsellers aggregated daily</sales_bestsellers_aggregated_daily>
+    <sales_bestsellers_aggregated_monthly>sales bestsellers aggregated monthly</sales_bestsellers_aggregated_monthly>
+    <sales_bestsellers_aggregated_yearly>sales bestsellers aggregated yearly</sales_bestsellers_aggregated_yearly>
+    <sales_billing_agreement>sales billing agreement</sales_billing_agreement>
+    <sales_billing_agreement_order>sales billing agreement order</sales_billing_agreement_order>
+    <sales_flat_creditmemo>sales flat creditmemo</sales_flat_creditmemo>
+    <sales_flat_creditmemo_comment>sales flat creditmemo comment</sales_flat_creditmemo_comment>
+    <sales_flat_creditmemo_grid>sales flat creditmemo grid</sales_flat_creditmemo_grid>
+    <sales_flat_creditmemo_item>sales flat creditmemo item</sales_flat_creditmemo_item>
+    <sales_flat_invoice>sales flat invoice</sales_flat_invoice>
+    <sales_flat_invoice_comment>sales flat invoice comment</sales_flat_invoice_comment>
+    <sales_flat_invoice_grid>sales flat invoice grid</sales_flat_invoice_grid>
+    <sales_flat_invoice_item>sales flat invoice item</sales_flat_invoice_item>
+    <sales_flat_order>sales flat order</sales_flat_order>
+    <sales_flat_order_address>sales flat order address</sales_flat_order_address>
+    <sales_flat_order_grid>sales flat order grid</sales_flat_order_grid>
+    <sales_flat_order_item>sales flat order item</sales_flat_order_item>
+    <sales_flat_order_payment>sales flat order payment</sales_flat_order_payment>
+    <sales_flat_order_status_history>sales flat order status history</sales_flat_order_status_history>
+    <sales_flat_quote>sales flat quote</sales_flat_quote>
+    <sales_flat_quote_address>sales flat quote address</sales_flat_quote_address>
+    <sales_flat_quote_address_item>sales flat quote address item</sales_flat_quote_address_item>
+    <sales_flat_quote_item>sales flat quote item</sales_flat_quote_item>
+    <sales_flat_quote_item_option>sales flat quote item option</sales_flat_quote_item_option>
+    <sales_flat_quote_payment>sales flat quote payment</sales_flat_quote_payment>
+    <sales_flat_quote_shipping_rate>sales flat quote shipping rate</sales_flat_quote_shipping_rate>
+    <sales_flat_shipment>sales flat shipment</sales_flat_shipment>
+    <sales_flat_shipment_comment>sales flat shipment comment</sales_flat_shipment_comment>
+    <sales_flat_shipment_grid>sales flat shipment grid</sales_flat_shipment_grid>
+    <sales_flat_shipment_item>sales flat shipment item</sales_flat_shipment_item>
+    <sales_flat_shipment_track>sales flat shipment track</sales_flat_shipment_track>
+    <sales_invoiced_aggregated>sales invoiced aggregated</sales_invoiced_aggregated>
+    <sales_invoiced_aggregated_order>sales invoiced aggregated order</sales_invoiced_aggregated_order>
+    <sales_order_aggregated_created>sales order aggregated created</sales_order_aggregated_created>
+    <sales_order_aggregated_updated>sales order aggregated updated</sales_order_aggregated_updated>
+    <sales_order_status>sales order status</sales_order_status>
+    <sales_order_status_label>sales order status label</sales_order_status_label>
+    <sales_order_status_state>sales order status state</sales_order_status_state>
+    <sales_order_tax>sales order tax</sales_order_tax>
+    <sales_order_tax_item>sales order tax item</sales_order_tax_item>
+    <sales_payment_transaction>sales payment transaction</sales_payment_transaction>
+    <sales_recurring_profile>sales recurring profile</sales_recurring_profile>
+    <sales_recurring_profile_order>sales recurring profile order</sales_recurring_profile_order>
+    <sales_refunded_aggregated>sales refunded aggregated</sales_refunded_aggregated>
+    <sales_refunded_aggregated_order>sales refunded aggregated order</sales_refunded_aggregated_order>
+    <sales_shipping_aggregated>sales shipping aggregated</sales_shipping_aggregated>
+    <sales_shipping_aggregated_order>sales shipping aggregated order</sales_shipping_aggregated_order>
+    <sendfriend_log>sendfriend log</sendfriend_log>
+    <Sheet2>Sheet2</Sheet2>
+    <shipping_tablerate>shipping tablerate</shipping_tablerate>
+    <sitemap>sitemap</sitemap>
+    <smtppro_email_log>smtppro email log</smtppro_email_log>
+    <tag>tag</tag>
+    <tag_properties>tag properties</tag_properties>
+    <tag_relation>tag relation</tag_relation>
+    <tag_summary>tag summary</tag_summary>
+    <tax_calculation>tax calculation</tax_calculation>
+    <tax_calculation_rate>tax calculation rate</tax_calculation_rate>
+    <tax_calculation_rate_title>tax calculation rate title</tax_calculation_rate_title>
+    <tax_calculation_rule>tax calculation rule</tax_calculation_rule>
+    <tax_class>tax class</tax_class>
+    <tax_order_aggregated_created>tax order aggregated created</tax_order_aggregated_created>
+    <tax_order_aggregated_updated>tax order aggregated updated</tax_order_aggregated_updated>
+    <tmp_customer_log>tmp customer log</tmp_customer_log>
+    <tmp_price>tmp price</tmp_price>
+    <ueb_newfrog_lover>ueb newfrog lover</ueb_newfrog_lover>
+    <ueb_newfrog_lover_click>ueb newfrog lover click</ueb_newfrog_lover_click>
+    <ueb_newfrog_lover_remark>ueb newfrog lover remark</ueb_newfrog_lover_remark>
+    <vakind_search_categories>vakind search categories</vakind_search_categories>
+    <vakind_search_items>vakind search items</vakind_search_items>
+    <vakind_temporary_hot_result>vakind temporary hot result</vakind_temporary_hot_result>
+    <weee_discount>weee discount</weee_discount>
+    <weee_tax>weee tax</weee_tax>
+    <widget>widget</widget>
+    <widget_instance>widget instance</widget_instance>
+    <widget_instance_page>widget instance page</widget_instance_page>
+    <widget_instance_page_layout>widget instance page layout</widget_instance_page_layout>
+    <wishlist>wishlist</wishlist>
+    <wishlist_item>wishlist item</wishlist_item>
+    <wishlist_item_option>wishlist item option</wishlist_item_option>
+    <xmlconnect_application>xmlconnect application</xmlconnect_application>
+    <xmlconnect_config_data>xmlconnect config data</xmlconnect_config_data>
+    <xmlconnect_history>xmlconnect history</xmlconnect_history>
+    <xmlconnect_notification_template>xmlconnect notification template</xmlconnect_notification_template>
+    <xmlconnect_queue>xmlconnect queue</xmlconnect_queue>
+</tables>
