@@ -1,12 +1,13 @@
 -- phpMyAdmin SQL Dump
--- version 4.4.4
+-- version 4.4.15.2
 -- http://www.phpmyadmin.net
 --
 -- Host: localhost
--- Generation Time: 2016-01-13 07:51:33
--- 服务器版本： 5.6.24
+-- Generation Time: 2016-01-18 01:20:47
+-- 服务器版本： 5.6.28
 -- PHP Version: 5.4.16
 
+SET FOREIGN_KEY_CHECKS=0;
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 SET time_zone = "+00:00";
 
@@ -14,10 +15,10 @@ SET time_zone = "+00:00";
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
 /*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
-/*!40101 SET NAMES utf8 */;
+/*!40101 SET NAMES utf8mb4 */;
 
 --
--- Database: `newfrog`
+-- Database: `mce17`
 --
 
 -- --------------------------------------------------------
@@ -45,7 +46,7 @@ CREATE TABLE IF NOT EXISTS `adminnotification_inbox` (
 
 CREATE TABLE IF NOT EXISTS `admin_assert` (
   `assert_id` int(10) unsigned NOT NULL COMMENT 'Assert ID',
-  `assert_type` varchar(20) DEFAULT NULL COMMENT 'Assert Type',
+  `assert_type` varchar(20) NOT NULL COMMENT 'Assert Type',
   `assert_data` text COMMENT 'Assert Data'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='Admin Assert Table';
 
@@ -62,7 +63,7 @@ CREATE TABLE IF NOT EXISTS `admin_role` (
   `sort_order` smallint(5) unsigned NOT NULL DEFAULT '0' COMMENT 'Role Sort Order',
   `role_type` varchar(1) NOT NULL DEFAULT '0' COMMENT 'Role Type',
   `user_id` int(10) unsigned NOT NULL DEFAULT '0' COMMENT 'User ID',
-  `role_name` varchar(50) DEFAULT NULL COMMENT 'Role Name'
+  `role_name` varchar(50) NOT NULL COMMENT 'Role Name'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='Admin Role Table';
 
 -- --------------------------------------------------------
@@ -74,7 +75,7 @@ CREATE TABLE IF NOT EXISTS `admin_role` (
 CREATE TABLE IF NOT EXISTS `admin_rule` (
   `rule_id` int(10) unsigned NOT NULL COMMENT 'Rule ID',
   `role_id` int(10) unsigned NOT NULL DEFAULT '0' COMMENT 'Role ID',
-  `resource_id` varchar(255) DEFAULT NULL COMMENT 'Resource ID',
+  `resource_id` varchar(255) NOT NULL COMMENT 'Resource ID',
   `privileges` varchar(20) DEFAULT NULL COMMENT 'Privileges',
   `assert_id` int(10) unsigned NOT NULL DEFAULT '0' COMMENT 'Assert ID',
   `role_type` varchar(1) DEFAULT NULL COMMENT 'Role Type',
@@ -93,7 +94,7 @@ CREATE TABLE IF NOT EXISTS `admin_user` (
   `lastname` varchar(32) DEFAULT NULL COMMENT 'User Last Name',
   `email` varchar(128) DEFAULT NULL COMMENT 'User Email',
   `username` varchar(40) DEFAULT NULL COMMENT 'User Login',
-  `password` varchar(40) DEFAULT NULL COMMENT 'User Password',
+  `password` varchar(100) DEFAULT NULL COMMENT 'User Password',
   `created` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT 'User Created Time',
   `modified` timestamp NULL DEFAULT NULL COMMENT 'User Modified Time',
   `logdate` timestamp NULL DEFAULT NULL COMMENT 'User Last Login Time',
@@ -104,80 +105,6 @@ CREATE TABLE IF NOT EXISTS `admin_user` (
   `rp_token` text COMMENT 'Reset Password Link Token',
   `rp_token_created_at` timestamp NULL DEFAULT NULL COMMENT 'Reset Password Link Token Creation Date'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='Admin User Table';
-
--- --------------------------------------------------------
-
---
--- 表的结构 `affiliate_admin_user`
---
-
-CREATE TABLE IF NOT EXISTS `affiliate_admin_user` (
-  `id` int(11) NOT NULL,
-  `username` varchar(20) NOT NULL,
-  `pwd` varchar(64) NOT NULL,
-  `email` varchar(40) NOT NULL,
-  `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-  `updated_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
-  `is_active` smallint(5) DEFAULT '1',
-  `role_id` smallint(4) DEFAULT '1'
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
--- --------------------------------------------------------
-
---
--- 表的结构 `affiliate_sales`
---
-
-CREATE TABLE IF NOT EXISTS `affiliate_sales` (
-  `id` bigint(20) NOT NULL,
-  `amount` bigint(20) NOT NULL DEFAULT '0',
-  `currency` varchar(10) DEFAULT 'USD',
-  `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-  `order_increment_id` bigint(20) DEFAULT NULL,
-  `order_status` varchar(20) DEFAULT NULL,
-  `visitor_id` bigint(20) DEFAULT NULL,
-  `product_infomation` text,
-  `promoter_id` int(11) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
--- --------------------------------------------------------
-
---
--- 表的结构 `affiliate_user`
---
-
-CREATE TABLE IF NOT EXISTS `affiliate_user` (
-  `id` int(11) NOT NULL,
-  `username` varchar(20) NOT NULL,
-  `pwd` varchar(64) NOT NULL,
-  `email` varchar(40) NOT NULL,
-  `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-  `updated_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
-  `domain` varchar(255) DEFAULT NULL,
-  `is_active` smallint(5) DEFAULT '1',
-  `affiliate_pwd` tinyint(2) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
--- --------------------------------------------------------
-
---
--- 表的结构 `affiliate_visitor`
---
-
-CREATE TABLE IF NOT EXISTS `affiliate_visitor` (
-  `visitor_id` bigint(20) NOT NULL,
-  `http_referer` varchar(255) DEFAULT NULL,
-  `http_user_agent` varchar(255) DEFAULT NULL,
-  `http_accept_charset` varchar(255) DEFAULT NULL,
-  `http_accept_language` varchar(255) DEFAULT NULL,
-  `server_addr` varchar(255) DEFAULT NULL,
-  `remote_addr` varchar(255) DEFAULT NULL,
-  `web_url` text NOT NULL,
-  `promoter_id` int(11) DEFAULT NULL,
-  `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-  `stay` int(10) DEFAULT NULL,
-  `cookie` varchar(64) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
@@ -281,7 +208,7 @@ CREATE TABLE IF NOT EXISTS `api_rule` (
 --
 
 CREATE TABLE IF NOT EXISTS `api_session` (
-  `user_id` int(10) unsigned NOT NULL COMMENT 'User id',
+  `user_id` int(10) unsigned NOT NULL DEFAULT '0' COMMENT 'User id',
   `logdate` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT 'Login date',
   `sessid` varchar(40) DEFAULT NULL COMMENT 'Sessioin id'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='Api Sessions';
@@ -309,130 +236,6 @@ CREATE TABLE IF NOT EXISTS `api_user` (
 -- --------------------------------------------------------
 
 --
--- 表的结构 `aw_blog`
---
-
-CREATE TABLE IF NOT EXISTS `aw_blog` (
-  `post_id` int(11) unsigned NOT NULL,
-  `title` varchar(255) NOT NULL DEFAULT '',
-  `post_content` text NOT NULL,
-  `status` smallint(6) NOT NULL DEFAULT '0',
-  `created_time` datetime DEFAULT NULL,
-  `update_time` datetime DEFAULT NULL,
-  `identifier` varchar(255) NOT NULL DEFAULT '',
-  `user` varchar(255) NOT NULL DEFAULT '',
-  `update_user` varchar(255) NOT NULL DEFAULT '',
-  `meta_keywords` text NOT NULL,
-  `meta_description` text NOT NULL,
-  `comments` tinyint(11) NOT NULL,
-  `tags` text NOT NULL,
-  `short_content` text NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
--- --------------------------------------------------------
-
---
--- 表的结构 `aw_blog_cat`
---
-
-CREATE TABLE IF NOT EXISTS `aw_blog_cat` (
-  `cat_id` int(11) unsigned NOT NULL,
-  `title` varchar(255) NOT NULL DEFAULT '',
-  `identifier` varchar(255) NOT NULL DEFAULT '',
-  `sort_order` tinyint(6) NOT NULL,
-  `meta_keywords` text NOT NULL,
-  `meta_description` text NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
--- --------------------------------------------------------
-
---
--- 表的结构 `aw_blog_cat_store`
---
-
-CREATE TABLE IF NOT EXISTS `aw_blog_cat_store` (
-  `cat_id` smallint(6) unsigned DEFAULT NULL,
-  `store_id` smallint(6) unsigned DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
--- --------------------------------------------------------
-
---
--- 表的结构 `aw_blog_comment`
---
-
-CREATE TABLE IF NOT EXISTS `aw_blog_comment` (
-  `comment_id` int(11) unsigned NOT NULL,
-  `post_id` smallint(11) NOT NULL DEFAULT '0',
-  `comment` text NOT NULL,
-  `status` smallint(6) NOT NULL DEFAULT '0',
-  `created_time` datetime DEFAULT NULL,
-  `user` varchar(255) NOT NULL DEFAULT '',
-  `email` varchar(255) NOT NULL DEFAULT '',
-  `user_id` int(11) DEFAULT NULL,
-  `ip` varchar(20) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
--- --------------------------------------------------------
-
---
--- 表的结构 `aw_blog_post_cat`
---
-
-CREATE TABLE IF NOT EXISTS `aw_blog_post_cat` (
-  `cat_id` smallint(6) unsigned DEFAULT NULL,
-  `post_id` smallint(6) unsigned DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
--- --------------------------------------------------------
-
---
--- 表的结构 `aw_blog_store`
---
-
-CREATE TABLE IF NOT EXISTS `aw_blog_store` (
-  `post_id` smallint(6) unsigned DEFAULT NULL,
-  `store_id` smallint(6) unsigned DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
--- --------------------------------------------------------
-
---
--- 表的结构 `aw_blog_tags`
---
-
-CREATE TABLE IF NOT EXISTS `aw_blog_tags` (
-  `id` int(11) NOT NULL,
-  `tag` varchar(255) NOT NULL,
-  `tag_count` int(11) NOT NULL DEFAULT '0',
-  `store_id` tinyint(4) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
--- --------------------------------------------------------
-
---
--- 表的结构 `belvg_facebook_customer`
---
-
-CREATE TABLE IF NOT EXISTS `belvg_facebook_customer` (
-  `customer_id` int(10) unsigned NOT NULL,
-  `fb_id` bigint(20) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
--- --------------------------------------------------------
-
---
--- 表的结构 `block_store`
---
-
-CREATE TABLE IF NOT EXISTS `block_store` (
-  `block_id` smallint(6) NOT NULL COMMENT 'Block ID',
-  `store_id` smallint(5) unsigned NOT NULL COMMENT 'Store ID'
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='CMS Block To Store Linkage Table';
-
--- --------------------------------------------------------
-
---
 -- 表的结构 `captcha_log`
 --
 
@@ -442,51 +245,6 @@ CREATE TABLE IF NOT EXISTS `captcha_log` (
   `count` int(10) unsigned NOT NULL DEFAULT '0' COMMENT 'Count',
   `updated_at` timestamp NULL DEFAULT NULL COMMENT 'Update Time'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='Count Login Attempts';
-
--- --------------------------------------------------------
-
---
--- 表的结构 `catalogindex_eav`
---
-
-CREATE TABLE IF NOT EXISTS `catalogindex_eav` (
-  `store_id` smallint(5) unsigned NOT NULL DEFAULT '0',
-  `entity_id` int(10) unsigned NOT NULL,
-  `attribute_id` smallint(5) unsigned NOT NULL,
-  `value` int(11) NOT NULL DEFAULT '0'
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
--- --------------------------------------------------------
-
---
--- 表的结构 `catalogindex_minimal_price`
---
-
-CREATE TABLE IF NOT EXISTS `catalogindex_minimal_price` (
-  `index_id` int(10) unsigned NOT NULL,
-  `entity_id` int(10) unsigned NOT NULL,
-  `customer_group_id` smallint(5) unsigned NOT NULL,
-  `qty` decimal(12,4) unsigned NOT NULL DEFAULT '0.0000',
-  `value` decimal(12,4) NOT NULL DEFAULT '0.0000',
-  `tax_class_id` smallint(6) NOT NULL DEFAULT '0',
-  `website_id` smallint(5) unsigned NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
--- --------------------------------------------------------
-
---
--- 表的结构 `catalogindex_price`
---
-
-CREATE TABLE IF NOT EXISTS `catalogindex_price` (
-  `entity_id` int(10) unsigned NOT NULL,
-  `attribute_id` smallint(5) unsigned NOT NULL,
-  `customer_group_id` smallint(3) unsigned NOT NULL DEFAULT '0',
-  `qty` decimal(12,4) unsigned NOT NULL DEFAULT '0.0000',
-  `value` decimal(12,4) NOT NULL DEFAULT '0.0000',
-  `tax_class_id` smallint(6) NOT NULL DEFAULT '0',
-  `website_id` smallint(5) unsigned NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
@@ -530,8 +288,7 @@ CREATE TABLE IF NOT EXISTS `cataloginventory_stock_item` (
   `qty_increments` decimal(12,4) NOT NULL DEFAULT '0.0000' COMMENT 'Qty Increments',
   `use_config_enable_qty_inc` smallint(5) unsigned NOT NULL DEFAULT '1' COMMENT 'Use Config Enable Qty Increments',
   `enable_qty_increments` smallint(5) unsigned NOT NULL DEFAULT '0' COMMENT 'Enable Qty Increments',
-  `is_decimal_divided` smallint(5) unsigned NOT NULL DEFAULT '0' COMMENT 'Is Divided into Multiple Boxes for Shipping',
-  `ebay_status` varchar(4) DEFAULT NULL
+  `is_decimal_divided` smallint(5) unsigned NOT NULL DEFAULT '0' COMMENT 'Is Divided into Multiple Boxes for Shipping'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='Cataloginventory Stock Item';
 
 -- --------------------------------------------------------
@@ -574,7 +331,7 @@ CREATE TABLE IF NOT EXISTS `cataloginventory_stock_status_tmp` (
   `stock_id` smallint(5) unsigned NOT NULL COMMENT 'Stock Id',
   `qty` decimal(12,4) NOT NULL DEFAULT '0.0000' COMMENT 'Qty',
   `stock_status` smallint(5) unsigned NOT NULL COMMENT 'Stock Status'
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='Cataloginventory Stock Status Indexer Tmp';
+) ENGINE=MEMORY DEFAULT CHARSET=utf8 COMMENT='Cataloginventory Stock Status Indexer Tmp';
 
 -- --------------------------------------------------------
 
@@ -609,6 +366,17 @@ CREATE TABLE IF NOT EXISTS `catalogrule` (
 CREATE TABLE IF NOT EXISTS `catalogrule_affected_product` (
   `product_id` int(10) unsigned NOT NULL COMMENT 'Product Id'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='CatalogRule Affected Product';
+
+-- --------------------------------------------------------
+
+--
+-- 表的结构 `catalogrule_customer_group`
+--
+
+CREATE TABLE IF NOT EXISTS `catalogrule_customer_group` (
+  `rule_id` int(10) unsigned NOT NULL COMMENT 'Rule Id',
+  `customer_group_id` smallint(5) unsigned NOT NULL COMMENT 'Customer Group Id'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='Catalog Rules To Customer Groups Relations';
 
 -- --------------------------------------------------------
 
@@ -683,7 +451,7 @@ CREATE TABLE IF NOT EXISTS `catalogsearch_fulltext` (
   `store_id` smallint(5) unsigned NOT NULL COMMENT 'Store ID',
   `data_index` longtext COMMENT 'Data index',
   `fulltext_id` int(10) unsigned NOT NULL COMMENT 'Entity ID'
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='Catalog search result table';
+) ENGINE=MyISAM DEFAULT CHARSET=utf8 COMMENT='Catalog search result table';
 
 -- --------------------------------------------------------
 
@@ -702,8 +470,7 @@ CREATE TABLE IF NOT EXISTS `catalogsearch_query` (
   `display_in_terms` smallint(6) NOT NULL DEFAULT '1' COMMENT 'Display in terms',
   `is_active` smallint(6) DEFAULT '1' COMMENT 'Active status',
   `is_processed` smallint(6) DEFAULT '0' COMMENT 'Processed status',
-  `updated_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT 'Updated at',
-  `seo_post` int(4) DEFAULT NULL
+  `updated_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT 'Updated at'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='Catalog search query table';
 
 -- --------------------------------------------------------
@@ -738,7 +505,7 @@ CREATE TABLE IF NOT EXISTS `catalog_category_anc_categs_index_idx` (
 CREATE TABLE IF NOT EXISTS `catalog_category_anc_categs_index_tmp` (
   `category_id` int(10) unsigned NOT NULL DEFAULT '0' COMMENT 'Category ID',
   `path` varchar(255) NOT NULL COMMENT 'Path'
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='Catalog Category Anchor Indexer Temp Table';
+) ENGINE=MEMORY DEFAULT CHARSET=utf8 COMMENT='Catalog Category Anchor Indexer Temp Table';
 
 -- --------------------------------------------------------
 
@@ -762,7 +529,7 @@ CREATE TABLE IF NOT EXISTS `catalog_category_anc_products_index_tmp` (
   `category_id` int(10) unsigned NOT NULL DEFAULT '0' COMMENT 'Category ID',
   `product_id` int(10) unsigned NOT NULL DEFAULT '0' COMMENT 'Product ID',
   `position` int(10) unsigned DEFAULT NULL COMMENT 'Position'
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='Catalog Category Anchor Product Indexer Temp Table';
+) ENGINE=MEMORY DEFAULT CHARSET=utf8 COMMENT='Catalog Category Anchor Product Indexer Temp Table';
 
 -- --------------------------------------------------------
 
@@ -875,7 +642,7 @@ CREATE TABLE IF NOT EXISTS `catalog_category_flat_store_1` (
   `children_count` int(11) NOT NULL DEFAULT '0' COMMENT 'children_count',
   `store_id` smallint(5) unsigned NOT NULL DEFAULT '0' COMMENT 'Store Id',
   `all_children` text COMMENT 'All Children',
-  `available_sort_by` text COMMENT 'Available Product Listing Sort by',
+  `available_sort_by` text COMMENT 'Available Product Listing Sort By',
   `children` text COMMENT 'Children',
   `custom_apply_to_products` int(11) DEFAULT NULL COMMENT 'Apply To Products',
   `custom_design` varchar(255) DEFAULT NULL COMMENT 'Custom Design',
@@ -883,18 +650,15 @@ CREATE TABLE IF NOT EXISTS `catalog_category_flat_store_1` (
   `custom_design_to` datetime DEFAULT NULL COMMENT 'Active To',
   `custom_layout_update` text COMMENT 'Custom Layout Update',
   `custom_use_parent_settings` int(11) DEFAULT NULL COMMENT 'Use Parent Category Settings',
-  `default_sort_by` varchar(255) DEFAULT NULL COMMENT 'Default Product Listing Sort by',
+  `default_sort_by` varchar(255) DEFAULT NULL COMMENT 'Default Product Listing Sort By',
   `description` text COMMENT 'Description',
   `display_mode` varchar(255) DEFAULT NULL COMMENT 'Display Mode',
-  `filter_price_range` decimal(12,4) DEFAULT NULL COMMENT 'Layered Navigation Price Step',
+  `filter_price_range` int(11) DEFAULT NULL COMMENT 'Layered Navigation Price Step',
   `image` varchar(255) DEFAULT NULL COMMENT 'Image',
   `include_in_menu` int(11) DEFAULT NULL COMMENT 'Include in Navigation Menu',
   `is_active` int(11) DEFAULT NULL COMMENT 'Is Active',
   `is_anchor` int(11) DEFAULT NULL COMMENT 'Is Anchor',
-  `is_featured_category` int(11) DEFAULT NULL COMMENT 'Is Category Featured',
-  `is_featured_subcat` int(11) DEFAULT NULL COMMENT 'Is Category Featured as Sub-Category',
   `landing_page` int(11) DEFAULT NULL COMMENT 'CMS Block',
-  `master_email` varchar(255) DEFAULT NULL COMMENT '负责人Email',
   `meta_description` text COMMENT 'Meta Description',
   `meta_keywords` text COMMENT 'Meta Keywords',
   `meta_title` varchar(255) DEFAULT NULL COMMENT 'Page Title',
@@ -905,6 +669,96 @@ CREATE TABLE IF NOT EXISTS `catalog_category_flat_store_1` (
   `url_key` varchar(255) DEFAULT NULL COMMENT 'URL Key',
   `url_path` varchar(255) DEFAULT NULL COMMENT 'Url Path'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='Catalog Category Flat (Store 1)';
+
+-- --------------------------------------------------------
+
+--
+-- 表的结构 `catalog_category_flat_store_2`
+--
+
+CREATE TABLE IF NOT EXISTS `catalog_category_flat_store_2` (
+  `entity_id` int(10) unsigned NOT NULL COMMENT 'entity_id',
+  `parent_id` int(10) unsigned NOT NULL DEFAULT '0' COMMENT 'parent_id',
+  `created_at` timestamp NULL DEFAULT NULL COMMENT 'created_at',
+  `updated_at` timestamp NULL DEFAULT NULL COMMENT 'updated_at',
+  `path` varchar(255) NOT NULL DEFAULT '' COMMENT 'path',
+  `position` int(11) NOT NULL DEFAULT '0' COMMENT 'position',
+  `level` int(11) NOT NULL DEFAULT '0' COMMENT 'level',
+  `children_count` int(11) NOT NULL DEFAULT '0' COMMENT 'children_count',
+  `store_id` smallint(5) unsigned NOT NULL DEFAULT '0' COMMENT 'Store Id',
+  `all_children` text COMMENT 'All Children',
+  `available_sort_by` text COMMENT 'Available Product Listing Sort By',
+  `children` text COMMENT 'Children',
+  `custom_apply_to_products` int(11) DEFAULT NULL COMMENT 'Apply To Products',
+  `custom_design` varchar(255) DEFAULT NULL COMMENT 'Custom Design',
+  `custom_design_from` datetime DEFAULT NULL COMMENT 'Active From',
+  `custom_design_to` datetime DEFAULT NULL COMMENT 'Active To',
+  `custom_layout_update` text COMMENT 'Custom Layout Update',
+  `custom_use_parent_settings` int(11) DEFAULT NULL COMMENT 'Use Parent Category Settings',
+  `default_sort_by` varchar(255) DEFAULT NULL COMMENT 'Default Product Listing Sort By',
+  `description` text COMMENT 'Description',
+  `display_mode` varchar(255) DEFAULT NULL COMMENT 'Display Mode',
+  `filter_price_range` int(11) DEFAULT NULL COMMENT 'Layered Navigation Price Step',
+  `image` varchar(255) DEFAULT NULL COMMENT 'Image',
+  `include_in_menu` int(11) DEFAULT NULL COMMENT 'Include in Navigation Menu',
+  `is_active` int(11) DEFAULT NULL COMMENT 'Is Active',
+  `is_anchor` int(11) DEFAULT NULL COMMENT 'Is Anchor',
+  `landing_page` int(11) DEFAULT NULL COMMENT 'CMS Block',
+  `meta_description` text COMMENT 'Meta Description',
+  `meta_keywords` text COMMENT 'Meta Keywords',
+  `meta_title` varchar(255) DEFAULT NULL COMMENT 'Page Title',
+  `name` varchar(255) DEFAULT NULL COMMENT 'Name',
+  `page_layout` varchar(255) DEFAULT NULL COMMENT 'Page Layout',
+  `path_in_store` text COMMENT 'Path In Store',
+  `thumbnail` varchar(255) DEFAULT NULL COMMENT 'Thumbnail Image',
+  `url_key` varchar(255) DEFAULT NULL COMMENT 'URL Key',
+  `url_path` varchar(255) DEFAULT NULL COMMENT 'Url Path'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='Catalog Category Flat (Store 2)';
+
+-- --------------------------------------------------------
+
+--
+-- 表的结构 `catalog_category_flat_store_3`
+--
+
+CREATE TABLE IF NOT EXISTS `catalog_category_flat_store_3` (
+  `entity_id` int(10) unsigned NOT NULL COMMENT 'entity_id',
+  `parent_id` int(10) unsigned NOT NULL DEFAULT '0' COMMENT 'parent_id',
+  `created_at` timestamp NULL DEFAULT NULL COMMENT 'created_at',
+  `updated_at` timestamp NULL DEFAULT NULL COMMENT 'updated_at',
+  `path` varchar(255) NOT NULL DEFAULT '' COMMENT 'path',
+  `position` int(11) NOT NULL DEFAULT '0' COMMENT 'position',
+  `level` int(11) NOT NULL DEFAULT '0' COMMENT 'level',
+  `children_count` int(11) NOT NULL DEFAULT '0' COMMENT 'children_count',
+  `store_id` smallint(5) unsigned NOT NULL DEFAULT '0' COMMENT 'Store Id',
+  `all_children` text COMMENT 'All Children',
+  `available_sort_by` text COMMENT 'Available Product Listing Sort By',
+  `children` text COMMENT 'Children',
+  `custom_apply_to_products` int(11) DEFAULT NULL COMMENT 'Apply To Products',
+  `custom_design` varchar(255) DEFAULT NULL COMMENT 'Custom Design',
+  `custom_design_from` datetime DEFAULT NULL COMMENT 'Active From',
+  `custom_design_to` datetime DEFAULT NULL COMMENT 'Active To',
+  `custom_layout_update` text COMMENT 'Custom Layout Update',
+  `custom_use_parent_settings` int(11) DEFAULT NULL COMMENT 'Use Parent Category Settings',
+  `default_sort_by` varchar(255) DEFAULT NULL COMMENT 'Default Product Listing Sort By',
+  `description` text COMMENT 'Description',
+  `display_mode` varchar(255) DEFAULT NULL COMMENT 'Display Mode',
+  `filter_price_range` int(11) DEFAULT NULL COMMENT 'Layered Navigation Price Step',
+  `image` varchar(255) DEFAULT NULL COMMENT 'Image',
+  `include_in_menu` int(11) DEFAULT NULL COMMENT 'Include in Navigation Menu',
+  `is_active` int(11) DEFAULT NULL COMMENT 'Is Active',
+  `is_anchor` int(11) DEFAULT NULL COMMENT 'Is Anchor',
+  `landing_page` int(11) DEFAULT NULL COMMENT 'CMS Block',
+  `meta_description` text COMMENT 'Meta Description',
+  `meta_keywords` text COMMENT 'Meta Keywords',
+  `meta_title` varchar(255) DEFAULT NULL COMMENT 'Page Title',
+  `name` varchar(255) DEFAULT NULL COMMENT 'Name',
+  `page_layout` varchar(255) DEFAULT NULL COMMENT 'Page Layout',
+  `path_in_store` text COMMENT 'Path In Store',
+  `thumbnail` varchar(255) DEFAULT NULL COMMENT 'Thumbnail Image',
+  `url_key` varchar(255) DEFAULT NULL COMMENT 'URL Key',
+  `url_path` varchar(255) DEFAULT NULL COMMENT 'Url Path'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='Catalog Category Flat (Store 3)';
 
 -- --------------------------------------------------------
 
@@ -953,7 +807,7 @@ CREATE TABLE IF NOT EXISTS `catalog_category_product_index_enbl_idx` (
 CREATE TABLE IF NOT EXISTS `catalog_category_product_index_enbl_tmp` (
   `product_id` int(10) unsigned NOT NULL DEFAULT '0' COMMENT 'Product ID',
   `visibility` int(10) unsigned NOT NULL DEFAULT '0' COMMENT 'Visibility'
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='Catalog Category Product Enabled Indexer Temp Table';
+) ENGINE=MEMORY DEFAULT CHARSET=utf8 COMMENT='Catalog Category Product Enabled Indexer Temp Table';
 
 -- --------------------------------------------------------
 
@@ -983,7 +837,7 @@ CREATE TABLE IF NOT EXISTS `catalog_category_product_index_tmp` (
   `is_parent` smallint(5) unsigned NOT NULL DEFAULT '0' COMMENT 'Is Parent',
   `store_id` smallint(5) unsigned NOT NULL DEFAULT '0' COMMENT 'Store ID',
   `visibility` smallint(5) unsigned NOT NULL DEFAULT '0' COMMENT 'Visibility'
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='Catalog Category Product Indexer Temp Table';
+) ENGINE=MEMORY DEFAULT CHARSET=utf8 COMMENT='Catalog Category Product Indexer Temp Table';
 
 -- --------------------------------------------------------
 
@@ -1138,10 +992,10 @@ CREATE TABLE IF NOT EXISTS `catalog_product_entity` (
   `attribute_set_id` smallint(5) unsigned NOT NULL DEFAULT '0' COMMENT 'Attribute Set ID',
   `type_id` varchar(32) NOT NULL DEFAULT 'simple' COMMENT 'Type ID',
   `sku` varchar(64) DEFAULT NULL COMMENT 'SKU',
-  `has_options` smallint(6) NOT NULL DEFAULT '0' COMMENT 'Has Options',
-  `required_options` smallint(5) unsigned NOT NULL DEFAULT '0' COMMENT 'Required Options',
   `created_at` timestamp NULL DEFAULT NULL COMMENT 'Creation Time',
-  `updated_at` timestamp NULL DEFAULT NULL COMMENT 'Update Time'
+  `updated_at` timestamp NULL DEFAULT NULL COMMENT 'Update Time',
+  `has_options` smallint(6) NOT NULL DEFAULT '0' COMMENT 'Has Options',
+  `required_options` smallint(5) unsigned NOT NULL DEFAULT '0' COMMENT 'Required Options'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='Catalog Product Table';
 
 -- --------------------------------------------------------
@@ -1300,78 +1154,301 @@ CREATE TABLE IF NOT EXISTS `catalog_product_entity_varchar` (
 --
 
 CREATE TABLE IF NOT EXISTS `catalog_product_flat_1` (
-  `entity_id` int(10) unsigned NOT NULL COMMENT 'Entity Id',
-  `attribute_set_id` smallint(5) unsigned NOT NULL DEFAULT '0' COMMENT 'Attribute Set Id',
-  `type_id` varchar(32) NOT NULL DEFAULT 'simple' COMMENT 'Type Id',
-  `name` varchar(255) DEFAULT NULL COMMENT 'Name',
-  `short_description` text COMMENT 'Short Description',
-  `sku` varchar(64) DEFAULT NULL COMMENT 'Sku',
-  `price` decimal(12,4) DEFAULT NULL COMMENT 'Price',
-  `special_price` decimal(12,4) DEFAULT NULL COMMENT 'Special Price',
-  `special_from_date` datetime DEFAULT NULL COMMENT 'Special From Date',
-  `special_to_date` datetime DEFAULT NULL COMMENT 'Special To Date',
-  `cost` decimal(12,4) DEFAULT NULL COMMENT 'Cost',
-  `weight` decimal(12,4) DEFAULT NULL COMMENT 'Weight',
-  `small_image` varchar(255) DEFAULT NULL COMMENT 'Small Image',
-  `thumbnail` varchar(255) DEFAULT NULL COMMENT 'Thumbnail',
-  `news_from_date` datetime DEFAULT NULL COMMENT 'News From Date',
-  `news_to_date` datetime DEFAULT NULL COMMENT 'News To Date',
-  `tax_class_id` int(10) unsigned DEFAULT NULL COMMENT 'Tax Class Id',
-  `url_key` varchar(255) DEFAULT NULL COMMENT 'Url Key',
-  `url_path` varchar(255) DEFAULT NULL COMMENT 'Url Path',
-  `virtual_price` decimal(12,4) DEFAULT NULL COMMENT 'Virtual Price',
-  `visibility` smallint(5) unsigned DEFAULT NULL COMMENT 'Visibility',
-  `required_options` smallint(5) unsigned NOT NULL DEFAULT '0' COMMENT 'Required Options',
-  `has_options` smallint(6) NOT NULL DEFAULT '0' COMMENT 'Has Options',
-  `image_label` varchar(255) DEFAULT NULL COMMENT 'Image Label',
-  `small_image_label` varchar(255) DEFAULT NULL COMMENT 'Small Image Label',
-  `thumbnail_label` varchar(255) DEFAULT NULL COMMENT 'Thumbnail Label',
-  `created_at` timestamp NULL DEFAULT NULL COMMENT 'Created At',
-  `dropship_from` datetime DEFAULT NULL COMMENT 'Dropship From',
-  `dropship_price` decimal(12,4) DEFAULT NULL COMMENT 'Dropship Price',
-  `dropship_to` datetime DEFAULT NULL COMMENT 'Dropship To',
-  `updated_at` timestamp NULL DEFAULT NULL COMMENT 'Updated At',
-  `enable_googlecheckout` smallint(6) DEFAULT NULL COMMENT 'Enable Googlecheckout',
-  `price_type` int(11) DEFAULT NULL COMMENT 'Price Type',
-  `sku_type` int(11) DEFAULT NULL COMMENT 'Sku Type',
-  `weight_type` int(11) DEFAULT NULL COMMENT 'Weight Type',
-  `price_view` int(11) DEFAULT NULL COMMENT 'Price View',
-  `shipment_type` int(11) DEFAULT NULL COMMENT 'Shipment Type',
-  `links_purchased_separately` int(11) DEFAULT NULL COMMENT 'Links Purchased Separately',
-  `links_title` varchar(255) DEFAULT NULL COMMENT 'Links Title',
-  `links_exist` int(11) DEFAULT NULL COMMENT 'Links Exist',
-  `custom_design_from` datetime DEFAULT NULL COMMENT 'Custom Design From',
-  `custom_design_to` datetime DEFAULT NULL COMMENT 'Custom Design To',
-  `custom_layout_update` text COMMENT 'Custom Layout Update',
-  `description` text COMMENT 'Description',
-  `gallery` varchar(255) DEFAULT NULL COMMENT 'Gallery',
-  `gift_message_available` smallint(6) DEFAULT NULL COMMENT 'Gift Message Available',
-  `image` varchar(255) DEFAULT NULL COMMENT 'Image',
-  `is_imported` smallint(6) DEFAULT NULL COMMENT 'Is Imported',
-  `is_recurring` smallint(6) DEFAULT NULL COMMENT 'Is Recurring',
-  `media_gallery` varchar(255) DEFAULT NULL COMMENT 'Media Gallery',
-  `meta_description` varchar(255) DEFAULT NULL COMMENT 'Meta Description',
-  `meta_keyword` text COMMENT 'Meta Keyword',
-  `meta_title` varchar(255) DEFAULT NULL COMMENT 'Meta Title',
-  `minimal_price` decimal(12,4) DEFAULT NULL COMMENT 'Minimal Price',
-  `most_popular` decimal(12,4) DEFAULT NULL COMMENT 'Most Popular',
-  `msrp` decimal(12,4) DEFAULT NULL COMMENT 'Msrp',
-  `msrp_display_actual_price_type` varchar(255) DEFAULT NULL COMMENT 'Msrp Display Actual Price Type',
-  `msrp_enabled` smallint(6) DEFAULT NULL COMMENT 'Msrp Enabled',
-  `old_id` int(11) DEFAULT NULL COMMENT 'Old Id',
-  `phone` varchar(255) DEFAULT NULL COMMENT 'Phone',
-  `recurring_profile` text COMMENT 'Recurring Profile',
-  `rw_video_code` varchar(255) DEFAULT NULL COMMENT 'Rw Video Code',
-  `rw_video_height` int(11) DEFAULT NULL COMMENT 'Rw Video Height',
-  `rw_video_thumb_height` int(11) DEFAULT NULL COMMENT 'Rw Video Thumb Height',
-  `rw_video_thumb_width` int(11) DEFAULT NULL COMMENT 'Rw Video Thumb Width',
-  `rw_video_title` varchar(255) DEFAULT NULL COMMENT 'Rw Video Title',
-  `rw_video_width` int(11) DEFAULT NULL COMMENT 'Rw Video Width',
-  `samples_title` varchar(255) DEFAULT NULL COMMENT 'Samples Title',
-  `data_in_group` text COMMENT 'Data In Group',
-  `product_color` varchar(255) DEFAULT NULL COMMENT 'Product Color',
-  `test` decimal(12,4) DEFAULT NULL COMMENT 'Test'
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+  `entity_id` int(10) unsigned NOT NULL COMMENT 'entity_id',
+  `attribute_set_id` smallint(5) unsigned NOT NULL DEFAULT '0' COMMENT 'attribute_set_id',
+  `type_id` varchar(32) NOT NULL DEFAULT 'simple' COMMENT 'type_id',
+  `activation_information` text COMMENT 'activation_information',
+  `color` int(11) DEFAULT NULL COMMENT 'color',
+  `color_value` varchar(255) DEFAULT NULL COMMENT 'color_value',
+  `computer_manufacturers` int(11) DEFAULT NULL COMMENT 'computer_manufacturers',
+  `computer_manufacturers_value` varchar(255) DEFAULT NULL COMMENT 'computer_manufacturers_value',
+  `contrast_ratio` int(11) DEFAULT NULL COMMENT 'contrast_ratio',
+  `contrast_ratio_value` varchar(255) DEFAULT NULL COMMENT 'contrast_ratio_value',
+  `cost` decimal(12,4) DEFAULT NULL COMMENT 'cost',
+  `country_orgin` text COMMENT 'country_orgin',
+  `cpu_speed` int(11) DEFAULT NULL COMMENT 'cpu_speed',
+  `cpu_speed_value` varchar(255) DEFAULT NULL COMMENT 'cpu_speed_value',
+  `created_at` timestamp NULL DEFAULT NULL COMMENT 'created_at',
+  `custom_design_from` datetime DEFAULT NULL COMMENT 'custom_design_from',
+  `custom_design_to` datetime DEFAULT NULL COMMENT 'custom_design_to',
+  `custom_layout_update` text COMMENT 'custom_layout_update',
+  `description` text COMMENT 'description',
+  `dimension` text COMMENT 'dimension',
+  `enable_googlecheckout` smallint(6) DEFAULT NULL COMMENT 'enable_googlecheckout',
+  `finish` text COMMENT 'finish',
+  `gallery` varchar(255) DEFAULT NULL COMMENT 'gallery',
+  `gender` int(11) DEFAULT NULL COMMENT 'gender',
+  `gender_value` varchar(255) DEFAULT NULL COMMENT 'gender_value',
+  `gift_message_available` smallint(6) DEFAULT NULL COMMENT 'gift_message_available',
+  `harddrive_speed` varchar(255) DEFAULT NULL COMMENT 'harddrive_speed',
+  `hardrive` text COMMENT 'hardrive',
+  `has_options` smallint(6) NOT NULL DEFAULT '0' COMMENT 'has_options',
+  `image` varchar(255) DEFAULT NULL COMMENT 'image',
+  `image_label` varchar(255) DEFAULT NULL COMMENT 'image_label',
+  `in_depth` text COMMENT 'in_depth',
+  `is_recurring` smallint(6) DEFAULT NULL COMMENT 'is_recurring',
+  `links_exist` int(11) DEFAULT NULL COMMENT 'links_exist',
+  `links_purchased_separately` int(11) DEFAULT NULL COMMENT 'links_purchased_separately',
+  `links_title` varchar(255) DEFAULT NULL COMMENT 'links_title',
+  `manufacturer` int(11) DEFAULT NULL COMMENT 'manufacturer',
+  `manufacturer_value` varchar(255) DEFAULT NULL COMMENT 'manufacturer_value',
+  `max_resolution` varchar(255) DEFAULT NULL COMMENT 'max_resolution',
+  `media_gallery` varchar(255) DEFAULT NULL COMMENT 'media_gallery',
+  `megapixels` int(11) DEFAULT NULL COMMENT 'megapixels',
+  `megapixels_value` varchar(255) DEFAULT NULL COMMENT 'megapixels_value',
+  `memory` text COMMENT 'memory',
+  `meta_description` varchar(255) DEFAULT NULL COMMENT 'meta_description',
+  `meta_keyword` text COMMENT 'meta_keyword',
+  `meta_title` varchar(255) DEFAULT NULL COMMENT 'meta_title',
+  `minimal_price` decimal(12,4) DEFAULT NULL COMMENT 'minimal_price',
+  `model` text COMMENT 'model',
+  `msrp` decimal(12,4) DEFAULT NULL COMMENT 'msrp',
+  `msrp_display_actual_price_type` varchar(255) DEFAULT NULL COMMENT 'msrp_display_actual_price_type',
+  `msrp_enabled` smallint(6) DEFAULT NULL COMMENT 'msrp_enabled',
+  `name` varchar(255) DEFAULT NULL COMMENT 'name',
+  `news_from_date` datetime DEFAULT NULL COMMENT 'news_from_date',
+  `news_to_date` datetime DEFAULT NULL COMMENT 'news_to_date',
+  `old_id` int(11) DEFAULT NULL COMMENT 'old_id',
+  `price` decimal(12,4) DEFAULT NULL COMMENT 'price',
+  `price_type` int(11) DEFAULT NULL COMMENT 'price_type',
+  `price_view` int(11) DEFAULT NULL COMMENT 'price_view',
+  `processor` text COMMENT 'processor',
+  `ram_size` varchar(255) DEFAULT NULL COMMENT 'ram_size',
+  `recurring_profile` text COMMENT 'recurring_profile',
+  `required_options` smallint(5) unsigned NOT NULL DEFAULT '0' COMMENT 'required_options',
+  `response_time` varchar(255) DEFAULT NULL COMMENT 'response_time',
+  `room` int(11) DEFAULT NULL COMMENT 'room',
+  `room_value` varchar(255) DEFAULT NULL COMMENT 'room_value',
+  `samples_title` varchar(255) DEFAULT NULL COMMENT 'samples_title',
+  `screensize` text COMMENT 'screensize',
+  `shape` text COMMENT 'shape',
+  `shipment_type` int(11) DEFAULT NULL COMMENT 'shipment_type',
+  `shirt_size` int(11) DEFAULT NULL COMMENT 'shirt_size',
+  `shirt_size_value` varchar(255) DEFAULT NULL COMMENT 'shirt_size_value',
+  `shoe_size` int(11) DEFAULT NULL COMMENT 'shoe_size',
+  `shoe_size_value` varchar(255) DEFAULT NULL COMMENT 'shoe_size_value',
+  `shoe_type` int(11) DEFAULT NULL COMMENT 'shoe_type',
+  `shoe_type_value` varchar(255) DEFAULT NULL COMMENT 'shoe_type_value',
+  `short_description` text COMMENT 'short_description',
+  `sku` varchar(64) DEFAULT NULL COMMENT 'sku',
+  `sku_type` int(11) DEFAULT NULL COMMENT 'sku_type',
+  `small_image` varchar(255) DEFAULT NULL COMMENT 'small_image',
+  `small_image_label` varchar(255) DEFAULT NULL COMMENT 'small_image_label',
+  `special_from_date` datetime DEFAULT NULL COMMENT 'special_from_date',
+  `special_price` decimal(12,4) DEFAULT NULL COMMENT 'special_price',
+  `special_to_date` datetime DEFAULT NULL COMMENT 'special_to_date',
+  `tax_class_id` int(10) unsigned DEFAULT NULL COMMENT 'tax_class_id',
+  `thumbnail` varchar(255) DEFAULT NULL COMMENT 'thumbnail',
+  `thumbnail_label` varchar(255) DEFAULT NULL COMMENT 'thumbnail_label',
+  `updated_at` timestamp NULL DEFAULT NULL COMMENT 'updated_at',
+  `url_key` varchar(255) DEFAULT NULL COMMENT 'url_key',
+  `url_path` varchar(255) DEFAULT NULL COMMENT 'url_path',
+  `visibility` smallint(5) unsigned DEFAULT NULL COMMENT 'visibility',
+  `weight` decimal(12,4) DEFAULT NULL COMMENT 'weight',
+  `weight_type` int(11) DEFAULT NULL COMMENT 'weight_type'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='Catalog Product Flat (Store 1)';
+
+-- --------------------------------------------------------
+
+--
+-- 表的结构 `catalog_product_flat_2`
+--
+
+CREATE TABLE IF NOT EXISTS `catalog_product_flat_2` (
+  `entity_id` int(10) unsigned NOT NULL COMMENT 'entity_id',
+  `attribute_set_id` smallint(5) unsigned NOT NULL DEFAULT '0' COMMENT 'attribute_set_id',
+  `type_id` varchar(32) NOT NULL DEFAULT 'simple' COMMENT 'type_id',
+  `activation_information` text COMMENT 'activation_information',
+  `color` int(11) DEFAULT NULL COMMENT 'color',
+  `color_value` varchar(255) DEFAULT NULL COMMENT 'color_value',
+  `computer_manufacturers` int(11) DEFAULT NULL COMMENT 'computer_manufacturers',
+  `computer_manufacturers_value` varchar(255) DEFAULT NULL COMMENT 'computer_manufacturers_value',
+  `contrast_ratio` int(11) DEFAULT NULL COMMENT 'contrast_ratio',
+  `contrast_ratio_value` varchar(255) DEFAULT NULL COMMENT 'contrast_ratio_value',
+  `cost` decimal(12,4) DEFAULT NULL COMMENT 'cost',
+  `country_orgin` text COMMENT 'country_orgin',
+  `cpu_speed` int(11) DEFAULT NULL COMMENT 'cpu_speed',
+  `cpu_speed_value` varchar(255) DEFAULT NULL COMMENT 'cpu_speed_value',
+  `created_at` timestamp NULL DEFAULT NULL COMMENT 'created_at',
+  `custom_design_from` datetime DEFAULT NULL COMMENT 'custom_design_from',
+  `custom_design_to` datetime DEFAULT NULL COMMENT 'custom_design_to',
+  `custom_layout_update` text COMMENT 'custom_layout_update',
+  `description` text COMMENT 'description',
+  `dimension` text COMMENT 'dimension',
+  `enable_googlecheckout` smallint(6) DEFAULT NULL COMMENT 'enable_googlecheckout',
+  `finish` text COMMENT 'finish',
+  `gallery` varchar(255) DEFAULT NULL COMMENT 'gallery',
+  `gender` int(11) DEFAULT NULL COMMENT 'gender',
+  `gender_value` varchar(255) DEFAULT NULL COMMENT 'gender_value',
+  `gift_message_available` smallint(6) DEFAULT NULL COMMENT 'gift_message_available',
+  `harddrive_speed` varchar(255) DEFAULT NULL COMMENT 'harddrive_speed',
+  `hardrive` text COMMENT 'hardrive',
+  `has_options` smallint(6) NOT NULL DEFAULT '0' COMMENT 'has_options',
+  `image` varchar(255) DEFAULT NULL COMMENT 'image',
+  `image_label` varchar(255) DEFAULT NULL COMMENT 'image_label',
+  `in_depth` text COMMENT 'in_depth',
+  `is_recurring` smallint(6) DEFAULT NULL COMMENT 'is_recurring',
+  `links_exist` int(11) DEFAULT NULL COMMENT 'links_exist',
+  `links_purchased_separately` int(11) DEFAULT NULL COMMENT 'links_purchased_separately',
+  `links_title` varchar(255) DEFAULT NULL COMMENT 'links_title',
+  `manufacturer` int(11) DEFAULT NULL COMMENT 'manufacturer',
+  `manufacturer_value` varchar(255) DEFAULT NULL COMMENT 'manufacturer_value',
+  `max_resolution` varchar(255) DEFAULT NULL COMMENT 'max_resolution',
+  `media_gallery` varchar(255) DEFAULT NULL COMMENT 'media_gallery',
+  `megapixels` int(11) DEFAULT NULL COMMENT 'megapixels',
+  `megapixels_value` varchar(255) DEFAULT NULL COMMENT 'megapixels_value',
+  `memory` text COMMENT 'memory',
+  `meta_description` varchar(255) DEFAULT NULL COMMENT 'meta_description',
+  `meta_keyword` text COMMENT 'meta_keyword',
+  `meta_title` varchar(255) DEFAULT NULL COMMENT 'meta_title',
+  `minimal_price` decimal(12,4) DEFAULT NULL COMMENT 'minimal_price',
+  `model` text COMMENT 'model',
+  `msrp` decimal(12,4) DEFAULT NULL COMMENT 'msrp',
+  `msrp_display_actual_price_type` varchar(255) DEFAULT NULL COMMENT 'msrp_display_actual_price_type',
+  `msrp_enabled` smallint(6) DEFAULT NULL COMMENT 'msrp_enabled',
+  `name` varchar(255) DEFAULT NULL COMMENT 'name',
+  `news_from_date` datetime DEFAULT NULL COMMENT 'news_from_date',
+  `news_to_date` datetime DEFAULT NULL COMMENT 'news_to_date',
+  `old_id` int(11) DEFAULT NULL COMMENT 'old_id',
+  `price` decimal(12,4) DEFAULT NULL COMMENT 'price',
+  `price_type` int(11) DEFAULT NULL COMMENT 'price_type',
+  `price_view` int(11) DEFAULT NULL COMMENT 'price_view',
+  `processor` text COMMENT 'processor',
+  `ram_size` varchar(255) DEFAULT NULL COMMENT 'ram_size',
+  `recurring_profile` text COMMENT 'recurring_profile',
+  `required_options` smallint(5) unsigned NOT NULL DEFAULT '0' COMMENT 'required_options',
+  `response_time` varchar(255) DEFAULT NULL COMMENT 'response_time',
+  `room` int(11) DEFAULT NULL COMMENT 'room',
+  `room_value` varchar(255) DEFAULT NULL COMMENT 'room_value',
+  `samples_title` varchar(255) DEFAULT NULL COMMENT 'samples_title',
+  `screensize` text COMMENT 'screensize',
+  `shape` text COMMENT 'shape',
+  `shipment_type` int(11) DEFAULT NULL COMMENT 'shipment_type',
+  `shirt_size` int(11) DEFAULT NULL COMMENT 'shirt_size',
+  `shirt_size_value` varchar(255) DEFAULT NULL COMMENT 'shirt_size_value',
+  `shoe_size` int(11) DEFAULT NULL COMMENT 'shoe_size',
+  `shoe_size_value` varchar(255) DEFAULT NULL COMMENT 'shoe_size_value',
+  `shoe_type` int(11) DEFAULT NULL COMMENT 'shoe_type',
+  `shoe_type_value` varchar(255) DEFAULT NULL COMMENT 'shoe_type_value',
+  `short_description` text COMMENT 'short_description',
+  `sku` varchar(64) DEFAULT NULL COMMENT 'sku',
+  `sku_type` int(11) DEFAULT NULL COMMENT 'sku_type',
+  `small_image` varchar(255) DEFAULT NULL COMMENT 'small_image',
+  `small_image_label` varchar(255) DEFAULT NULL COMMENT 'small_image_label',
+  `special_from_date` datetime DEFAULT NULL COMMENT 'special_from_date',
+  `special_price` decimal(12,4) DEFAULT NULL COMMENT 'special_price',
+  `special_to_date` datetime DEFAULT NULL COMMENT 'special_to_date',
+  `tax_class_id` int(10) unsigned DEFAULT NULL COMMENT 'tax_class_id',
+  `thumbnail` varchar(255) DEFAULT NULL COMMENT 'thumbnail',
+  `thumbnail_label` varchar(255) DEFAULT NULL COMMENT 'thumbnail_label',
+  `updated_at` timestamp NULL DEFAULT NULL COMMENT 'updated_at',
+  `url_key` varchar(255) DEFAULT NULL COMMENT 'url_key',
+  `url_path` varchar(255) DEFAULT NULL COMMENT 'url_path',
+  `visibility` smallint(5) unsigned DEFAULT NULL COMMENT 'visibility',
+  `weight` decimal(12,4) DEFAULT NULL COMMENT 'weight',
+  `weight_type` int(11) DEFAULT NULL COMMENT 'weight_type'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='Catalog Product Flat (Store 2)';
+
+-- --------------------------------------------------------
+
+--
+-- 表的结构 `catalog_product_flat_3`
+--
+
+CREATE TABLE IF NOT EXISTS `catalog_product_flat_3` (
+  `entity_id` int(10) unsigned NOT NULL COMMENT 'entity_id',
+  `attribute_set_id` smallint(5) unsigned NOT NULL DEFAULT '0' COMMENT 'attribute_set_id',
+  `type_id` varchar(32) NOT NULL DEFAULT 'simple' COMMENT 'type_id',
+  `activation_information` text COMMENT 'activation_information',
+  `color` int(11) DEFAULT NULL COMMENT 'color',
+  `color_value` varchar(255) DEFAULT NULL COMMENT 'color_value',
+  `computer_manufacturers` int(11) DEFAULT NULL COMMENT 'computer_manufacturers',
+  `computer_manufacturers_value` varchar(255) DEFAULT NULL COMMENT 'computer_manufacturers_value',
+  `contrast_ratio` int(11) DEFAULT NULL COMMENT 'contrast_ratio',
+  `contrast_ratio_value` varchar(255) DEFAULT NULL COMMENT 'contrast_ratio_value',
+  `cost` decimal(12,4) DEFAULT NULL COMMENT 'cost',
+  `country_orgin` text COMMENT 'country_orgin',
+  `cpu_speed` int(11) DEFAULT NULL COMMENT 'cpu_speed',
+  `cpu_speed_value` varchar(255) DEFAULT NULL COMMENT 'cpu_speed_value',
+  `created_at` timestamp NULL DEFAULT NULL COMMENT 'created_at',
+  `custom_design_from` datetime DEFAULT NULL COMMENT 'custom_design_from',
+  `custom_design_to` datetime DEFAULT NULL COMMENT 'custom_design_to',
+  `custom_layout_update` text COMMENT 'custom_layout_update',
+  `description` text COMMENT 'description',
+  `dimension` text COMMENT 'dimension',
+  `enable_googlecheckout` smallint(6) DEFAULT NULL COMMENT 'enable_googlecheckout',
+  `finish` text COMMENT 'finish',
+  `gallery` varchar(255) DEFAULT NULL COMMENT 'gallery',
+  `gender` int(11) DEFAULT NULL COMMENT 'gender',
+  `gender_value` varchar(255) DEFAULT NULL COMMENT 'gender_value',
+  `gift_message_available` smallint(6) DEFAULT NULL COMMENT 'gift_message_available',
+  `harddrive_speed` varchar(255) DEFAULT NULL COMMENT 'harddrive_speed',
+  `hardrive` text COMMENT 'hardrive',
+  `has_options` smallint(6) NOT NULL DEFAULT '0' COMMENT 'has_options',
+  `image` varchar(255) DEFAULT NULL COMMENT 'image',
+  `image_label` varchar(255) DEFAULT NULL COMMENT 'image_label',
+  `in_depth` text COMMENT 'in_depth',
+  `is_recurring` smallint(6) DEFAULT NULL COMMENT 'is_recurring',
+  `links_exist` int(11) DEFAULT NULL COMMENT 'links_exist',
+  `links_purchased_separately` int(11) DEFAULT NULL COMMENT 'links_purchased_separately',
+  `links_title` varchar(255) DEFAULT NULL COMMENT 'links_title',
+  `manufacturer` int(11) DEFAULT NULL COMMENT 'manufacturer',
+  `manufacturer_value` varchar(255) DEFAULT NULL COMMENT 'manufacturer_value',
+  `max_resolution` varchar(255) DEFAULT NULL COMMENT 'max_resolution',
+  `media_gallery` varchar(255) DEFAULT NULL COMMENT 'media_gallery',
+  `megapixels` int(11) DEFAULT NULL COMMENT 'megapixels',
+  `megapixels_value` varchar(255) DEFAULT NULL COMMENT 'megapixels_value',
+  `memory` text COMMENT 'memory',
+  `meta_description` varchar(255) DEFAULT NULL COMMENT 'meta_description',
+  `meta_keyword` text COMMENT 'meta_keyword',
+  `meta_title` varchar(255) DEFAULT NULL COMMENT 'meta_title',
+  `minimal_price` decimal(12,4) DEFAULT NULL COMMENT 'minimal_price',
+  `model` text COMMENT 'model',
+  `msrp` decimal(12,4) DEFAULT NULL COMMENT 'msrp',
+  `msrp_display_actual_price_type` varchar(255) DEFAULT NULL COMMENT 'msrp_display_actual_price_type',
+  `msrp_enabled` smallint(6) DEFAULT NULL COMMENT 'msrp_enabled',
+  `name` varchar(255) DEFAULT NULL COMMENT 'name',
+  `news_from_date` datetime DEFAULT NULL COMMENT 'news_from_date',
+  `news_to_date` datetime DEFAULT NULL COMMENT 'news_to_date',
+  `old_id` int(11) DEFAULT NULL COMMENT 'old_id',
+  `price` decimal(12,4) DEFAULT NULL COMMENT 'price',
+  `price_type` int(11) DEFAULT NULL COMMENT 'price_type',
+  `price_view` int(11) DEFAULT NULL COMMENT 'price_view',
+  `processor` text COMMENT 'processor',
+  `ram_size` varchar(255) DEFAULT NULL COMMENT 'ram_size',
+  `recurring_profile` text COMMENT 'recurring_profile',
+  `required_options` smallint(5) unsigned NOT NULL DEFAULT '0' COMMENT 'required_options',
+  `response_time` varchar(255) DEFAULT NULL COMMENT 'response_time',
+  `room` int(11) DEFAULT NULL COMMENT 'room',
+  `room_value` varchar(255) DEFAULT NULL COMMENT 'room_value',
+  `samples_title` varchar(255) DEFAULT NULL COMMENT 'samples_title',
+  `screensize` text COMMENT 'screensize',
+  `shape` text COMMENT 'shape',
+  `shipment_type` int(11) DEFAULT NULL COMMENT 'shipment_type',
+  `shirt_size` int(11) DEFAULT NULL COMMENT 'shirt_size',
+  `shirt_size_value` varchar(255) DEFAULT NULL COMMENT 'shirt_size_value',
+  `shoe_size` int(11) DEFAULT NULL COMMENT 'shoe_size',
+  `shoe_size_value` varchar(255) DEFAULT NULL COMMENT 'shoe_size_value',
+  `shoe_type` int(11) DEFAULT NULL COMMENT 'shoe_type',
+  `shoe_type_value` varchar(255) DEFAULT NULL COMMENT 'shoe_type_value',
+  `short_description` text COMMENT 'short_description',
+  `sku` varchar(64) DEFAULT NULL COMMENT 'sku',
+  `sku_type` int(11) DEFAULT NULL COMMENT 'sku_type',
+  `small_image` varchar(255) DEFAULT NULL COMMENT 'small_image',
+  `small_image_label` varchar(255) DEFAULT NULL COMMENT 'small_image_label',
+  `special_from_date` datetime DEFAULT NULL COMMENT 'special_from_date',
+  `special_price` decimal(12,4) DEFAULT NULL COMMENT 'special_price',
+  `special_to_date` datetime DEFAULT NULL COMMENT 'special_to_date',
+  `tax_class_id` int(10) unsigned DEFAULT NULL COMMENT 'tax_class_id',
+  `thumbnail` varchar(255) DEFAULT NULL COMMENT 'thumbnail',
+  `thumbnail_label` varchar(255) DEFAULT NULL COMMENT 'thumbnail_label',
+  `updated_at` timestamp NULL DEFAULT NULL COMMENT 'updated_at',
+  `url_key` varchar(255) DEFAULT NULL COMMENT 'url_key',
+  `url_path` varchar(255) DEFAULT NULL COMMENT 'url_path',
+  `visibility` smallint(5) unsigned DEFAULT NULL COMMENT 'visibility',
+  `weight` decimal(12,4) DEFAULT NULL COMMENT 'weight',
+  `weight_type` int(11) DEFAULT NULL COMMENT 'weight_type'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='Catalog Product Flat (Store 3)';
 
 -- --------------------------------------------------------
 
@@ -1423,7 +1500,7 @@ CREATE TABLE IF NOT EXISTS `catalog_product_index_eav_decimal_tmp` (
   `attribute_id` smallint(5) unsigned NOT NULL DEFAULT '0' COMMENT 'Attribute ID',
   `store_id` smallint(5) unsigned NOT NULL DEFAULT '0' COMMENT 'Store ID',
   `value` decimal(12,4) NOT NULL DEFAULT '0.0000' COMMENT 'Value'
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='Catalog Product EAV Decimal Indexer Temp Table';
+) ENGINE=MEMORY DEFAULT CHARSET=utf8 COMMENT='Catalog Product EAV Decimal Indexer Temp Table';
 
 -- --------------------------------------------------------
 
@@ -1449,7 +1526,7 @@ CREATE TABLE IF NOT EXISTS `catalog_product_index_eav_tmp` (
   `attribute_id` smallint(5) unsigned NOT NULL DEFAULT '0' COMMENT 'Attribute ID',
   `store_id` smallint(5) unsigned NOT NULL DEFAULT '0' COMMENT 'Store ID',
   `value` int(10) unsigned NOT NULL DEFAULT '0' COMMENT 'Value'
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='Catalog Product EAV Indexer Temp Table';
+) ENGINE=MEMORY DEFAULT CHARSET=utf8 COMMENT='Catalog Product EAV Indexer Temp Table';
 
 -- --------------------------------------------------------
 
@@ -1546,7 +1623,7 @@ CREATE TABLE IF NOT EXISTS `catalog_product_index_price_bundle_opt_tmp` (
   `alt_tier_price` decimal(12,4) DEFAULT NULL COMMENT 'Alt Tier Price',
   `group_price` decimal(12,4) DEFAULT NULL COMMENT 'Group price',
   `alt_group_price` decimal(12,4) DEFAULT NULL COMMENT 'Alt Group Price'
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='Catalog Product Index Price Bundle Opt Tmp';
+) ENGINE=MEMORY DEFAULT CHARSET=utf8 COMMENT='Catalog Product Index Price Bundle Opt Tmp';
 
 -- --------------------------------------------------------
 
@@ -1584,7 +1661,7 @@ CREATE TABLE IF NOT EXISTS `catalog_product_index_price_bundle_sel_tmp` (
   `price` decimal(12,4) DEFAULT NULL COMMENT 'Price',
   `tier_price` decimal(12,4) DEFAULT NULL COMMENT 'Tier Price',
   `group_price` decimal(12,4) DEFAULT NULL COMMENT 'Group price'
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='Catalog Product Index Price Bundle Sel Tmp';
+) ENGINE=MEMORY DEFAULT CHARSET=utf8 COMMENT='Catalog Product Index Price Bundle Sel Tmp';
 
 -- --------------------------------------------------------
 
@@ -1609,7 +1686,7 @@ CREATE TABLE IF NOT EXISTS `catalog_product_index_price_bundle_tmp` (
   `group_price` decimal(12,4) DEFAULT NULL COMMENT 'Group price',
   `base_group_price` decimal(12,4) DEFAULT NULL COMMENT 'Base Group Price',
   `group_price_percent` decimal(12,4) DEFAULT NULL COMMENT 'Group Price Percent'
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='Catalog Product Index Price Bundle Tmp';
+) ENGINE=MEMORY DEFAULT CHARSET=utf8 COMMENT='Catalog Product Index Price Bundle Tmp';
 
 -- --------------------------------------------------------
 
@@ -1641,7 +1718,7 @@ CREATE TABLE IF NOT EXISTS `catalog_product_index_price_cfg_opt_agr_tmp` (
   `price` decimal(12,4) DEFAULT NULL COMMENT 'Price',
   `tier_price` decimal(12,4) DEFAULT NULL COMMENT 'Tier Price',
   `group_price` decimal(12,4) DEFAULT NULL COMMENT 'Group price'
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='Catalog Product Price Indexer Config Option Aggregate Temp T';
+) ENGINE=MEMORY DEFAULT CHARSET=utf8 COMMENT='Catalog Product Price Indexer Config Option Aggregate Temp T';
 
 -- --------------------------------------------------------
 
@@ -1673,7 +1750,7 @@ CREATE TABLE IF NOT EXISTS `catalog_product_index_price_cfg_opt_tmp` (
   `max_price` decimal(12,4) DEFAULT NULL COMMENT 'Max Price',
   `tier_price` decimal(12,4) DEFAULT NULL COMMENT 'Tier Price',
   `group_price` decimal(12,4) DEFAULT NULL COMMENT 'Group price'
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='Catalog Product Price Indexer Config Option Temp Table';
+) ENGINE=MEMORY DEFAULT CHARSET=utf8 COMMENT='Catalog Product Price Indexer Config Option Temp Table';
 
 -- --------------------------------------------------------
 
@@ -1701,7 +1778,7 @@ CREATE TABLE IF NOT EXISTS `catalog_product_index_price_downlod_tmp` (
   `website_id` smallint(5) unsigned NOT NULL COMMENT 'Website ID',
   `min_price` decimal(12,4) NOT NULL DEFAULT '0.0000' COMMENT 'Minimum price',
   `max_price` decimal(12,4) NOT NULL DEFAULT '0.0000' COMMENT 'Maximum price'
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='Temporary Indexer Table for price of downloadable products';
+) ENGINE=MEMORY DEFAULT CHARSET=utf8 COMMENT='Temporary Indexer Table for price of downloadable products';
 
 -- --------------------------------------------------------
 
@@ -1743,7 +1820,7 @@ CREATE TABLE IF NOT EXISTS `catalog_product_index_price_final_tmp` (
   `base_tier` decimal(12,4) DEFAULT NULL COMMENT 'Base Tier',
   `group_price` decimal(12,4) DEFAULT NULL COMMENT 'Group price',
   `base_group_price` decimal(12,4) DEFAULT NULL COMMENT 'Base Group Price'
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='Catalog Product Price Indexer Final Temp Table';
+) ENGINE=MEMORY DEFAULT CHARSET=utf8 COMMENT='Catalog Product Price Indexer Final Temp Table';
 
 -- --------------------------------------------------------
 
@@ -1796,7 +1873,7 @@ CREATE TABLE IF NOT EXISTS `catalog_product_index_price_opt_agr_tmp` (
   `max_price` decimal(12,4) DEFAULT NULL COMMENT 'Max Price',
   `tier_price` decimal(12,4) DEFAULT NULL COMMENT 'Tier Price',
   `group_price` decimal(12,4) DEFAULT NULL COMMENT 'Group price'
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='Catalog Product Price Indexer Option Aggregate Temp Table';
+) ENGINE=MEMORY DEFAULT CHARSET=utf8 COMMENT='Catalog Product Price Indexer Option Aggregate Temp Table';
 
 -- --------------------------------------------------------
 
@@ -1828,7 +1905,7 @@ CREATE TABLE IF NOT EXISTS `catalog_product_index_price_opt_tmp` (
   `max_price` decimal(12,4) DEFAULT NULL COMMENT 'Max Price',
   `tier_price` decimal(12,4) DEFAULT NULL COMMENT 'Tier Price',
   `group_price` decimal(12,4) DEFAULT NULL COMMENT 'Group price'
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='Catalog Product Price Indexer Option Temp Table';
+) ENGINE=MEMORY DEFAULT CHARSET=utf8 COMMENT='Catalog Product Price Indexer Option Temp Table';
 
 -- --------------------------------------------------------
 
@@ -1847,7 +1924,7 @@ CREATE TABLE IF NOT EXISTS `catalog_product_index_price_tmp` (
   `max_price` decimal(12,4) DEFAULT NULL COMMENT 'Max Price',
   `tier_price` decimal(12,4) DEFAULT NULL COMMENT 'Tier Price',
   `group_price` decimal(12,4) DEFAULT NULL COMMENT 'Group price'
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='Catalog Product Price Indexer Temp Table';
+) ENGINE=MEMORY DEFAULT CHARSET=utf8 COMMENT='Catalog Product Price Indexer Temp Table';
 
 -- --------------------------------------------------------
 
@@ -2045,7 +2122,7 @@ CREATE TABLE IF NOT EXISTS `catalog_product_option_type_value` (
 CREATE TABLE IF NOT EXISTS `catalog_product_relation` (
   `parent_id` int(10) unsigned NOT NULL DEFAULT '0' COMMENT 'Parent ID',
   `child_id` int(10) unsigned NOT NULL DEFAULT '0' COMMENT 'Child ID'
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='Catalog Product Relation Table';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 ROW_FORMAT=FIXED COMMENT='Catalog Product Relation Table';
 
 -- --------------------------------------------------------
 
@@ -2072,7 +2149,7 @@ CREATE TABLE IF NOT EXISTS `catalog_product_super_attribute_label` (
   `store_id` smallint(5) unsigned NOT NULL DEFAULT '0' COMMENT 'Store ID',
   `use_default` smallint(5) unsigned DEFAULT '0' COMMENT 'Use Default Value',
   `value` varchar(255) DEFAULT NULL COMMENT 'Value'
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='Catalog Product Super Attribute Label Table';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC COMMENT='Catalog Product Super Attribute Label Table';
 
 -- --------------------------------------------------------
 
@@ -2110,7 +2187,7 @@ CREATE TABLE IF NOT EXISTS `catalog_product_super_link` (
 CREATE TABLE IF NOT EXISTS `catalog_product_website` (
   `product_id` int(10) unsigned NOT NULL DEFAULT '0' COMMENT 'Product ID',
   `website_id` smallint(5) unsigned NOT NULL DEFAULT '0' COMMENT 'Website ID'
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='Catalog Product To Website Linkage Table';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 ROW_FORMAT=FIXED COMMENT='Catalog Product To Website Linkage Table';
 
 -- --------------------------------------------------------
 
@@ -2178,7 +2255,7 @@ CREATE TABLE IF NOT EXISTS `cms_page` (
   `root_template` varchar(255) DEFAULT NULL COMMENT 'Page Template',
   `meta_keywords` text COMMENT 'Page Meta Keywords',
   `meta_description` text COMMENT 'Page Meta Description',
-  `identifier` varchar(100) DEFAULT NULL COMMENT 'Page String Identifier',
+  `identifier` varchar(100) NOT NULL COMMENT 'Page String Identifier',
   `content_heading` varchar(255) DEFAULT NULL COMMENT 'Page Content Heading',
   `content` mediumtext COMMENT 'Page Content',
   `creation_time` timestamp NULL DEFAULT NULL COMMENT 'Page Creation Time',
@@ -2203,52 +2280,6 @@ CREATE TABLE IF NOT EXISTS `cms_page_store` (
   `page_id` smallint(6) NOT NULL COMMENT 'Page ID',
   `store_id` smallint(5) unsigned NOT NULL COMMENT 'Store ID'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='CMS Page To Store Linkage Table';
-
--- --------------------------------------------------------
-
---
--- 表的结构 `contacts`
---
-
-CREATE TABLE IF NOT EXISTS `contacts` (
-  `id` int(10) unsigned NOT NULL,
-  `name` varchar(50) NOT NULL,
-  `email` varchar(50) NOT NULL,
-  `telephone` varchar(20) NOT NULL,
-  `order_id` varchar(50) NOT NULL,
-  `sku` varchar(10) NOT NULL,
-  `comment` text NOT NULL,
-  `client_view` tinyint(2) NOT NULL DEFAULT '1',
-  `feedback` smallint(6) NOT NULL DEFAULT '0',
-  `customer_id` int(11) NOT NULL,
-  `created_at` datetime NOT NULL,
-  `attachment` varchar(600) NOT NULL,
-  `updated_at` datetime NOT NULL,
-  `status` tinyint(4) NOT NULL DEFAULT '0',
-  `subject` varchar(100) NOT NULL,
-  `category` varchar(20) NOT NULL,
-  `message_id` varchar(50) NOT NULL,
-  `admin_view` tinyint(2) NOT NULL DEFAULT '0',
-  `requesttype` varchar(20) DEFAULT NULL,
-  `request_status` tinyint(4) NOT NULL DEFAULT '0'
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
-
--- --------------------------------------------------------
-
---
--- 表的结构 `contacts_feedback`
---
-
-CREATE TABLE IF NOT EXISTS `contacts_feedback` (
-  `id` int(11) unsigned NOT NULL,
-  `customer_id` int(11) NOT NULL,
-  `comment` text NOT NULL,
-  `created_at` datetime NOT NULL,
-  `attachment` varchar(600) CHARACTER SET utf8 NOT NULL,
-  `admin` varchar(20) NOT NULL DEFAULT '0',
-  `contacts_id` int(10) unsigned NOT NULL,
-  `name` varchar(50) NOT NULL
-) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
 
@@ -2293,20 +2324,6 @@ CREATE TABLE IF NOT EXISTS `core_cache_tag` (
 --
 
 CREATE TABLE IF NOT EXISTS `core_config_data` (
-  `config_id` int(10) unsigned NOT NULL COMMENT 'Config Id',
-  `scope` varchar(8) NOT NULL DEFAULT 'default' COMMENT 'Config Scope',
-  `scope_id` int(11) NOT NULL DEFAULT '0' COMMENT 'Config Scope Id',
-  `path` varchar(255) NOT NULL DEFAULT 'general' COMMENT 'Config Path',
-  `value` text COMMENT 'Config Value'
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='Config Data';
-
--- --------------------------------------------------------
-
---
--- 表的结构 `core_config_data_bak`
---
-
-CREATE TABLE IF NOT EXISTS `core_config_data_bak` (
   `config_id` int(10) unsigned NOT NULL COMMENT 'Config Id',
   `scope` varchar(8) NOT NULL DEFAULT 'default' COMMENT 'Config Scope',
   `scope_id` int(11) NOT NULL DEFAULT '0' COMMENT 'Config Scope Id',
@@ -2467,25 +2484,6 @@ CREATE TABLE IF NOT EXISTS `core_url_rewrite` (
 -- --------------------------------------------------------
 
 --
--- 表的结构 `core_url_rewrite_new`
---
-
-CREATE TABLE IF NOT EXISTS `core_url_rewrite_new` (
-  `url_rewrite_id` int(10) unsigned NOT NULL COMMENT 'Rewrite Id',
-  `store_id` smallint(5) unsigned NOT NULL DEFAULT '0' COMMENT 'Store Id',
-  `category_id` int(10) unsigned DEFAULT NULL COMMENT 'Category Id',
-  `product_id` int(10) unsigned DEFAULT NULL COMMENT 'Product Id',
-  `id_path` varchar(255) DEFAULT NULL COMMENT 'Id Path',
-  `request_path` varchar(255) DEFAULT NULL COMMENT 'Request Path',
-  `target_path` varchar(255) DEFAULT NULL COMMENT 'Target Path',
-  `is_system` smallint(5) unsigned DEFAULT '1' COMMENT 'Defines is Rewrite System',
-  `options` varchar(255) DEFAULT NULL COMMENT 'Options',
-  `description` varchar(255) DEFAULT NULL COMMENT 'Deascription'
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='Url Rewrites';
-
--- --------------------------------------------------------
-
---
 -- 表的结构 `core_variable`
 --
 
@@ -2585,7 +2583,7 @@ CREATE TABLE IF NOT EXISTS `coupon_aggregated_updated` (
   `discount_amount_actual` decimal(12,4) NOT NULL DEFAULT '0.0000' COMMENT 'Discount Amount Actual',
   `total_amount_actual` decimal(12,4) NOT NULL DEFAULT '0.0000' COMMENT 'Total Amount Actual',
   `rule_name` varchar(255) DEFAULT NULL COMMENT 'Rule Name'
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='Ueb Coupon Aggregated Updated';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='Coupon Aggregated Updated';
 
 -- --------------------------------------------------------
 
@@ -2619,7 +2617,7 @@ CREATE TABLE IF NOT EXISTS `customer_address_entity` (
   `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT 'Created At',
   `updated_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00' COMMENT 'Updated At',
   `is_active` smallint(5) unsigned NOT NULL DEFAULT '1' COMMENT 'Is Active'
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='Customer Address Entity';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC COMMENT='Customer Address Entity';
 
 -- --------------------------------------------------------
 
@@ -2742,7 +2740,7 @@ CREATE TABLE IF NOT EXISTS `customer_entity` (
   `updated_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00' COMMENT 'Updated At',
   `is_active` smallint(5) unsigned NOT NULL DEFAULT '1' COMMENT 'Is Active',
   `disable_auto_group_change` smallint(5) unsigned NOT NULL DEFAULT '0' COMMENT 'Disable automatic group change based on VAT ID'
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='Customer Entity';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC COMMENT='Customer Entity';
 
 -- --------------------------------------------------------
 
@@ -2962,9 +2960,9 @@ CREATE TABLE IF NOT EXISTS `design_change` (
 --
 
 CREATE TABLE IF NOT EXISTS `directory_country` (
-  `country_id` varchar(2) NOT NULL DEFAULT '' COMMENT 'Country Id in ISO-2',
-  `iso2_code` varchar(2) DEFAULT NULL COMMENT 'Country ISO-2 format',
-  `iso3_code` varchar(3) DEFAULT NULL COMMENT 'Country ISO-3'
+  `country_id` varchar(2) NOT NULL COMMENT 'Country Id in ISO-2',
+  `iso2_code` varchar(2) NOT NULL COMMENT 'Country ISO-2 format',
+  `iso3_code` varchar(3) NOT NULL COMMENT 'Country ISO-3'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='Directory Country';
 
 -- --------------------------------------------------------
@@ -2975,8 +2973,8 @@ CREATE TABLE IF NOT EXISTS `directory_country` (
 
 CREATE TABLE IF NOT EXISTS `directory_country_format` (
   `country_format_id` int(10) unsigned NOT NULL COMMENT 'Country Format Id',
-  `country_id` varchar(2) DEFAULT NULL COMMENT 'Country Id in ISO-2',
-  `type` varchar(30) DEFAULT NULL COMMENT 'Country Format Type',
+  `country_id` varchar(2) NOT NULL COMMENT 'Country Id in ISO-2',
+  `type` varchar(30) NOT NULL COMMENT 'Country Format Type',
   `format` text NOT NULL COMMENT 'Country Format'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='Directory Country Format';
 
@@ -2989,7 +2987,7 @@ CREATE TABLE IF NOT EXISTS `directory_country_format` (
 CREATE TABLE IF NOT EXISTS `directory_country_region` (
   `region_id` int(10) unsigned NOT NULL COMMENT 'Region Id',
   `country_id` varchar(4) NOT NULL DEFAULT '0' COMMENT 'Country Id in ISO-2',
-  `code` varchar(32) DEFAULT NULL COMMENT 'Region code',
+  `code` varchar(32) NOT NULL COMMENT 'Region code',
   `default_name` varchar(255) DEFAULT NULL COMMENT 'Region Name'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='Directory Country Region';
 
@@ -3000,9 +2998,9 @@ CREATE TABLE IF NOT EXISTS `directory_country_region` (
 --
 
 CREATE TABLE IF NOT EXISTS `directory_country_region_name` (
-  `locale` varchar(8) NOT NULL DEFAULT '' COMMENT 'Locale',
+  `locale` varchar(8) NOT NULL COMMENT 'Locale',
   `region_id` int(10) unsigned NOT NULL DEFAULT '0' COMMENT 'Region Id',
-  `name` varchar(255) DEFAULT NULL COMMENT 'Region Name'
+  `name` varchar(255) NOT NULL COMMENT 'Region Name'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='Directory Country Region Name';
 
 -- --------------------------------------------------------
@@ -3015,7 +3013,7 @@ CREATE TABLE IF NOT EXISTS `directory_currency_rate` (
   `currency_from` varchar(3) NOT NULL COMMENT 'Currency Code Convert From',
   `currency_to` varchar(3) NOT NULL COMMENT 'Currency Code Convert To',
   `rate` decimal(24,12) NOT NULL DEFAULT '0.000000000000' COMMENT 'Currency Conversion Rate'
-) ENGINE=MyISAM DEFAULT CHARSET=utf8 COMMENT='Directory Currency Rate';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='Directory Currency Rate';
 
 -- --------------------------------------------------------
 
@@ -3441,54 +3439,6 @@ CREATE TABLE IF NOT EXISTS `eav_form_type_entity` (
 -- --------------------------------------------------------
 
 --
--- 表的结构 `errorpay`
---
-
-CREATE TABLE IF NOT EXISTS `errorpay` (
-  `errorpay_id` int(11) unsigned NOT NULL,
-  `title` varchar(255) NOT NULL DEFAULT '',
-  `filename` varchar(255) NOT NULL DEFAULT '',
-  `content` text NOT NULL,
-  `status` smallint(6) NOT NULL DEFAULT '0',
-  `created_time` datetime DEFAULT NULL,
-  `update_time` datetime DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
--- --------------------------------------------------------
-
---
--- 表的结构 `express_rates`
---
-
-CREATE TABLE IF NOT EXISTS `express_rates` (
-  `id` smallint(5) unsigned NOT NULL,
-  `first_weight` smallint(5) unsigned NOT NULL,
-  `price` decimal(10,2) NOT NULL,
-  `block_weight` smallint(5) unsigned NOT NULL,
-  `block_price` decimal(10,2) NOT NULL,
-  `discount` float NOT NULL,
-  `max_weight` int(10) unsigned NOT NULL,
-  `express_type` varchar(20) NOT NULL,
-  `country_id` varchar(500) NOT NULL,
-  `special_discount` float NOT NULL,
-  `scope` enum('default','websites','stores','config') NOT NULL DEFAULT 'default',
-  `scope_id` smallint(5) unsigned NOT NULL
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
-
--- --------------------------------------------------------
-
---
--- 表的结构 `fox_quote_id`
---
-
-CREATE TABLE IF NOT EXISTS `fox_quote_id` (
-  `quote_id` int(11) NOT NULL,
-  `new_quote_id` int(11) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
--- --------------------------------------------------------
-
---
 -- 表的结构 `gift_message`
 --
 
@@ -3499,79 +3449,6 @@ CREATE TABLE IF NOT EXISTS `gift_message` (
   `recipient` varchar(255) DEFAULT NULL COMMENT 'Recipient',
   `message` text COMMENT 'Message'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='Gift Message';
-
--- --------------------------------------------------------
-
---
--- 表的结构 `globalcollect_order_sent`
---
-
-CREATE TABLE IF NOT EXISTS `globalcollect_order_sent` (
-  `order_id` varchar(50) NOT NULL,
-  `increment_id` varchar(50) NOT NULL,
-  `created_at` datetime NOT NULL,
-  `checked_at` datetime DEFAULT NULL,
-  `processed` tinyint(2) NOT NULL DEFAULT '0',
-  `test_mode` int(5) DEFAULT '0' COMMENT 'Is order created in Test Mode',
-  `attempt_count` int(5) DEFAULT '0' COMMENT 'Attempt count'
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
-
--- --------------------------------------------------------
-
---
--- 表的结构 `globalcollect_payment_method`
---
-
-CREATE TABLE IF NOT EXISTS `globalcollect_payment_method` (
-  `payment_method_id` tinyint(3) unsigned NOT NULL,
-  `code` varchar(32) NOT NULL DEFAULT '',
-  `name` varchar(50) NOT NULL DEFAULT ''
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
--- --------------------------------------------------------
-
---
--- 表的结构 `globalcollect_payment_product`
---
-
-CREATE TABLE IF NOT EXISTS `globalcollect_payment_product` (
-  `payment_product_id` smallint(5) unsigned NOT NULL,
-  `code` varchar(64) NOT NULL DEFAULT '',
-  `payment_method_id` tinyint(3) unsigned NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
--- --------------------------------------------------------
-
---
--- 表的结构 `globalcollect_payment_scope`
---
-
-CREATE TABLE IF NOT EXISTS `globalcollect_payment_scope` (
-  `payment_product_id` smallint(5) unsigned NOT NULL,
-  `country_id` char(3) NOT NULL DEFAULT '',
-  `language` char(2) NOT NULL,
-  `currency_code` char(3) DEFAULT NULL,
-  `minimum_amount` decimal(12,4) unsigned DEFAULT NULL,
-  `maximum_amount` decimal(12,4) unsigned DEFAULT NULL,
-  `order_type` tinyint(3) unsigned DEFAULT '0',
-  `collected_at` datetime DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
--- --------------------------------------------------------
-
---
--- 表的结构 `globalcollect_token`
---
-
-CREATE TABLE IF NOT EXISTS `globalcollect_token` (
-  `token_id` int(10) unsigned NOT NULL COMMENT 'Token Id',
-  `customer_id` int(10) unsigned NOT NULL COMMENT 'Customer Id',
-  `token` varchar(255) NOT NULL DEFAULT '' COMMENT 'GC Token',
-  `cc_number` varchar(255) NOT NULL DEFAULT '' COMMENT 'CC Number',
-  `expire_date` varchar(5) NOT NULL DEFAULT '' COMMENT 'CC Expire date',
-  `payment_product_id` int(11) DEFAULT NULL COMMENT 'CC Type',
-  `effort_id` int(11) DEFAULT '1' COMMENT 'Effort ID'
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='globalcollect_token';
 
 -- --------------------------------------------------------
 
@@ -3692,7 +3569,7 @@ CREATE TABLE IF NOT EXISTS `log_summary` (
 
 CREATE TABLE IF NOT EXISTS `log_summary_type` (
   `type_id` smallint(5) unsigned NOT NULL COMMENT 'Type ID',
-  `type_code` varchar(64) DEFAULT NULL COMMENT 'Type Code',
+  `type_code` varchar(64) NOT NULL COMMENT 'Type Code',
   `period` smallint(5) unsigned NOT NULL DEFAULT '0' COMMENT 'Period',
   `period_type` varchar(6) NOT NULL DEFAULT 'MINUTE' COMMENT 'Period Type'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='Log Summary Types Table';
@@ -3717,7 +3594,7 @@ CREATE TABLE IF NOT EXISTS `log_url` (
 
 CREATE TABLE IF NOT EXISTS `log_url_info` (
   `url_id` bigint(20) unsigned NOT NULL COMMENT 'URL ID',
-  `url` varchar(255) DEFAULT NULL COMMENT 'URL',
+  `url` varchar(255) NOT NULL DEFAULT '' COMMENT 'URL',
   `referer` varchar(255) DEFAULT NULL COMMENT 'Referrer'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='Log URL Info Table';
 
@@ -3729,7 +3606,7 @@ CREATE TABLE IF NOT EXISTS `log_url_info` (
 
 CREATE TABLE IF NOT EXISTS `log_visitor` (
   `visitor_id` bigint(20) unsigned NOT NULL COMMENT 'Visitor ID',
-  `session_id` varchar(64) DEFAULT NULL COMMENT 'Session ID',
+  `session_id` varchar(64) NOT NULL COMMENT 'Session ID',
   `first_visit_at` timestamp NULL DEFAULT NULL COMMENT 'First Visit Time',
   `last_visit_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00' COMMENT 'Last Visit Time',
   `last_url_id` bigint(20) unsigned NOT NULL DEFAULT '0' COMMENT 'Last URL ID',
@@ -3767,276 +3644,6 @@ CREATE TABLE IF NOT EXISTS `log_visitor_online` (
   `customer_id` int(10) unsigned DEFAULT NULL COMMENT 'Customer ID',
   `last_url` varchar(255) DEFAULT NULL COMMENT 'Last URL'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='Log Visitor Online Table';
-
--- --------------------------------------------------------
-
---
--- 表的结构 `mdg_giftregistry_entity`
---
-
-CREATE TABLE IF NOT EXISTS `mdg_giftregistry_entity` (
-  `entity_id` int(10) unsigned NOT NULL COMMENT 'Entity Id',
-  `customer_id` int(10) unsigned NOT NULL DEFAULT '0' COMMENT 'Customer Id',
-  `type_id` int(10) unsigned NOT NULL DEFAULT '0' COMMENT 'Type Id',
-  `website_id` smallint(5) unsigned NOT NULL DEFAULT '0' COMMENT 'Website Id',
-  `event_name` varchar(255) DEFAULT NULL COMMENT 'Event Name',
-  `event_date` date DEFAULT NULL COMMENT 'Event Date',
-  `event_country` varchar(3) DEFAULT NULL COMMENT 'Event Country',
-  `event_location` varchar(255) DEFAULT NULL COMMENT 'Event Location',
-  `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT 'Created At'
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='mdg_giftregistry_entity';
-
--- --------------------------------------------------------
-
---
--- 表的结构 `mdg_giftregistry_type`
---
-
-CREATE TABLE IF NOT EXISTS `mdg_giftregistry_type` (
-  `type_id` int(10) unsigned NOT NULL COMMENT 'Type Id',
-  `code` varchar(25) DEFAULT NULL COMMENT 'Code',
-  `name` varchar(250) DEFAULT NULL COMMENT 'name',
-  `description` varchar(250) DEFAULT NULL COMMENT 'Description',
-  `store_id` smallint(5) unsigned NOT NULL DEFAULT '0' COMMENT 'Store Id',
-  `is_active` smallint(5) unsigned NOT NULL DEFAULT '1' COMMENT 'Is Active'
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='Magento Developers Guide Type Table';
-
--- --------------------------------------------------------
-
---
--- 表的结构 `newfrog_catalog_relation`
---
-
-CREATE TABLE IF NOT EXISTS `newfrog_catalog_relation` (
-  `id` int(10) unsigned NOT NULL,
-  `sku` varchar(20) NOT NULL,
-  `category_id` int(10) unsigned NOT NULL,
-  `type` varchar(100) NOT NULL,
-  `status` smallint(1) NOT NULL,
-  `starttime` date NOT NULL,
-  `endtime` date NOT NULL,
-  `updatetime` date DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
--- --------------------------------------------------------
-
---
--- 表的结构 `newfrog_category_new`
---
-
-CREATE TABLE IF NOT EXISTS `newfrog_category_new` (
-  `category_id` int(4) NOT NULL,
-  `newfrog_id` int(6) DEFAULT NULL,
-  `parent_id` int(4) NOT NULL,
-  `newfrog_parent_id` int(6) DEFAULT NULL,
-  `name` varchar(255) NOT NULL,
-  `position` tinyint(4) NOT NULL,
-  `level` tinyint(4) NOT NULL,
-  `is_active` tinyint(4) DEFAULT '1',
-  `created_at` datetime DEFAULT NULL,
-  `updated_at` datetime DEFAULT NULL,
-  `url_key` varchar(255) DEFAULT NULL,
-  `description` tinytext,
-  `meta_title` varchar(252) DEFAULT NULL,
-  `meta_keywords` varchar(255) DEFAULT NULL,
-  `meta_description` varchar(255) DEFAULT NULL,
-  `path` varchar(255) DEFAULT NULL,
-  `url_path` varchar(255) DEFAULT NULL,
-  `available_sort_by` varchar(255) DEFAULT NULL,
-  `page_layout` varchar(50) DEFAULT NULL,
-  `include_in_menu` tinyint(4) NOT NULL DEFAULT '1',
-  `is_anchor` tinyint(4) NOT NULL DEFAULT '1'
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
-
--- --------------------------------------------------------
-
---
--- 表的结构 `newfrog_clearance`
---
-
-CREATE TABLE IF NOT EXISTS `newfrog_clearance` (
-  `id` smallint(6) NOT NULL,
-  `product_id` varchar(20) NOT NULL DEFAULT '0',
-  `sku` varchar(20) NOT NULL,
-  `status` tinyint(4) NOT NULL DEFAULT '0',
-  `type` varchar(20) NOT NULL DEFAULT 'clearance'
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-
--- --------------------------------------------------------
-
---
--- 表的结构 `newfrog_erorreport`
---
-
-CREATE TABLE IF NOT EXISTS `newfrog_erorreport` (
-  `id` int(10) NOT NULL,
-  `description` text,
-  `email` varchar(50) DEFAULT '0',
-  `details` tinytext,
-  `productname` varchar(100) DEFAULT '0',
-  `productlink` varchar(100) DEFAULT '0'
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
-
--- --------------------------------------------------------
-
---
--- 表的结构 `newfrog_lover`
---
-
-CREATE TABLE IF NOT EXISTS `newfrog_lover` (
-  `id` int(10) unsigned NOT NULL,
-  `view_url` varchar(100) NOT NULL,
-  `title` varchar(50) NOT NULL,
-  `user_num` varchar(20) NOT NULL,
-  `user_name` varchar(20) NOT NULL,
-  `upload_time` date NOT NULL,
-  `check_time` date NOT NULL,
-  `check_status` smallint(2) NOT NULL,
-  `click_count` int(10) unsigned NOT NULL,
-  `descript` text NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
--- --------------------------------------------------------
-
---
--- 表的结构 `newfrog_lover_click`
---
-
-CREATE TABLE IF NOT EXISTS `newfrog_lover_click` (
-  `id` int(10) unsigned NOT NULL,
-  `IP` varchar(20) NOT NULL,
-  `parent_id` int(10) unsigned NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
--- --------------------------------------------------------
-
---
--- 表的结构 `newfrog_lover_remark`
---
-
-CREATE TABLE IF NOT EXISTS `newfrog_lover_remark` (
-  `id` int(10) unsigned NOT NULL,
-  `parent_id` int(10) unsigned NOT NULL,
-  `user_name` varchar(20) NOT NULL,
-  `remark_content` text NOT NULL,
-  `create_time` date NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
--- --------------------------------------------------------
-
---
--- 表的结构 `newfrog_newzone_entity`
---
-
-CREATE TABLE IF NOT EXISTS `newfrog_newzone_entity` (
-  `entity_id` int(10) unsigned NOT NULL COMMENT 'Entity Id',
-  `type_id` int(10) unsigned NOT NULL DEFAULT '0' COMMENT 'Type Id',
-  `website_id` smallint(5) unsigned NOT NULL DEFAULT '0' COMMENT 'Website Id',
-  `sort_num` int(11) DEFAULT '0' COMMENT 'Sort Num',
-  `zone_status` tinyint(1) DEFAULT '1' COMMENT 'Zone_Status',
-  `zone_name` varchar(255) DEFAULT NULL COMMENT 'Zone Name',
-  `zone_url` varchar(255) DEFAULT NULL COMMENT 'Zone Url',
-  `zone_img` varchar(255) DEFAULT NULL COMMENT 'Zone Img',
-  `zone_img_alt` varchar(255) DEFAULT NULL COMMENT 'Zone Img Alt',
-  `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT 'Created At'
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='newfrog_newzone_entity';
-
--- --------------------------------------------------------
-
---
--- 表的结构 `newfrog_newzone_type`
---
-
-CREATE TABLE IF NOT EXISTS `newfrog_newzone_type` (
-  `type_id` int(10) unsigned NOT NULL COMMENT 'Type Id',
-  `code` varchar(25) DEFAULT NULL COMMENT 'Code',
-  `name` varchar(250) DEFAULT NULL COMMENT 'name',
-  `description` varchar(250) DEFAULT NULL COMMENT 'Description',
-  `store_id` smallint(5) unsigned NOT NULL DEFAULT '0' COMMENT 'Store Id',
-  `is_active` smallint(5) unsigned NOT NULL DEFAULT '1' COMMENT 'Is Active'
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='Magento Developers Guide Type Table';
-
--- --------------------------------------------------------
-
---
--- 表的结构 `newfrog_online_price_tmp`
---
-
-CREATE TABLE IF NOT EXISTS `newfrog_online_price_tmp` (
-  `id` int(11) NOT NULL,
-  `entity_id` int(11) DEFAULT NULL,
-  `sku` varchar(15) DEFAULT NULL,
-  `newfrog_price` varchar(15) DEFAULT NULL,
-  `erp_price` varchar(15) DEFAULT NULL,
-  `special_price` varchar(15) DEFAULT NULL,
-  `special_from_date` date DEFAULT NULL,
-  `special_to_date` date DEFAULT NULL,
-  `virtual_price` varchar(15) DEFAULT NULL,
-  `tier_price` varchar(255) DEFAULT NULL,
-  `state` tinyint(4) DEFAULT '0'
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
-
--- --------------------------------------------------------
-
---
--- 表的结构 `newfrog_pricematch`
---
-
-CREATE TABLE IF NOT EXISTS `newfrog_pricematch` (
-  `id` int(10) NOT NULL,
-  `match_url` varchar(255) DEFAULT '',
-  `lowerprice` varchar(10) DEFAULT '0',
-  `email` varchar(50) DEFAULT NULL,
-  `name` varchar(100) DEFAULT '0',
-  `details` text
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
-
--- --------------------------------------------------------
-
---
--- 表的结构 `newfrog_Saveproduct`
---
-
-CREATE TABLE IF NOT EXISTS `newfrog_Saveproduct` (
-  `id` int(10) unsigned NOT NULL,
-  `customer_id` varchar(20) DEFAULT NULL,
-  `product_id` varchar(100) NOT NULL,
-  `product_qty` varchar(100) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
--- --------------------------------------------------------
-
---
--- 表的结构 `newfrog_save_product`
---
-
-CREATE TABLE IF NOT EXISTS `newfrog_save_product` (
-  `id` int(10) unsigned NOT NULL,
-  `customer_id` varchar(20) DEFAULT NULL,
-  `product_id` varchar(100) NOT NULL,
-  `product_qty` varchar(100) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
--- --------------------------------------------------------
-
---
--- 表的结构 `newfrog_wholesale`
---
-
-CREATE TABLE IF NOT EXISTS `newfrog_wholesale` (
-  `id` int(10) NOT NULL,
-  `target_price` varchar(30) DEFAULT '',
-  `quantity` varchar(10) DEFAULT '0',
-  `country` varchar(50) DEFAULT NULL,
-  `name` varchar(50) DEFAULT '0',
-  `email` varchar(100) DEFAULT '0',
-  `skype` varchar(100) DEFAULT '',
-  `msn` varchar(100) DEFAULT '0',
-  `message` text,
-  `sku` varchar(30) DEFAULT '',
-  `link` text,
-  `hideit` varchar(30) DEFAULT ''
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
@@ -4107,7 +3714,7 @@ CREATE TABLE IF NOT EXISTS `newsletter_subscriber` (
   `store_id` smallint(5) unsigned DEFAULT '0' COMMENT 'Store Id',
   `change_status_at` timestamp NULL DEFAULT NULL COMMENT 'Change Status At',
   `customer_id` int(10) unsigned NOT NULL DEFAULT '0' COMMENT 'Customer Id',
-  `subscriber_email` varchar(150) DEFAULT NULL COMMENT 'Subscriber Email',
+  `subscriber_email` varchar(150) NOT NULL COMMENT 'Subscriber Email',
   `subscriber_status` int(11) NOT NULL DEFAULT '0' COMMENT 'Subscriber Status',
   `subscriber_confirm_code` varchar(32) DEFAULT 'NULL' COMMENT 'Subscriber Confirm Code'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='Newsletter Subscriber';
@@ -4181,20 +3788,6 @@ CREATE TABLE IF NOT EXISTS `oauth_token` (
   `authorized` smallint(5) unsigned NOT NULL DEFAULT '0' COMMENT 'Is Token authorized',
   `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT 'Token creation timestamp'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='OAuth Tokens';
-
--- --------------------------------------------------------
-
---
--- 表的结构 `outofstocksubscription_info`
---
-
-CREATE TABLE IF NOT EXISTS `outofstocksubscription_info` (
-  `id` int(10) unsigned NOT NULL,
-  `product_id` int(10) unsigned NOT NULL,
-  `email` text NOT NULL,
-  `is_active` enum('0','1') NOT NULL DEFAULT '0',
-  `date` datetime DEFAULT '0000-00-00 00:00:00'
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC;
 
 -- --------------------------------------------------------
 
@@ -4295,6 +3888,20 @@ CREATE TABLE IF NOT EXISTS `poll` (
   `closed` smallint(6) NOT NULL DEFAULT '0' COMMENT 'Is closed',
   `answers_display` smallint(6) DEFAULT NULL COMMENT 'Answers display'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='Poll';
+
+-- --------------------------------------------------------
+
+--
+-- 表的结构 `poll_answer`
+--
+
+CREATE TABLE IF NOT EXISTS `poll_answer` (
+  `answer_id` int(10) unsigned NOT NULL COMMENT 'Answer Id',
+  `poll_id` int(10) unsigned NOT NULL DEFAULT '0' COMMENT 'Poll Id',
+  `answer_title` varchar(255) DEFAULT NULL COMMENT 'Answer title',
+  `votes_count` int(10) unsigned NOT NULL DEFAULT '0' COMMENT 'Votes Count',
+  `answer_order` smallint(6) NOT NULL DEFAULT '0' COMMENT 'Answers display'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='Poll Answers';
 
 -- --------------------------------------------------------
 
@@ -4574,10 +4181,8 @@ CREATE TABLE IF NOT EXISTS `review` (
   `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT 'Review create date',
   `entity_id` smallint(5) unsigned NOT NULL DEFAULT '0' COMMENT 'Entity id',
   `entity_pk_value` int(10) unsigned NOT NULL DEFAULT '0' COMMENT 'Product id',
-  `status_id` smallint(5) unsigned NOT NULL DEFAULT '0' COMMENT 'Status code',
-  `order_id` int(11) DEFAULT NULL,
-  `image_url` varchar(200) DEFAULT NULL
-) ENGINE=MyISAM DEFAULT CHARSET=utf8 COMMENT='Review base information';
+  `status_id` smallint(5) unsigned NOT NULL DEFAULT '0' COMMENT 'Status code'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='Review base information';
 
 -- --------------------------------------------------------
 
@@ -4591,13 +4196,9 @@ CREATE TABLE IF NOT EXISTS `review_detail` (
   `store_id` smallint(5) unsigned DEFAULT '0' COMMENT 'Store id',
   `title` varchar(255) NOT NULL COMMENT 'Title',
   `detail` text NOT NULL COMMENT 'Detail description',
-  `cons` text NOT NULL,
-  `other` text NOT NULL,
   `nickname` varchar(128) NOT NULL COMMENT 'User nickname',
-  `customer_id` int(10) unsigned DEFAULT NULL COMMENT 'Customer Id',
-  `support` smallint(5) DEFAULT '0',
-  `unsupport` smallint(5) DEFAULT '0'
-) ENGINE=MyISAM DEFAULT CHARSET=utf8 COMMENT='Review detail information';
+  `customer_id` int(10) unsigned DEFAULT NULL COMMENT 'Customer Id'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='Review detail information';
 
 -- --------------------------------------------------------
 
@@ -4608,7 +4209,7 @@ CREATE TABLE IF NOT EXISTS `review_detail` (
 CREATE TABLE IF NOT EXISTS `review_entity` (
   `entity_id` smallint(5) unsigned NOT NULL COMMENT 'Review entity id',
   `entity_code` varchar(32) NOT NULL COMMENT 'Review entity code'
-) ENGINE=MyISAM DEFAULT CHARSET=utf8 COMMENT='Review entities';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='Review entities';
 
 -- --------------------------------------------------------
 
@@ -4628,52 +4229,13 @@ CREATE TABLE IF NOT EXISTS `review_entity_summary` (
 -- --------------------------------------------------------
 
 --
--- 表的结构 `review_photo`
---
-
-CREATE TABLE IF NOT EXISTS `review_photo` (
-  `id` int(10) unsigned NOT NULL,
-  `verify` smallint(6) DEFAULT NULL,
-  `customer_id` int(10) unsigned NOT NULL,
-  `entity_id` int(10) unsigned NOT NULL,
-  `image_url` varchar(100) NOT NULL,
-  `create_at` date NOT NULL,
-  `title` varchar(100) DEFAULT NULL,
-  `small_image` varchar(100) NOT NULL,
-  `mideum_image` varchar(100) NOT NULL,
-  `big_image` varchar(100) NOT NULL,
-  `reason` varchar(255) NOT NULL,
-  `point` smallint(5) unsigned NOT NULL,
-  `order_id` int(11) DEFAULT NULL,
-  `product_image_url` varchar(200) DEFAULT NULL,
-  `top` smallint(6) NOT NULL DEFAULT '0'
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
-
--- --------------------------------------------------------
-
---
--- 表的结构 `review_photo_review`
---
-
-CREATE TABLE IF NOT EXISTS `review_photo_review` (
-  `review_photo_id` int(10) NOT NULL,
-  `is_pass` smallint(6) DEFAULT '0',
-  `customer_id` int(10) NOT NULL,
-  `pk_id` int(10) NOT NULL,
-  `review_field` varchar(50) NOT NULL,
-  `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
-
--- --------------------------------------------------------
-
---
 -- 表的结构 `review_status`
 --
 
 CREATE TABLE IF NOT EXISTS `review_status` (
   `status_id` smallint(5) unsigned NOT NULL COMMENT 'Status id',
   `status_code` varchar(32) NOT NULL COMMENT 'Status code'
-) ENGINE=MyISAM DEFAULT CHARSET=utf8 COMMENT='Review statuses';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='Review statuses';
 
 -- --------------------------------------------------------
 
@@ -4684,61 +4246,7 @@ CREATE TABLE IF NOT EXISTS `review_status` (
 CREATE TABLE IF NOT EXISTS `review_store` (
   `review_id` bigint(20) unsigned NOT NULL DEFAULT '0' COMMENT 'Review Id',
   `store_id` smallint(5) unsigned NOT NULL DEFAULT '0' COMMENT 'Store Id'
-) ENGINE=MyISAM DEFAULT CHARSET=utf8 COMMENT='Review Store';
-
--- --------------------------------------------------------
-
---
--- 表的结构 `rewardpoints_account`
---
-
-CREATE TABLE IF NOT EXISTS `rewardpoints_account` (
-  `rewardpoints_account_id` int(10) unsigned NOT NULL,
-  `customer_id` int(10) unsigned NOT NULL DEFAULT '0',
-  `store_id` text,
-  `order_id` varchar(60) NOT NULL DEFAULT '0',
-  `review_id` varchar(30) DEFAULT '0',
-  `points_current` int(10) unsigned DEFAULT '0',
-  `points_spent` int(10) unsigned DEFAULT '0',
-  `date_start` date DEFAULT NULL,
-  `date_end` date DEFAULT NULL,
-  `rewardpoints_referral_id` int(11) DEFAULT NULL
-) ENGINE=MyISAM DEFAULT CHARSET=utf8 COMMENT='Reward points for an account';
-
--- --------------------------------------------------------
-
---
--- 表的结构 `rewardpoints_referral`
---
-
-CREATE TABLE IF NOT EXISTS `rewardpoints_referral` (
-  `rewardpoints_referral_id` int(11) unsigned NOT NULL,
-  `rewardpoints_referral_parent_id` int(11) unsigned NOT NULL,
-  `rewardpoints_referral_child_id` int(11) unsigned DEFAULT NULL,
-  `rewardpoints_referral_email` varchar(255) NOT NULL DEFAULT '',
-  `rewardpoints_referral_name` varchar(255) DEFAULT NULL,
-  `rewardpoints_referral_status` tinyint(1) DEFAULT '0'
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
-
--- --------------------------------------------------------
-
---
--- 表的结构 `rewardpoints_rule`
---
-
-CREATE TABLE IF NOT EXISTS `rewardpoints_rule` (
-  `rewardpoints_rule_id` int(11) NOT NULL,
-  `rewardpoints_rule_name` varchar(255) NOT NULL,
-  `rewardpoints_rule_type` varchar(60) NOT NULL,
-  `rewardpoints_rule_test` text NOT NULL,
-  `rewardpoints_rule_operator` varchar(50) NOT NULL,
-  `rewardpoints_rule_points` int(11) NOT NULL,
-  `rewardpoints_rule_extra` tinyint(1) NOT NULL,
-  `website_ids` text,
-  `rewardpoints_rule_start` date DEFAULT NULL,
-  `rewardpoints_rule_end` date DEFAULT NULL,
-  `rewardpoints_rule_activated` tinyint(1) NOT NULL
-) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='Review Store';
 
 -- --------------------------------------------------------
 
@@ -4752,8 +4260,6 @@ CREATE TABLE IF NOT EXISTS `salesrule` (
   `description` text COMMENT 'Description',
   `from_date` date DEFAULT NULL,
   `to_date` date DEFAULT NULL,
-  `coupon_code` varchar(255) DEFAULT NULL,
-  `uses_per_coupon` int(11) NOT NULL DEFAULT '0',
   `uses_per_customer` int(11) NOT NULL DEFAULT '0' COMMENT 'Uses Per Customer',
   `is_active` smallint(6) NOT NULL DEFAULT '0' COMMENT 'Is Active',
   `conditions_serialized` mediumtext COMMENT 'Conditions Serialized',
@@ -4771,7 +4277,8 @@ CREATE TABLE IF NOT EXISTS `salesrule` (
   `times_used` int(10) unsigned NOT NULL DEFAULT '0' COMMENT 'Times Used',
   `is_rss` smallint(6) NOT NULL DEFAULT '0' COMMENT 'Is Rss',
   `coupon_type` smallint(5) unsigned NOT NULL DEFAULT '1' COMMENT 'Coupon Type',
-  `use_auto_generation` smallint(6) NOT NULL DEFAULT '0' COMMENT 'Use Auto Generation'
+  `use_auto_generation` smallint(6) NOT NULL DEFAULT '0' COMMENT 'Use Auto Generation',
+  `uses_per_coupon` int(11) NOT NULL DEFAULT '0' COMMENT 'Uses Per Coupon'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='Salesrule';
 
 -- --------------------------------------------------------
@@ -5000,10 +4507,7 @@ CREATE TABLE IF NOT EXISTS `sales_flat_creditmemo` (
   `shipping_hidden_tax_amount` decimal(12,4) DEFAULT NULL COMMENT 'Shipping Hidden Tax Amount',
   `base_shipping_hidden_tax_amnt` decimal(12,4) DEFAULT NULL COMMENT 'Base Shipping Hidden Tax Amount',
   `shipping_incl_tax` decimal(12,4) DEFAULT NULL COMMENT 'Shipping Incl Tax',
-  `base_shipping_incl_tax` decimal(12,4) DEFAULT NULL COMMENT 'Base Shipping Incl Tax',
-  `insurance_amount` decimal(12,4) NOT NULL,
-  `base_insurance_amount` decimal(12,4) NOT NULL,
-  `payment_reference` varchar(50) DEFAULT NULL
+  `base_shipping_incl_tax` decimal(12,4) DEFAULT NULL COMMENT 'Base Shipping Incl Tax'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='Sales Flat Creditmemo';
 
 -- --------------------------------------------------------
@@ -5137,15 +4641,20 @@ CREATE TABLE IF NOT EXISTS `sales_flat_invoice` (
   `increment_id` varchar(50) DEFAULT NULL COMMENT 'Increment Id',
   `created_at` timestamp NULL DEFAULT NULL COMMENT 'Created At',
   `updated_at` timestamp NULL DEFAULT NULL COMMENT 'Updated At',
+  `customer_id` int(11) DEFAULT NULL,
+  `invoice_status_id` int(11) DEFAULT NULL,
+  `invoice_type` int(11) DEFAULT NULL,
+  `is_virtual` int(11) DEFAULT NULL,
+  `real_order_id` varchar(255) DEFAULT NULL,
+  `total_due` decimal(12,4) DEFAULT NULL,
+  `total_paid` decimal(12,4) DEFAULT NULL,
   `hidden_tax_amount` decimal(12,4) DEFAULT NULL COMMENT 'Hidden Tax Amount',
   `base_hidden_tax_amount` decimal(12,4) DEFAULT NULL COMMENT 'Base Hidden Tax Amount',
   `shipping_hidden_tax_amount` decimal(12,4) DEFAULT NULL COMMENT 'Shipping Hidden Tax Amount',
   `base_shipping_hidden_tax_amnt` decimal(12,4) DEFAULT NULL COMMENT 'Base Shipping Hidden Tax Amount',
   `shipping_incl_tax` decimal(12,4) DEFAULT NULL COMMENT 'Shipping Incl Tax',
   `base_shipping_incl_tax` decimal(12,4) DEFAULT NULL COMMENT 'Base Shipping Incl Tax',
-  `base_total_refunded` decimal(12,4) DEFAULT NULL COMMENT 'Base Total Refunded',
-  `insurance_amount` decimal(12,4) NOT NULL,
-  `base_insurance_amount` decimal(12,4) NOT NULL
+  `base_total_refunded` decimal(12,4) DEFAULT NULL COMMENT 'Base Total Refunded'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='Sales Flat Invoice';
 
 -- --------------------------------------------------------
@@ -5225,6 +4734,7 @@ CREATE TABLE IF NOT EXISTS `sales_flat_invoice_item` (
   `weee_tax_applied` text COMMENT 'Weee Tax Applied',
   `sku` varchar(255) DEFAULT NULL COMMENT 'Sku',
   `name` varchar(255) DEFAULT NULL COMMENT 'Name',
+  `shipment_id` int(11) DEFAULT NULL,
   `hidden_tax_amount` decimal(12,4) DEFAULT NULL COMMENT 'Hidden Tax Amount',
   `base_hidden_tax_amount` decimal(12,4) DEFAULT NULL COMMENT 'Base Hidden Tax Amount'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='Sales Flat Invoice Item';
@@ -5362,6 +4872,16 @@ CREATE TABLE IF NOT EXISTS `sales_flat_order` (
   `updated_at` timestamp NULL DEFAULT NULL COMMENT 'Updated At',
   `total_item_count` smallint(5) unsigned NOT NULL COMMENT 'Total Item Count',
   `customer_gender` int(11) DEFAULT NULL COMMENT 'Customer Gender',
+  `base_custbalance_amount` decimal(12,4) DEFAULT NULL,
+  `currency_base_id` int(11) DEFAULT NULL,
+  `currency_code` varchar(255) DEFAULT NULL,
+  `currency_rate` decimal(12,4) DEFAULT NULL,
+  `custbalance_amount` decimal(12,4) DEFAULT NULL,
+  `is_hold` int(11) DEFAULT NULL,
+  `is_multi_payment` int(11) DEFAULT NULL,
+  `real_order_id` varchar(255) DEFAULT NULL,
+  `tax_percent` decimal(12,4) DEFAULT NULL,
+  `tracking_numbers` text,
   `hidden_tax_amount` decimal(12,4) DEFAULT NULL COMMENT 'Hidden Tax Amount',
   `base_hidden_tax_amount` decimal(12,4) DEFAULT NULL COMMENT 'Base Hidden Tax Amount',
   `shipping_hidden_tax_amount` decimal(12,4) DEFAULT NULL COMMENT 'Shipping Hidden Tax Amount',
@@ -5372,11 +4892,7 @@ CREATE TABLE IF NOT EXISTS `sales_flat_order` (
   `base_hidden_tax_refunded` decimal(12,4) DEFAULT NULL COMMENT 'Base Hidden Tax Refunded',
   `shipping_incl_tax` decimal(12,4) DEFAULT NULL COMMENT 'Shipping Incl Tax',
   `base_shipping_incl_tax` decimal(12,4) DEFAULT NULL COMMENT 'Base Shipping Incl Tax',
-  `coupon_rule_name` varchar(255) DEFAULT NULL COMMENT 'Coupon Sales Rule Name',
-  `onestepcheckout_customercomment` text,
-  `insurance_amount` decimal(12,4) NOT NULL,
-  `base_insurance_amount` decimal(12,4) NOT NULL,
-  `track_link` varchar(255) NOT NULL
+  `coupon_rule_name` varchar(255) DEFAULT NULL COMMENT 'Coupon Sales Rule Name'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='Sales Flat Order';
 
 -- --------------------------------------------------------
@@ -5407,6 +4923,9 @@ CREATE TABLE IF NOT EXISTS `sales_flat_order_address` (
   `middlename` varchar(255) DEFAULT NULL COMMENT 'Middlename',
   `suffix` varchar(255) DEFAULT NULL COMMENT 'Suffix',
   `company` varchar(255) DEFAULT NULL COMMENT 'Company',
+  `address_id` int(11) DEFAULT NULL,
+  `gift_message_id` int(11) DEFAULT NULL,
+  `tax_id` varchar(255) DEFAULT NULL,
   `vat_id` text COMMENT 'Vat Id',
   `vat_is_valid` smallint(6) DEFAULT NULL COMMENT 'Vat Is Valid',
   `vat_request_id` text COMMENT 'Vat Request Id',
@@ -5498,13 +5017,6 @@ CREATE TABLE IF NOT EXISTS `sales_flat_order_item` (
   `gift_message_available` int(11) DEFAULT NULL COMMENT 'Gift Message Available',
   `base_tax_before_discount` decimal(12,4) DEFAULT NULL COMMENT 'Base Tax Before Discount',
   `tax_before_discount` decimal(12,4) DEFAULT NULL COMMENT 'Tax Before Discount',
-  `ext_order_item_id` varchar(255) DEFAULT NULL COMMENT 'Ext Order Item Id',
-  `locked_do_invoice` smallint(5) unsigned DEFAULT NULL COMMENT 'Locked Do Invoice',
-  `locked_do_ship` smallint(5) unsigned DEFAULT NULL COMMENT 'Locked Do Ship',
-  `price_incl_tax` decimal(12,4) DEFAULT NULL COMMENT 'Price Incl Tax',
-  `base_price_incl_tax` decimal(12,4) DEFAULT NULL COMMENT 'Base Price Incl Tax',
-  `row_total_incl_tax` decimal(12,4) DEFAULT NULL COMMENT 'Row Total Incl Tax',
-  `base_row_total_incl_tax` decimal(12,4) DEFAULT NULL COMMENT 'Base Row Total Incl Tax',
   `weee_tax_applied` text COMMENT 'Weee Tax Applied',
   `weee_tax_applied_amount` decimal(12,4) DEFAULT NULL COMMENT 'Weee Tax Applied Amount',
   `weee_tax_applied_row_amount` decimal(12,4) DEFAULT NULL COMMENT 'Weee Tax Applied Row Amount',
@@ -5514,6 +5026,13 @@ CREATE TABLE IF NOT EXISTS `sales_flat_order_item` (
   `weee_tax_row_disposition` decimal(12,4) DEFAULT NULL COMMENT 'Weee Tax Row Disposition',
   `base_weee_tax_disposition` decimal(12,4) DEFAULT NULL COMMENT 'Base Weee Tax Disposition',
   `base_weee_tax_row_disposition` decimal(12,4) DEFAULT NULL COMMENT 'Base Weee Tax Row Disposition',
+  `ext_order_item_id` varchar(255) DEFAULT NULL COMMENT 'Ext Order Item Id',
+  `locked_do_invoice` smallint(5) unsigned DEFAULT NULL COMMENT 'Locked Do Invoice',
+  `locked_do_ship` smallint(5) unsigned DEFAULT NULL COMMENT 'Locked Do Ship',
+  `price_incl_tax` decimal(12,4) DEFAULT NULL COMMENT 'Price Incl Tax',
+  `base_price_incl_tax` decimal(12,4) DEFAULT NULL COMMENT 'Base Price Incl Tax',
+  `row_total_incl_tax` decimal(12,4) DEFAULT NULL COMMENT 'Row Total Incl Tax',
+  `base_row_total_incl_tax` decimal(12,4) DEFAULT NULL COMMENT 'Base Row Total Incl Tax',
   `hidden_tax_amount` decimal(12,4) DEFAULT NULL COMMENT 'Hidden Tax Amount',
   `base_hidden_tax_amount` decimal(12,4) DEFAULT NULL COMMENT 'Base Hidden Tax Amount',
   `hidden_tax_invoiced` decimal(12,4) DEFAULT NULL COMMENT 'Hidden Tax Invoiced',
@@ -5596,7 +5115,11 @@ CREATE TABLE IF NOT EXISTS `sales_flat_order_payment` (
   `flo2cash_account_id` varchar(255) DEFAULT NULL,
   `paybox_request_number` varchar(255) DEFAULT NULL COMMENT 'Paybox Request Number',
   `address_status` varchar(255) DEFAULT NULL COMMENT 'Address Status',
-  `additional_information` text COMMENT 'Additional Information'
+  `additional_information` text COMMENT 'Additional Information',
+  `amount` decimal(12,4) DEFAULT NULL,
+  `cc_raw_request` text,
+  `cc_raw_response` text,
+  `customer_payment_id` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='Sales Flat Order Payment';
 
 -- --------------------------------------------------------
@@ -5636,6 +5159,9 @@ CREATE TABLE IF NOT EXISTS `sales_flat_quote` (
   `orig_order_id` int(10) unsigned DEFAULT '0' COMMENT 'Orig Order Id',
   `store_to_base_rate` decimal(12,4) DEFAULT '0.0000' COMMENT 'Store To Base Rate',
   `store_to_quote_rate` decimal(12,4) DEFAULT '0.0000' COMMENT 'Store To Quote Rate',
+  `base_to_global_rate` decimal(12,4) DEFAULT NULL COMMENT 'Base To Global Rate',
+  `base_to_quote_rate` decimal(12,4) DEFAULT NULL COMMENT 'Base To Quote Rate',
+  `global_currency_code` varchar(255) DEFAULT NULL COMMENT 'Global Currency Code',
   `base_currency_code` varchar(255) DEFAULT NULL COMMENT 'Base Currency Code',
   `store_currency_code` varchar(255) DEFAULT NULL COMMENT 'Store Currency Code',
   `quote_currency_code` varchar(255) DEFAULT NULL COMMENT 'Quote Currency Code',
@@ -5655,24 +5181,21 @@ CREATE TABLE IF NOT EXISTS `sales_flat_quote` (
   `customer_note` varchar(255) DEFAULT NULL COMMENT 'Customer Note',
   `customer_note_notify` smallint(5) unsigned DEFAULT '1' COMMENT 'Customer Note Notify',
   `customer_is_guest` smallint(5) unsigned DEFAULT '0' COMMENT 'Customer Is Guest',
+  `customer_taxvat` varchar(255) DEFAULT NULL COMMENT 'Customer Taxvat',
   `remote_ip` varchar(32) DEFAULT NULL COMMENT 'Remote Ip',
   `applied_rule_ids` varchar(255) DEFAULT NULL COMMENT 'Applied Rule Ids',
   `reserved_order_id` varchar(64) DEFAULT NULL COMMENT 'Reserved Order Id',
   `password_hash` varchar(255) DEFAULT NULL COMMENT 'Password Hash',
   `coupon_code` varchar(255) DEFAULT NULL COMMENT 'Coupon Code',
-  `global_currency_code` varchar(255) DEFAULT NULL COMMENT 'Global Currency Code',
-  `base_to_global_rate` decimal(12,4) DEFAULT NULL COMMENT 'Base To Global Rate',
-  `base_to_quote_rate` decimal(12,4) DEFAULT NULL COMMENT 'Base To Quote Rate',
-  `customer_taxvat` varchar(255) DEFAULT NULL COMMENT 'Customer Taxvat',
-  `customer_gender` varchar(255) DEFAULT NULL COMMENT 'Customer Gender',
   `subtotal` decimal(12,4) DEFAULT NULL COMMENT 'Subtotal',
   `base_subtotal` decimal(12,4) DEFAULT NULL COMMENT 'Base Subtotal',
   `subtotal_with_discount` decimal(12,4) DEFAULT NULL COMMENT 'Subtotal With Discount',
   `base_subtotal_with_discount` decimal(12,4) DEFAULT NULL COMMENT 'Base Subtotal With Discount',
+  `gift_message_id` int(11) DEFAULT NULL COMMENT 'Gift Message Id',
   `is_changed` int(10) unsigned DEFAULT NULL COMMENT 'Is Changed',
   `trigger_recollect` smallint(6) NOT NULL COMMENT 'Trigger Recollect',
   `ext_shipping_info` text COMMENT 'Ext Shipping Info',
-  `gift_message_id` int(11) DEFAULT NULL COMMENT 'Gift Message Id',
+  `customer_gender` varchar(255) DEFAULT NULL COMMENT 'Customer Gender',
   `is_persistent` smallint(5) unsigned DEFAULT '0' COMMENT 'Is Quote Persistent'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='Sales Flat Quote';
 
@@ -5728,12 +5251,12 @@ CREATE TABLE IF NOT EXISTS `sales_flat_quote_address` (
   `base_grand_total` decimal(12,4) NOT NULL DEFAULT '0.0000' COMMENT 'Base Grand Total',
   `customer_notes` text COMMENT 'Customer Notes',
   `applied_taxes` text COMMENT 'Applied Taxes',
-  `discount_description` varchar(255) DEFAULT NULL COMMENT 'Discount Description',
+  `gift_message_id` int(11) DEFAULT NULL COMMENT 'Gift Message Id',
   `shipping_discount_amount` decimal(12,4) DEFAULT NULL COMMENT 'Shipping Discount Amount',
   `base_shipping_discount_amount` decimal(12,4) DEFAULT NULL COMMENT 'Base Shipping Discount Amount',
   `subtotal_incl_tax` decimal(12,4) DEFAULT NULL COMMENT 'Subtotal Incl Tax',
   `base_subtotal_total_incl_tax` decimal(12,4) DEFAULT NULL COMMENT 'Base Subtotal Total Incl Tax',
-  `gift_message_id` int(11) DEFAULT NULL COMMENT 'Gift Message Id',
+  `discount_description` varchar(255) DEFAULT NULL COMMENT 'Discount Description',
   `hidden_tax_amount` decimal(12,4) DEFAULT NULL COMMENT 'Hidden Tax Amount',
   `base_hidden_tax_amount` decimal(12,4) DEFAULT NULL COMMENT 'Base Hidden Tax Amount',
   `shipping_hidden_tax_amount` decimal(12,4) DEFAULT NULL COMMENT 'Shipping Hidden Tax Amount',
@@ -5744,9 +5267,7 @@ CREATE TABLE IF NOT EXISTS `sales_flat_quote_address` (
   `vat_is_valid` smallint(6) DEFAULT NULL COMMENT 'Vat Is Valid',
   `vat_request_id` text COMMENT 'Vat Request Id',
   `vat_request_date` text COMMENT 'Vat Request Date',
-  `vat_request_success` smallint(6) DEFAULT NULL COMMENT 'Vat Request Success',
-  `insurance_amount` decimal(12,4) NOT NULL,
-  `base_insurance_amount` decimal(12,4) NOT NULL
+  `vat_request_success` smallint(6) DEFAULT NULL COMMENT 'Vat Request Success'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='Sales Flat Quote Address';
 
 -- --------------------------------------------------------
@@ -5774,6 +5295,8 @@ CREATE TABLE IF NOT EXISTS `sales_flat_quote_address_item` (
   `base_discount_amount` decimal(12,4) DEFAULT '0.0000' COMMENT 'Base Discount Amount',
   `base_tax_amount` decimal(12,4) DEFAULT '0.0000' COMMENT 'Base Tax Amount',
   `row_weight` decimal(12,4) DEFAULT '0.0000' COMMENT 'Row Weight',
+  `gift_message_id` int(11) DEFAULT NULL COMMENT 'Gift Message Id',
+  `base_cost` decimal(12,4) DEFAULT NULL COMMENT 'Base Cost',
   `product_id` int(10) unsigned DEFAULT NULL COMMENT 'Product Id',
   `super_product_id` int(10) unsigned DEFAULT NULL COMMENT 'Super Product Id',
   `parent_product_id` int(10) unsigned DEFAULT NULL COMMENT 'Parent Product Id',
@@ -5788,12 +5311,10 @@ CREATE TABLE IF NOT EXISTS `sales_flat_quote_address_item` (
   `no_discount` int(10) unsigned DEFAULT NULL COMMENT 'No Discount',
   `tax_percent` decimal(12,4) DEFAULT NULL COMMENT 'Tax Percent',
   `base_price` decimal(12,4) DEFAULT NULL COMMENT 'Base Price',
-  `base_cost` decimal(12,4) DEFAULT NULL COMMENT 'Base Cost',
   `price_incl_tax` decimal(12,4) DEFAULT NULL COMMENT 'Price Incl Tax',
   `base_price_incl_tax` decimal(12,4) DEFAULT NULL COMMENT 'Base Price Incl Tax',
   `row_total_incl_tax` decimal(12,4) DEFAULT NULL COMMENT 'Row Total Incl Tax',
   `base_row_total_incl_tax` decimal(12,4) DEFAULT NULL COMMENT 'Base Row Total Incl Tax',
-  `gift_message_id` int(11) DEFAULT NULL COMMENT 'Gift Message Id',
   `hidden_tax_amount` decimal(12,4) DEFAULT NULL COMMENT 'Hidden Tax Amount',
   `base_hidden_tax_amount` decimal(12,4) DEFAULT NULL COMMENT 'Base Hidden Tax Amount'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='Sales Flat Quote Address Item';
@@ -5840,12 +5361,6 @@ CREATE TABLE IF NOT EXISTS `sales_flat_quote_item` (
   `base_tax_before_discount` decimal(12,4) DEFAULT NULL COMMENT 'Base Tax Before Discount',
   `tax_before_discount` decimal(12,4) DEFAULT NULL COMMENT 'Tax Before Discount',
   `original_custom_price` decimal(12,4) DEFAULT NULL COMMENT 'Original Custom Price',
-  `redirect_url` varchar(255) DEFAULT NULL COMMENT 'Redirect Url',
-  `base_cost` decimal(12,4) DEFAULT NULL COMMENT 'Base Cost',
-  `price_incl_tax` decimal(12,4) DEFAULT NULL COMMENT 'Price Incl Tax',
-  `base_price_incl_tax` decimal(12,4) DEFAULT NULL COMMENT 'Base Price Incl Tax',
-  `row_total_incl_tax` decimal(12,4) DEFAULT NULL COMMENT 'Row Total Incl Tax',
-  `base_row_total_incl_tax` decimal(12,4) DEFAULT NULL COMMENT 'Base Row Total Incl Tax',
   `gift_message_id` int(11) DEFAULT NULL COMMENT 'Gift Message Id',
   `weee_tax_applied` text COMMENT 'Weee Tax Applied',
   `weee_tax_applied_amount` decimal(12,4) DEFAULT NULL COMMENT 'Weee Tax Applied Amount',
@@ -5856,6 +5371,12 @@ CREATE TABLE IF NOT EXISTS `sales_flat_quote_item` (
   `weee_tax_row_disposition` decimal(12,4) DEFAULT NULL COMMENT 'Weee Tax Row Disposition',
   `base_weee_tax_disposition` decimal(12,4) DEFAULT NULL COMMENT 'Base Weee Tax Disposition',
   `base_weee_tax_row_disposition` decimal(12,4) DEFAULT NULL COMMENT 'Base Weee Tax Row Disposition',
+  `redirect_url` varchar(255) DEFAULT NULL COMMENT 'Redirect Url',
+  `base_cost` decimal(12,4) DEFAULT NULL COMMENT 'Base Cost',
+  `price_incl_tax` decimal(12,4) DEFAULT NULL COMMENT 'Price Incl Tax',
+  `base_price_incl_tax` decimal(12,4) DEFAULT NULL COMMENT 'Base Price Incl Tax',
+  `row_total_incl_tax` decimal(12,4) DEFAULT NULL COMMENT 'Row Total Incl Tax',
+  `base_row_total_incl_tax` decimal(12,4) DEFAULT NULL COMMENT 'Base Row Total Incl Tax',
   `hidden_tax_amount` decimal(12,4) DEFAULT NULL COMMENT 'Hidden Tax Amount',
   `base_hidden_tax_amount` decimal(12,4) DEFAULT NULL COMMENT 'Base Hidden Tax Amount'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='Sales Flat Quote Item';
@@ -5901,9 +5422,11 @@ CREATE TABLE IF NOT EXISTS `sales_flat_quote_payment` (
   `paypal_payer_id` varchar(255) DEFAULT NULL COMMENT 'Paypal Payer Id',
   `paypal_payer_status` varchar(255) DEFAULT NULL COMMENT 'Paypal Payer Status',
   `po_number` varchar(255) DEFAULT NULL COMMENT 'Po Number',
+  `ideal_issuer_id` varchar(255) DEFAULT NULL,
+  `ideal_issuer_list` varchar(255) DEFAULT NULL,
+  `additional_information` text COMMENT 'Additional Information',
   `additional_data` text COMMENT 'Additional Data',
-  `cc_ss_issue` varchar(255) DEFAULT NULL COMMENT 'Cc Ss Issue',
-  `additional_information` text COMMENT 'Additional Information'
+  `cc_ss_issue` varchar(255) DEFAULT NULL COMMENT 'Cc Ss Issue'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='Sales Flat Quote Payment';
 
 -- --------------------------------------------------------
@@ -5923,8 +5446,8 @@ CREATE TABLE IF NOT EXISTS `sales_flat_quote_shipping_rate` (
   `method` varchar(255) DEFAULT NULL COMMENT 'Method',
   `method_description` text COMMENT 'Method Description',
   `price` decimal(12,4) NOT NULL DEFAULT '0.0000' COMMENT 'Price',
-  `error_message` text COMMENT 'Error Message',
-  `method_title` text COMMENT 'Method Title'
+  `method_title` text COMMENT 'Method Title',
+  `error_message` text COMMENT 'Error Message'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='Sales Flat Quote Shipping Rate';
 
 -- --------------------------------------------------------
@@ -5947,7 +5470,6 @@ CREATE TABLE IF NOT EXISTS `sales_flat_shipment` (
   `increment_id` varchar(50) DEFAULT NULL COMMENT 'Increment Id',
   `created_at` timestamp NULL DEFAULT NULL COMMENT 'Created At',
   `updated_at` timestamp NULL DEFAULT NULL COMMENT 'Updated At',
-  `packageid` varchar(255) DEFAULT NULL,
   `packages` text COMMENT 'Packed Products in Packages',
   `shipping_label` mediumblob COMMENT 'Shipping Label Content'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='Sales Flat Shipment';
@@ -6347,21 +5869,6 @@ CREATE TABLE IF NOT EXISTS `sendfriend_log` (
 -- --------------------------------------------------------
 
 --
--- 表的结构 `Sheet2`
---
-
-CREATE TABLE IF NOT EXISTS `Sheet2` (
-  `64831.05` varchar(255) DEFAULT NULL,
-  `0` varchar(255) DEFAULT NULL,
-  `Recommendations` varchar(255) DEFAULT NULL,
-  `1 (1)` varchar(255) DEFAULT NULL,
-  `2015/3/28` varchar(255) DEFAULT NULL,
-  `2015/4/5` varchar(255) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
--- --------------------------------------------------------
-
---
 -- 表的结构 `shipping_tablerate`
 --
 
@@ -6395,21 +5902,6 @@ CREATE TABLE IF NOT EXISTS `sitemap` (
 -- --------------------------------------------------------
 
 --
--- 表的结构 `smtppro_email_log`
---
-
-CREATE TABLE IF NOT EXISTS `smtppro_email_log` (
-  `email_id` int(10) unsigned NOT NULL,
-  `log_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-  `email_to` varchar(255) NOT NULL DEFAULT '',
-  `template` varchar(255) DEFAULT NULL,
-  `subject` varchar(255) DEFAULT NULL,
-  `email_body` text
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
--- --------------------------------------------------------
-
---
 -- 表的结构 `tag`
 --
 
@@ -6419,7 +5911,7 @@ CREATE TABLE IF NOT EXISTS `tag` (
   `status` smallint(6) NOT NULL DEFAULT '0' COMMENT 'Status',
   `first_customer_id` int(10) unsigned DEFAULT NULL COMMENT 'First Customer Id',
   `first_store_id` smallint(5) unsigned DEFAULT NULL COMMENT 'First Store Id'
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='Tag';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC COMMENT='Tag';
 
 -- --------------------------------------------------------
 
@@ -6473,11 +5965,11 @@ CREATE TABLE IF NOT EXISTS `tag_summary` (
 --
 
 CREATE TABLE IF NOT EXISTS `tax_calculation` (
-  `tax_calculation_id` int(11) NOT NULL COMMENT 'Tax Calculation Id',
   `tax_calculation_rate_id` int(11) NOT NULL COMMENT 'Tax Calculation Rate Id',
   `tax_calculation_rule_id` int(11) NOT NULL COMMENT 'Tax Calculation Rule Id',
   `customer_tax_class_id` smallint(6) NOT NULL COMMENT 'Customer Tax Class Id',
-  `product_tax_class_id` smallint(6) NOT NULL COMMENT 'Product Tax Class Id'
+  `product_tax_class_id` smallint(6) NOT NULL COMMENT 'Product Tax Class Id',
+  `tax_calculation_id` int(11) NOT NULL COMMENT 'Tax Calculation Id'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='Tax Calculation';
 
 -- --------------------------------------------------------
@@ -6492,7 +5984,7 @@ CREATE TABLE IF NOT EXISTS `tax_calculation_rate` (
   `tax_region_id` int(11) NOT NULL COMMENT 'Tax Region Id',
   `tax_postcode` varchar(21) DEFAULT NULL COMMENT 'Tax Postcode',
   `code` varchar(255) NOT NULL COMMENT 'Code',
-  `rate` decimal(12,4) NOT NULL COMMENT 'Rate',
+  `rate` decimal(12,4) NOT NULL DEFAULT '0.0000' COMMENT 'Rate',
   `zip_is_range` smallint(6) DEFAULT NULL COMMENT 'Zip Is Range',
   `zip_from` int(10) unsigned DEFAULT NULL COMMENT 'Zip From',
   `zip_to` int(10) unsigned DEFAULT NULL COMMENT 'Zip To'
@@ -6568,117 +6060,7 @@ CREATE TABLE IF NOT EXISTS `tax_order_aggregated_updated` (
   `percent` float DEFAULT NULL COMMENT 'Percent',
   `orders_count` int(10) unsigned NOT NULL DEFAULT '0' COMMENT 'Orders Count',
   `tax_base_amount_sum` float DEFAULT NULL COMMENT 'Tax Base Amount Sum'
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='Ueb Tax Order Aggregated Updated';
-
--- --------------------------------------------------------
-
---
--- 表的结构 `tmp_customer_log`
---
-
-CREATE TABLE IF NOT EXISTS `tmp_customer_log` (
-  `id` int(11) NOT NULL,
-  `customer_id` int(11) NOT NULL,
-  `status` tinyint(4) NOT NULL DEFAULT '0',
-  `createtime` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
-  `updatetime` datetime NOT NULL DEFAULT '0000-00-00 00:00:00'
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
--- --------------------------------------------------------
-
---
--- 表的结构 `tmp_price`
---
-
-CREATE TABLE IF NOT EXISTS `tmp_price` (
-  `sku` varchar(15) NOT NULL,
-  `price` varchar(15) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
--- --------------------------------------------------------
-
---
--- 表的结构 `ueb_newfrog_lover`
---
-
-CREATE TABLE IF NOT EXISTS `ueb_newfrog_lover` (
-  `id` int(10) unsigned NOT NULL,
-  `view_url` varchar(100) NOT NULL,
-  `title` varchar(50) NOT NULL,
-  `user_num` varchar(20) NOT NULL,
-  `user_name` varchar(20) NOT NULL,
-  `upload_time` date NOT NULL,
-  `check_time` date NOT NULL,
-  `check_status` smallint(2) NOT NULL,
-  `click_count` int(10) unsigned NOT NULL,
-  `descript` text NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
--- --------------------------------------------------------
-
---
--- 表的结构 `ueb_newfrog_lover_click`
---
-
-CREATE TABLE IF NOT EXISTS `ueb_newfrog_lover_click` (
-  `id` int(10) unsigned NOT NULL,
-  `IP` varchar(20) NOT NULL,
-  `parent_id` int(10) unsigned NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
--- --------------------------------------------------------
-
---
--- 表的结构 `ueb_newfrog_lover_remark`
---
-
-CREATE TABLE IF NOT EXISTS `ueb_newfrog_lover_remark` (
-  `id` int(10) unsigned NOT NULL,
-  `parent_id` int(10) unsigned NOT NULL,
-  `user_name` varchar(20) NOT NULL,
-  `remark_content` text NOT NULL,
-  `create_time` date NOT NULL,
-  `status` tinyint(4) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
--- --------------------------------------------------------
-
---
--- 表的结构 `vakind_search_categories`
---
-
-CREATE TABLE IF NOT EXISTS `vakind_search_categories` (
-  `cat_position` int(8) unsigned NOT NULL,
-  `category_id` int(8) unsigned NOT NULL DEFAULT '0'
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
--- --------------------------------------------------------
-
---
--- 表的结构 `vakind_search_items`
---
-
-CREATE TABLE IF NOT EXISTS `vakind_search_items` (
-  `category_name` varchar(50) NOT NULL DEFAULT '',
-  `category_id` int(10) unsigned NOT NULL DEFAULT '0',
-  `pk_id` int(10) unsigned NOT NULL,
-  `from_time` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
-  `to_time` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
-  `search_items` text NOT NULL,
-  `product_items` text NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
--- --------------------------------------------------------
-
---
--- 表的结构 `vakind_temporary_hot_result`
---
-
-CREATE TABLE IF NOT EXISTS `vakind_temporary_hot_result` (
-  `id` int(11) unsigned NOT NULL,
-  `query_id` int(11) unsigned NOT NULL DEFAULT '0',
-  `result_first_match_product` varchar(15) NOT NULL
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='Tax Order Aggregated Updated';
 
 -- --------------------------------------------------------
 
@@ -6779,7 +6161,7 @@ CREATE TABLE IF NOT EXISTS `wishlist` (
   `shared` smallint(5) unsigned NOT NULL DEFAULT '0' COMMENT 'Sharing flag (0 or 1)',
   `sharing_code` varchar(32) DEFAULT NULL COMMENT 'Sharing encrypted code',
   `updated_at` timestamp NULL DEFAULT NULL COMMENT 'Last updated date'
-) ENGINE=MyISAM DEFAULT CHARSET=utf8 COMMENT='Wishlist main Table';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC COMMENT='Wishlist main Table';
 
 -- --------------------------------------------------------
 
@@ -6795,7 +6177,7 @@ CREATE TABLE IF NOT EXISTS `wishlist_item` (
   `added_at` timestamp NULL DEFAULT NULL COMMENT 'Add date and time',
   `description` text COMMENT 'Short description of wish list item',
   `qty` decimal(12,4) NOT NULL COMMENT 'Qty'
-) ENGINE=MyISAM DEFAULT CHARSET=utf8 COMMENT='Wishlist items';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='Wishlist items';
 
 -- --------------------------------------------------------
 
@@ -6809,7 +6191,7 @@ CREATE TABLE IF NOT EXISTS `wishlist_item_option` (
   `product_id` int(10) unsigned NOT NULL COMMENT 'Product Id',
   `code` varchar(255) NOT NULL COMMENT 'Code',
   `value` text COMMENT 'Value'
-) ENGINE=MyISAM DEFAULT CHARSET=utf8 COMMENT='Wishlist Item Option Table';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='Wishlist Item Option Table';
 
 -- --------------------------------------------------------
 
@@ -6905,9 +6287,9 @@ CREATE TABLE IF NOT EXISTS `xmlconnect_queue` (
 --
 ALTER TABLE `adminnotification_inbox`
   ADD PRIMARY KEY (`notification_id`),
-  ADD KEY `IDX_UEB_ADMINNOTIFICATION_INBOX_SEVERITY` (`severity`) USING BTREE,
-  ADD KEY `IDX_UEB_ADMINNOTIFICATION_INBOX_IS_READ` (`is_read`) USING BTREE,
-  ADD KEY `IDX_UEB_ADMINNOTIFICATION_INBOX_IS_REMOVE` (`is_remove`) USING BTREE;
+  ADD KEY `IDX_ADMINNOTIFICATION_INBOX_SEVERITY` (`severity`),
+  ADD KEY `IDX_ADMINNOTIFICATION_INBOX_IS_READ` (`is_read`),
+  ADD KEY `IDX_ADMINNOTIFICATION_INBOX_IS_REMOVE` (`is_remove`);
 
 --
 -- Indexes for table `admin_assert`
@@ -6920,77 +6302,53 @@ ALTER TABLE `admin_assert`
 --
 ALTER TABLE `admin_role`
   ADD PRIMARY KEY (`role_id`),
-  ADD KEY `IDX_UEB_ADMIN_ROLE_PARENT_ID_SORT_ORDER` (`parent_id`,`sort_order`) USING BTREE,
-  ADD KEY `IDX_UEB_ADMIN_ROLE_TREE_LEVEL` (`tree_level`) USING BTREE;
+  ADD KEY `IDX_ADMIN_ROLE_PARENT_ID_SORT_ORDER` (`parent_id`,`sort_order`),
+  ADD KEY `IDX_ADMIN_ROLE_TREE_LEVEL` (`tree_level`);
 
 --
 -- Indexes for table `admin_rule`
 --
 ALTER TABLE `admin_rule`
   ADD PRIMARY KEY (`rule_id`),
-  ADD KEY `IDX_UEB_ADMIN_RULE_RESOURCE_ID_ROLE_ID` (`resource_id`,`role_id`) USING BTREE,
-  ADD KEY `IDX_UEB_ADMIN_RULE_ROLE_ID_RESOURCE_ID` (`role_id`,`resource_id`) USING BTREE;
+  ADD KEY `IDX_ADMIN_RULE_RESOURCE_ID_ROLE_ID` (`resource_id`,`role_id`),
+  ADD KEY `IDX_ADMIN_RULE_ROLE_ID_RESOURCE_ID` (`role_id`,`resource_id`);
 
 --
 -- Indexes for table `admin_user`
 --
 ALTER TABLE `admin_user`
   ADD PRIMARY KEY (`user_id`),
-  ADD UNIQUE KEY `UNQ_UEB_ADMIN_USER_USERNAME` (`username`) USING BTREE;
-
---
--- Indexes for table `affiliate_admin_user`
---
-ALTER TABLE `affiliate_admin_user`
-  ADD PRIMARY KEY (`id`);
-
---
--- Indexes for table `affiliate_sales`
---
-ALTER TABLE `affiliate_sales`
-  ADD PRIMARY KEY (`id`);
-
---
--- Indexes for table `affiliate_user`
---
-ALTER TABLE `affiliate_user`
-  ADD PRIMARY KEY (`id`);
-
---
--- Indexes for table `affiliate_visitor`
---
-ALTER TABLE `affiliate_visitor`
-  ADD PRIMARY KEY (`visitor_id`);
+  ADD UNIQUE KEY `UNQ_ADMIN_USER_USERNAME` (`username`);
 
 --
 -- Indexes for table `api2_acl_attribute`
 --
 ALTER TABLE `api2_acl_attribute`
   ADD PRIMARY KEY (`entity_id`),
-  ADD UNIQUE KEY `UNQ_UEB_UEB_API2_ACL_ATTRIBUTE_USER_TYPE_RESOURCE_ID_OPERATION` (`user_type`,`resource_id`,`operation`) USING BTREE,
-  ADD KEY `IDX_UEB_API2_ACL_ATTRIBUTE_USER_TYPE` (`user_type`) USING BTREE;
+  ADD UNIQUE KEY `UNQ_API2_ACL_ATTRIBUTE_USER_TYPE_RESOURCE_ID_OPERATION` (`user_type`,`resource_id`,`operation`),
+  ADD KEY `IDX_API2_ACL_ATTRIBUTE_USER_TYPE` (`user_type`);
 
 --
 -- Indexes for table `api2_acl_role`
 --
 ALTER TABLE `api2_acl_role`
   ADD PRIMARY KEY (`entity_id`),
-  ADD KEY `IDX_UEB_API2_ACL_ROLE_CREATED_AT` (`created_at`) USING BTREE,
-  ADD KEY `IDX_UEB_API2_ACL_ROLE_UPDATED_AT` (`updated_at`) USING BTREE;
+  ADD KEY `IDX_API2_ACL_ROLE_CREATED_AT` (`created_at`),
+  ADD KEY `IDX_API2_ACL_ROLE_UPDATED_AT` (`updated_at`);
 
 --
 -- Indexes for table `api2_acl_rule`
 --
 ALTER TABLE `api2_acl_rule`
   ADD PRIMARY KEY (`entity_id`),
-  ADD UNIQUE KEY `UNQ_UEB_UEB_API2_ACL_RULE_ROLE_ID_RESOURCE_ID_PRIVILEGE` (`role_id`,`resource_id`,`privilege`) USING BTREE;
+  ADD UNIQUE KEY `UNQ_API2_ACL_RULE_ROLE_ID_RESOURCE_ID_PRIVILEGE` (`role_id`,`resource_id`,`privilege`);
 
 --
 -- Indexes for table `api2_acl_user`
 --
 ALTER TABLE `api2_acl_user`
-  ADD UNIQUE KEY `UNQ_UEB_UEB_API2_ACL_USER_ADMIN_ID` (`admin_id`) USING BTREE,
-  ADD KEY `FK_UEB_API2_ACL_USER_ROLE_ID_UEB_API2_ACL_ROLE_ENTITY_ID` (`role_id`) USING BTREE;
+  ADD UNIQUE KEY `UNQ_API2_ACL_USER_ADMIN_ID` (`admin_id`),
+  ADD KEY `FK_API2_ACL_USER_ROLE_ID_API2_ACL_ROLE_ENTITY_ID` (`role_id`);
 
 --
 -- Indexes for table `api_assert`
@@ -7003,23 +6361,23 @@ ALTER TABLE `api_assert`
 --
 ALTER TABLE `api_role`
   ADD PRIMARY KEY (`role_id`),
-  ADD KEY `IDX_UEB_API_ROLE_PARENT_ID_SORT_ORDER` (`parent_id`,`sort_order`) USING BTREE,
-  ADD KEY `IDX_UEB_API_ROLE_TREE_LEVEL` (`tree_level`) USING BTREE;
+  ADD KEY `IDX_API_ROLE_PARENT_ID_SORT_ORDER` (`parent_id`,`sort_order`),
+  ADD KEY `IDX_API_ROLE_TREE_LEVEL` (`tree_level`);
 
 --
 -- Indexes for table `api_rule`
 --
 ALTER TABLE `api_rule`
   ADD PRIMARY KEY (`rule_id`),
-  ADD KEY `IDX_UEB_API_RULE_RESOURCE_ID_ROLE_ID` (`resource_id`,`role_id`) USING BTREE,
-  ADD KEY `IDX_UEB_API_RULE_ROLE_ID_RESOURCE_ID` (`role_id`,`resource_id`) USING BTREE;
+  ADD KEY `IDX_API_RULE_RESOURCE_ID_ROLE_ID` (`resource_id`,`role_id`),
+  ADD KEY `IDX_API_RULE_ROLE_ID_RESOURCE_ID` (`role_id`,`resource_id`);
 
 --
 -- Indexes for table `api_session`
 --
 ALTER TABLE `api_session`
-  ADD KEY `IDX_UEB_API_SESSION_USER_ID` (`user_id`) USING BTREE,
-  ADD KEY `IDX_UEB_API_SESSION_SESSID` (`sessid`) USING BTREE;
+  ADD KEY `IDX_API_SESSION_USER_ID` (`user_id`),
+  ADD KEY `IDX_API_SESSION_SESSID` (`sessid`);
 
 --
 -- Indexes for table `api_user`
@@ -7028,83 +6386,10 @@ ALTER TABLE `api_user`
   ADD PRIMARY KEY (`user_id`);
 
 --
--- Indexes for table `aw_blog`
---
-ALTER TABLE `aw_blog`
-  ADD PRIMARY KEY (`post_id`),
-  ADD UNIQUE KEY `identifier` (`identifier`) USING BTREE;
-
---
--- Indexes for table `aw_blog_cat`
---
-ALTER TABLE `aw_blog_cat`
-  ADD PRIMARY KEY (`cat_id`);
-
---
--- Indexes for table `aw_blog_comment`
---
-ALTER TABLE `aw_blog_comment`
-  ADD PRIMARY KEY (`comment_id`);
-
---
--- Indexes for table `aw_blog_tags`
---
-ALTER TABLE `aw_blog_tags`
-  ADD PRIMARY KEY (`id`),
-  ADD KEY `tag` (`tag`,`tag_count`,`store_id`) USING BTREE;
-
---
--- Indexes for table `belvg_facebook_customer`
---
-ALTER TABLE `belvg_facebook_customer`
-  ADD UNIQUE KEY `FB_CUSTOMER` (`customer_id`,`fb_id`) USING BTREE;
-
---
--- Indexes for table `block_store`
---
-ALTER TABLE `block_store`
-  ADD PRIMARY KEY (`block_id`,`store_id`),
-  ADD KEY `IDX_UEB_CMS_BLOCK_STORE_STORE_ID` (`store_id`) USING BTREE;
-
---
 -- Indexes for table `captcha_log`
 --
 ALTER TABLE `captcha_log`
   ADD PRIMARY KEY (`type`,`value`);
-
---
--- Indexes for table `catalogindex_eav`
---
-ALTER TABLE `catalogindex_eav`
-  ADD PRIMARY KEY (`store_id`,`entity_id`,`attribute_id`,`value`),
-  ADD KEY `IDX_VALUE` (`value`) USING BTREE,
-  ADD KEY `FK_CATALOGINDEX_EAV_ENTITY` (`entity_id`) USING BTREE,
-  ADD KEY `FK_CATALOGINDEX_EAV_ATTRIBUTE` (`attribute_id`) USING BTREE,
-  ADD KEY `FK_CATALOGINDEX_EAV_STORE` (`store_id`) USING BTREE;
-
---
--- Indexes for table `catalogindex_minimal_price`
---
-ALTER TABLE `catalogindex_minimal_price`
-  ADD PRIMARY KEY (`index_id`),
-  ADD KEY `IDX_VALUE` (`value`) USING BTREE,
-  ADD KEY `IDX_QTY` (`qty`) USING BTREE,
-  ADD KEY `FK_CATALOGINDEX_MINIMAL_PRICE_CUSTOMER_GROUP` (`customer_group_id`) USING BTREE,
-  ADD KEY `FK_CI_MINIMAL_PRICE_WEBSITE_ID` (`website_id`) USING BTREE,
-  ADD KEY `IDX_FULL` (`entity_id`,`qty`,`customer_group_id`,`value`,`website_id`) USING BTREE;
-
---
--- Indexes for table `catalogindex_price`
---
-ALTER TABLE `catalogindex_price`
-  ADD KEY `IDX_VALUE` (`value`) USING BTREE,
-  ADD KEY `IDX_QTY` (`qty`) USING BTREE,
-  ADD KEY `FK_CATALOGINDEX_PRICE_ENTITY` (`entity_id`) USING BTREE,
-  ADD KEY `FK_CATALOGINDEX_PRICE_ATTRIBUTE` (`attribute_id`) USING BTREE,
-  ADD KEY `FK_CATALOGINDEX_PRICE_CUSTOMER_GROUP` (`customer_group_id`) USING BTREE,
-  ADD KEY `IDX_RANGE_VALUE` (`entity_id`,`attribute_id`,`customer_group_id`,`value`) USING BTREE,
-  ADD KEY `FK_CI_PRICE_WEBSITE_ID` (`website_id`) USING BTREE,
-  ADD KEY `IDX_FULL` (`entity_id`,`attribute_id`,`customer_group_id`,`value`,`website_id`) USING BTREE;
 
 --
 -- Indexes for table `cataloginventory_stock`
@@ -7117,39 +6402,40 @@ ALTER TABLE `cataloginventory_stock`
 --
 ALTER TABLE `cataloginventory_stock_item`
   ADD PRIMARY KEY (`item_id`),
-  ADD UNIQUE KEY `UNQ_CATALOGINVENTORY_STOCK_ITEM_PRODUCT_ID_STOCK_ID` (`product_id`,`stock_id`) USING BTREE,
-  ADD KEY `IDX_CATALOGINVENTORY_STOCK_ITEM_PRODUCT_ID` (`product_id`) USING BTREE,
-  ADD KEY `IDX_CATALOGINVENTORY_STOCK_ITEM_STOCK_ID` (`stock_id`) USING BTREE;
+  ADD UNIQUE KEY `UNQ_CATALOGINVENTORY_STOCK_ITEM_PRODUCT_ID_STOCK_ID` (`product_id`,`stock_id`),
+  ADD KEY `IDX_CATALOGINVENTORY_STOCK_ITEM_PRODUCT_ID` (`product_id`),
+  ADD KEY `IDX_CATALOGINVENTORY_STOCK_ITEM_STOCK_ID` (`stock_id`);
 
 --
 -- Indexes for table `cataloginventory_stock_status`
 --
 ALTER TABLE `cataloginventory_stock_status`
   ADD PRIMARY KEY (`product_id`,`website_id`,`stock_id`),
-  ADD KEY `IDX_CATALOGINVENTORY_STOCK_STATUS_STOCK_ID` (`stock_id`) USING BTREE,
-  ADD KEY `IDX_CATALOGINVENTORY_STOCK_STATUS_WEBSITE_ID` (`website_id`) USING BTREE;
+  ADD KEY `IDX_CATALOGINVENTORY_STOCK_STATUS_STOCK_ID` (`stock_id`),
+  ADD KEY `IDX_CATALOGINVENTORY_STOCK_STATUS_WEBSITE_ID` (`website_id`);
 
 --
 -- Indexes for table `cataloginventory_stock_status_idx`
 --
 ALTER TABLE `cataloginventory_stock_status_idx`
   ADD PRIMARY KEY (`product_id`,`website_id`,`stock_id`),
-  ADD KEY `IDX_CATALOGINVENTORY_STOCK_STATUS_IDX_STOCK_ID` (`stock_id`) USING BTREE,
-  ADD KEY `IDX_CATALOGINVENTORY_STOCK_STATUS_IDX_WEBSITE_ID` (`website_id`) USING BTREE;
+  ADD KEY `IDX_CATALOGINVENTORY_STOCK_STATUS_IDX_STOCK_ID` (`stock_id`),
+  ADD KEY `IDX_CATALOGINVENTORY_STOCK_STATUS_IDX_WEBSITE_ID` (`website_id`);
 
 --
 -- Indexes for table `cataloginventory_stock_status_tmp`
 --
 ALTER TABLE `cataloginventory_stock_status_tmp`
   ADD PRIMARY KEY (`product_id`,`website_id`,`stock_id`),
-  ADD KEY `IDX_CATALOGINVENTORY_STOCK_STATUS_TMP_STOCK_ID` (`stock_id`) USING HASH,
-  ADD KEY `IDX_CATALOGINVENTORY_STOCK_STATUS_TMP_WEBSITE_ID` (`website_id`) USING HASH;
+  ADD KEY `IDX_CATALOGINVENTORY_STOCK_STATUS_TMP_STOCK_ID` (`stock_id`),
+  ADD KEY `IDX_CATALOGINVENTORY_STOCK_STATUS_TMP_WEBSITE_ID` (`website_id`);
 
 --
 -- Indexes for table `catalogrule`
 --
 ALTER TABLE `catalogrule`
-  ADD PRIMARY KEY (`rule_id`);
+  ADD PRIMARY KEY (`rule_id`),
+  ADD KEY `IDX_CATALOGRULE_IS_ACTIVE_SORT_ORDER_TO_DATE_FROM_DATE` (`is_active`,`sort_order`,`to_date`,`from_date`);
 
 --
 -- Indexes for table `catalogrule_affected_product`
@@ -7158,149 +6444,160 @@ ALTER TABLE `catalogrule_affected_product`
   ADD PRIMARY KEY (`product_id`);
 
 --
+-- Indexes for table `catalogrule_customer_group`
+--
+ALTER TABLE `catalogrule_customer_group`
+  ADD PRIMARY KEY (`rule_id`,`customer_group_id`),
+  ADD KEY `IDX_CATALOGRULE_CUSTOMER_GROUP_RULE_ID` (`rule_id`),
+  ADD KEY `IDX_CATALOGRULE_CUSTOMER_GROUP_CUSTOMER_GROUP_ID` (`customer_group_id`);
+
+--
 -- Indexes for table `catalogrule_group_website`
 --
 ALTER TABLE `catalogrule_group_website`
   ADD PRIMARY KEY (`rule_id`,`customer_group_id`,`website_id`),
-  ADD KEY `IDX_CATALOGRULE_GROUP_WEBSITE_RULE_ID` (`rule_id`) USING BTREE,
-  ADD KEY `IDX_CATALOGRULE_GROUP_WEBSITE_CUSTOMER_GROUP_ID` (`customer_group_id`) USING BTREE,
-  ADD KEY `IDX_CATALOGRULE_GROUP_WEBSITE_WEBSITE_ID` (`website_id`) USING BTREE;
+  ADD KEY `IDX_CATALOGRULE_GROUP_WEBSITE_RULE_ID` (`rule_id`),
+  ADD KEY `IDX_CATALOGRULE_GROUP_WEBSITE_CUSTOMER_GROUP_ID` (`customer_group_id`),
+  ADD KEY `IDX_CATALOGRULE_GROUP_WEBSITE_WEBSITE_ID` (`website_id`);
 
 --
 -- Indexes for table `catalogrule_product`
 --
 ALTER TABLE `catalogrule_product`
   ADD PRIMARY KEY (`rule_product_id`),
-  ADD UNIQUE KEY `EAA51B56FF092A0DCB795D1CEF812B7B` (`rule_id`,`from_time`,`to_time`,`website_id`,`customer_group_id`,`product_id`,`sort_order`) USING BTREE,
-  ADD KEY `IDX_CATALOGRULE_PRODUCT_RULE_ID` (`rule_id`) USING BTREE,
-  ADD KEY `IDX_CATALOGRULE_PRODUCT_CUSTOMER_GROUP_ID` (`customer_group_id`) USING BTREE,
-  ADD KEY `IDX_CATALOGRULE_PRODUCT_WEBSITE_ID` (`website_id`) USING BTREE,
-  ADD KEY `IDX_CATALOGRULE_PRODUCT_FROM_TIME` (`from_time`) USING BTREE,
-  ADD KEY `IDX_CATALOGRULE_PRODUCT_TO_TIME` (`to_time`) USING BTREE,
-  ADD KEY `IDX_CATALOGRULE_PRODUCT_PRODUCT_ID` (`product_id`) USING BTREE;
+  ADD UNIQUE KEY `EAA51B56FF092A0DCB795D1CEF812B7B` (`rule_id`,`from_time`,`to_time`,`website_id`,`customer_group_id`,`product_id`,`sort_order`),
+  ADD KEY `IDX_CATALOGRULE_PRODUCT_RULE_ID` (`rule_id`),
+  ADD KEY `IDX_CATALOGRULE_PRODUCT_CUSTOMER_GROUP_ID` (`customer_group_id`),
+  ADD KEY `IDX_CATALOGRULE_PRODUCT_WEBSITE_ID` (`website_id`),
+  ADD KEY `IDX_CATALOGRULE_PRODUCT_FROM_TIME` (`from_time`),
+  ADD KEY `IDX_CATALOGRULE_PRODUCT_TO_TIME` (`to_time`),
+  ADD KEY `IDX_CATALOGRULE_PRODUCT_PRODUCT_ID` (`product_id`);
 
 --
 -- Indexes for table `catalogrule_product_price`
 --
 ALTER TABLE `catalogrule_product_price`
   ADD PRIMARY KEY (`rule_product_price_id`),
-  ADD UNIQUE KEY `UNQ_CATRULE_PRD_PRICE_RULE_DATE_WS_ID_CSTR_GROUP_ID_PRD_ID` (`rule_date`,`website_id`,`customer_group_id`,`product_id`) USING BTREE,
-  ADD KEY `IDX_CATALOGRULE_PRODUCT_PRICE_CUSTOMER_GROUP_ID` (`customer_group_id`) USING BTREE,
-  ADD KEY `IDX_CATALOGRULE_PRODUCT_PRICE_WEBSITE_ID` (`website_id`) USING BTREE,
-  ADD KEY `IDX_CATALOGRULE_PRODUCT_PRICE_PRODUCT_ID` (`product_id`) USING BTREE;
+  ADD UNIQUE KEY `UNQ_CATRULE_PRD_PRICE_RULE_DATE_WS_ID_CSTR_GROUP_ID_PRD_ID` (`rule_date`,`website_id`,`customer_group_id`,`product_id`),
+  ADD KEY `IDX_CATALOGRULE_PRODUCT_PRICE_CUSTOMER_GROUP_ID` (`customer_group_id`),
+  ADD KEY `IDX_CATALOGRULE_PRODUCT_PRICE_WEBSITE_ID` (`website_id`),
+  ADD KEY `IDX_CATALOGRULE_PRODUCT_PRICE_PRODUCT_ID` (`product_id`);
 
 --
 -- Indexes for table `catalogrule_website`
 --
 ALTER TABLE `catalogrule_website`
   ADD PRIMARY KEY (`rule_id`,`website_id`),
-  ADD KEY `IDX_CATALOGRULE_WEBSITE_RULE_ID` (`rule_id`) USING BTREE,
-  ADD KEY `IDX_CATALOGRULE_WEBSITE_WEBSITE_ID` (`website_id`) USING BTREE;
+  ADD KEY `IDX_CATALOGRULE_WEBSITE_RULE_ID` (`rule_id`),
+  ADD KEY `IDX_CATALOGRULE_WEBSITE_WEBSITE_ID` (`website_id`);
 
 --
 -- Indexes for table `catalogsearch_fulltext`
 --
 ALTER TABLE `catalogsearch_fulltext`
   ADD PRIMARY KEY (`fulltext_id`),
-  ADD UNIQUE KEY `UNQ_CATALOGSEARCH_FULLTEXT_PRODUCT_ID_STORE_ID` (`product_id`,`store_id`) USING BTREE;
+  ADD UNIQUE KEY `UNQ_CATALOGSEARCH_FULLTEXT_PRODUCT_ID_STORE_ID` (`product_id`,`store_id`),
+  ADD FULLTEXT KEY `FTI_CATALOGSEARCH_FULLTEXT_DATA_INDEX` (`data_index`);
 
 --
 -- Indexes for table `catalogsearch_query`
 --
 ALTER TABLE `catalogsearch_query`
   ADD PRIMARY KEY (`query_id`),
-  ADD KEY `IDX_CATALOGSEARCH_QUERY_QUERY_TEXT_STORE_ID_POPULARITY` (`query_text`,`store_id`,`popularity`) USING BTREE,
-  ADD KEY `IDX_CATALOGSEARCH_QUERY_STORE_ID` (`store_id`) USING BTREE;
+  ADD KEY `IDX_CATALOGSEARCH_QUERY_QUERY_TEXT_STORE_ID_POPULARITY` (`query_text`,`store_id`,`popularity`),
+  ADD KEY `IDX_CATALOGSEARCH_QUERY_STORE_ID` (`store_id`);
 
 --
 -- Indexes for table `catalogsearch_result`
 --
 ALTER TABLE `catalogsearch_result`
-  ADD PRIMARY KEY (`query_id`,`product_id`);
+  ADD PRIMARY KEY (`query_id`,`product_id`),
+  ADD KEY `IDX_CATALOGSEARCH_RESULT_QUERY_ID` (`query_id`),
+  ADD KEY `IDX_CATALOGSEARCH_RESULT_PRODUCT_ID` (`product_id`);
 
 --
 -- Indexes for table `catalog_category_anc_categs_index_idx`
 --
 ALTER TABLE `catalog_category_anc_categs_index_idx`
-  ADD KEY `IDX_CATALOG_CATEGORY_ANC_CATEGS_INDEX_IDX_CATEGORY_ID` (`category_id`) USING BTREE,
-  ADD KEY `IDX_CATALOG_CATEGORY_ANC_CATEGS_INDEX_IDX_PATH_CATEGORY_ID` (`path`,`category_id`) USING BTREE;
+  ADD KEY `IDX_CATALOG_CATEGORY_ANC_CATEGS_INDEX_IDX_CATEGORY_ID` (`category_id`),
+  ADD KEY `IDX_CATALOG_CATEGORY_ANC_CATEGS_INDEX_IDX_PATH_CATEGORY_ID` (`path`,`category_id`);
 
 --
 -- Indexes for table `catalog_category_anc_categs_index_tmp`
 --
 ALTER TABLE `catalog_category_anc_categs_index_tmp`
-  ADD KEY `IDX_CATALOG_CATEGORY_ANC_CATEGS_INDEX_TMP_CATEGORY_ID` (`category_id`) USING HASH,
-  ADD KEY `IDX_CATALOG_CATEGORY_ANC_CATEGS_INDEX_TMP_PATH_CATEGORY_ID` (`path`,`category_id`) USING HASH;
+  ADD KEY `IDX_CATALOG_CATEGORY_ANC_CATEGS_INDEX_TMP_CATEGORY_ID` (`category_id`),
+  ADD KEY `IDX_CATALOG_CATEGORY_ANC_CATEGS_INDEX_TMP_PATH_CATEGORY_ID` (`path`,`category_id`);
 
 --
 -- Indexes for table `catalog_category_anc_products_index_idx`
 --
 ALTER TABLE `catalog_category_anc_products_index_idx`
-  ADD KEY `IDX_CAT_CTGR_ANC_PRDS_IDX_IDX_CTGR_ID_PRD_ID_POSITION` (`category_id`,`product_id`,`position`) USING BTREE;
+  ADD KEY `IDX_CAT_CTGR_ANC_PRDS_IDX_IDX_CTGR_ID_PRD_ID_POSITION` (`category_id`,`product_id`,`position`);
 
 --
 -- Indexes for table `catalog_category_anc_products_index_tmp`
 --
 ALTER TABLE `catalog_category_anc_products_index_tmp`
-  ADD KEY `IDX_CAT_CTGR_ANC_PRDS_IDX_TMP_CTGR_ID_PRD_ID_POSITION` (`category_id`,`product_id`,`position`) USING HASH;
+  ADD KEY `IDX_CAT_CTGR_ANC_PRDS_IDX_TMP_CTGR_ID_PRD_ID_POSITION` (`category_id`,`product_id`,`position`);
 
 --
 -- Indexes for table `catalog_category_entity`
 --
 ALTER TABLE `catalog_category_entity`
   ADD PRIMARY KEY (`entity_id`),
-  ADD KEY `IDX_CATALOG_CATEGORY_ENTITY_LEVEL` (`level`) USING BTREE,
-  ADD KEY `IDX_CATALOG_CATEGORY_ENTITY_PATH_ENTITY_ID` (`path`,`entity_id`) USING BTREE;
+  ADD KEY `IDX_CATALOG_CATEGORY_ENTITY_LEVEL` (`level`),
+  ADD KEY `IDX_CATALOG_CATEGORY_ENTITY_PATH_ENTITY_ID` (`path`,`entity_id`);
 
 --
 -- Indexes for table `catalog_category_entity_datetime`
 --
 ALTER TABLE `catalog_category_entity_datetime`
   ADD PRIMARY KEY (`value_id`),
-  ADD UNIQUE KEY `UNQ_CAT_CTGR_ENTT_DTIME_ENTT_TYPE_ID_ENTT_ID_ATTR_ID_STORE_ID` (`entity_type_id`,`entity_id`,`attribute_id`,`store_id`) USING BTREE,
-  ADD KEY `IDX_CATALOG_CATEGORY_ENTITY_DATETIME_ENTITY_ID` (`entity_id`) USING BTREE,
-  ADD KEY `IDX_CATALOG_CATEGORY_ENTITY_DATETIME_ATTRIBUTE_ID` (`attribute_id`) USING BTREE,
-  ADD KEY `IDX_CATALOG_CATEGORY_ENTITY_DATETIME_STORE_ID` (`store_id`) USING BTREE;
+  ADD UNIQUE KEY `UNQ_CAT_CTGR_ENTT_DTIME_ENTT_TYPE_ID_ENTT_ID_ATTR_ID_STORE_ID` (`entity_type_id`,`entity_id`,`attribute_id`,`store_id`),
+  ADD KEY `IDX_CATALOG_CATEGORY_ENTITY_DATETIME_ENTITY_ID` (`entity_id`),
+  ADD KEY `IDX_CATALOG_CATEGORY_ENTITY_DATETIME_ATTRIBUTE_ID` (`attribute_id`),
+  ADD KEY `IDX_CATALOG_CATEGORY_ENTITY_DATETIME_STORE_ID` (`store_id`);
 
 --
 -- Indexes for table `catalog_category_entity_decimal`
 --
 ALTER TABLE `catalog_category_entity_decimal`
   ADD PRIMARY KEY (`value_id`),
-  ADD UNIQUE KEY `UNQ_CAT_CTGR_ENTT_DEC_ENTT_TYPE_ID_ENTT_ID_ATTR_ID_STORE_ID` (`entity_type_id`,`entity_id`,`attribute_id`,`store_id`) USING BTREE,
-  ADD KEY `IDX_CATALOG_CATEGORY_ENTITY_DECIMAL_ENTITY_ID` (`entity_id`) USING BTREE,
-  ADD KEY `IDX_CATALOG_CATEGORY_ENTITY_DECIMAL_ATTRIBUTE_ID` (`attribute_id`) USING BTREE,
-  ADD KEY `IDX_CATALOG_CATEGORY_ENTITY_DECIMAL_STORE_ID` (`store_id`) USING BTREE;
+  ADD UNIQUE KEY `UNQ_CAT_CTGR_ENTT_DEC_ENTT_TYPE_ID_ENTT_ID_ATTR_ID_STORE_ID` (`entity_type_id`,`entity_id`,`attribute_id`,`store_id`),
+  ADD KEY `IDX_CATALOG_CATEGORY_ENTITY_DECIMAL_ENTITY_ID` (`entity_id`),
+  ADD KEY `IDX_CATALOG_CATEGORY_ENTITY_DECIMAL_ATTRIBUTE_ID` (`attribute_id`),
+  ADD KEY `IDX_CATALOG_CATEGORY_ENTITY_DECIMAL_STORE_ID` (`store_id`);
 
 --
 -- Indexes for table `catalog_category_entity_int`
 --
 ALTER TABLE `catalog_category_entity_int`
   ADD PRIMARY KEY (`value_id`),
-  ADD UNIQUE KEY `UNQ_CAT_CTGR_ENTT_INT_ENTT_TYPE_ID_ENTT_ID_ATTR_ID_STORE_ID` (`entity_type_id`,`entity_id`,`attribute_id`,`store_id`) USING BTREE,
-  ADD KEY `IDX_CATALOG_CATEGORY_ENTITY_INT_ENTITY_ID` (`entity_id`) USING BTREE,
-  ADD KEY `IDX_CATALOG_CATEGORY_ENTITY_INT_ATTRIBUTE_ID` (`attribute_id`) USING BTREE,
-  ADD KEY `IDX_CATALOG_CATEGORY_ENTITY_INT_STORE_ID` (`store_id`) USING BTREE;
+  ADD UNIQUE KEY `UNQ_CAT_CTGR_ENTT_INT_ENTT_TYPE_ID_ENTT_ID_ATTR_ID_STORE_ID` (`entity_type_id`,`entity_id`,`attribute_id`,`store_id`),
+  ADD KEY `IDX_CATALOG_CATEGORY_ENTITY_INT_ENTITY_ID` (`entity_id`),
+  ADD KEY `IDX_CATALOG_CATEGORY_ENTITY_INT_ATTRIBUTE_ID` (`attribute_id`),
+  ADD KEY `IDX_CATALOG_CATEGORY_ENTITY_INT_STORE_ID` (`store_id`);
 
 --
 -- Indexes for table `catalog_category_entity_text`
 --
 ALTER TABLE `catalog_category_entity_text`
   ADD PRIMARY KEY (`value_id`),
-  ADD UNIQUE KEY `UNQ_CAT_CTGR_ENTT_TEXT_ENTT_TYPE_ID_ENTT_ID_ATTR_ID_STORE_ID` (`entity_type_id`,`entity_id`,`attribute_id`,`store_id`) USING BTREE,
-  ADD KEY `IDX_CATALOG_CATEGORY_ENTITY_TEXT_ENTITY_ID` (`entity_id`) USING BTREE,
-  ADD KEY `IDX_CATALOG_CATEGORY_ENTITY_TEXT_ATTRIBUTE_ID` (`attribute_id`) USING BTREE,
-  ADD KEY `IDX_CATALOG_CATEGORY_ENTITY_TEXT_STORE_ID` (`store_id`) USING BTREE;
+  ADD UNIQUE KEY `UNQ_CAT_CTGR_ENTT_TEXT_ENTT_TYPE_ID_ENTT_ID_ATTR_ID_STORE_ID` (`entity_type_id`,`entity_id`,`attribute_id`,`store_id`),
+  ADD KEY `IDX_CATALOG_CATEGORY_ENTITY_TEXT_ENTITY_ID` (`entity_id`),
+  ADD KEY `IDX_CATALOG_CATEGORY_ENTITY_TEXT_ATTRIBUTE_ID` (`attribute_id`),
+  ADD KEY `IDX_CATALOG_CATEGORY_ENTITY_TEXT_STORE_ID` (`store_id`);
 
 --
 -- Indexes for table `catalog_category_entity_varchar`
 --
 ALTER TABLE `catalog_category_entity_varchar`
   ADD PRIMARY KEY (`value_id`),
-  ADD UNIQUE KEY `UNQ_CAT_CTGR_ENTT_VCHR_ENTT_TYPE_ID_ENTT_ID_ATTR_ID_STORE_ID` (`entity_type_id`,`entity_id`,`attribute_id`,`store_id`) USING BTREE,
-  ADD KEY `IDX_CATALOG_CATEGORY_ENTITY_VARCHAR_ENTITY_ID` (`entity_id`) USING BTREE,
-  ADD KEY `IDX_CATALOG_CATEGORY_ENTITY_VARCHAR_ATTRIBUTE_ID` (`attribute_id`) USING BTREE,
-  ADD KEY `IDX_CATALOG_CATEGORY_ENTITY_VARCHAR_STORE_ID` (`store_id`) USING BTREE;
+  ADD UNIQUE KEY `UNQ_CAT_CTGR_ENTT_VCHR_ENTT_TYPE_ID_ENTT_ID_ATTR_ID_STORE_ID` (`entity_type_id`,`entity_id`,`attribute_id`,`store_id`),
+  ADD KEY `IDX_CATALOG_CATEGORY_ENTITY_VARCHAR_ENTITY_ID` (`entity_id`),
+  ADD KEY `IDX_CATALOG_CATEGORY_ENTITY_VARCHAR_ATTRIBUTE_ID` (`attribute_id`),
+  ADD KEY `IDX_CATALOG_CATEGORY_ENTITY_VARCHAR_STORE_ID` (`store_id`);
 
 --
 -- Indexes for table `catalog_category_flat_store_1`
@@ -7312,99 +6609,117 @@ ALTER TABLE `catalog_category_flat_store_1`
   ADD KEY `IDX_CATALOG_CATEGORY_FLAT_STORE_1_LEVEL` (`level`);
 
 --
+-- Indexes for table `catalog_category_flat_store_2`
+--
+ALTER TABLE `catalog_category_flat_store_2`
+  ADD PRIMARY KEY (`entity_id`),
+  ADD KEY `IDX_CATALOG_CATEGORY_FLAT_STORE_2_STORE_ID` (`store_id`),
+  ADD KEY `IDX_CATALOG_CATEGORY_FLAT_STORE_2_PATH` (`path`),
+  ADD KEY `IDX_CATALOG_CATEGORY_FLAT_STORE_2_LEVEL` (`level`);
+
+--
+-- Indexes for table `catalog_category_flat_store_3`
+--
+ALTER TABLE `catalog_category_flat_store_3`
+  ADD PRIMARY KEY (`entity_id`),
+  ADD KEY `IDX_CATALOG_CATEGORY_FLAT_STORE_3_STORE_ID` (`store_id`),
+  ADD KEY `IDX_CATALOG_CATEGORY_FLAT_STORE_3_PATH` (`path`),
+  ADD KEY `IDX_CATALOG_CATEGORY_FLAT_STORE_3_LEVEL` (`level`);
+
+--
 -- Indexes for table `catalog_category_product`
 --
 ALTER TABLE `catalog_category_product`
   ADD PRIMARY KEY (`category_id`,`product_id`),
-  ADD KEY `IDX_CATALOG_CATEGORY_PRODUCT_PRODUCT_ID` (`product_id`) USING BTREE;
+  ADD KEY `IDX_CATALOG_CATEGORY_PRODUCT_PRODUCT_ID` (`product_id`);
 
 --
 -- Indexes for table `catalog_category_product_index`
 --
 ALTER TABLE `catalog_category_product_index`
   ADD PRIMARY KEY (`category_id`,`product_id`,`store_id`),
-  ADD KEY `15D3C269665C74C2219037D534F4B0DC` (`store_id`,`category_id`,`visibility`,`is_parent`,`position`) USING BTREE,
-  ADD KEY `IDX_CAT_CTGR_PRD_IDX_PRD_ID_STORE_ID_CTGR_ID_VISIBILITY` (`product_id`,`store_id`,`category_id`,`visibility`) USING BTREE;
+  ADD KEY `15D3C269665C74C2219037D534F4B0DC` (`store_id`,`category_id`,`visibility`,`is_parent`,`position`),
+  ADD KEY `IDX_CAT_CTGR_PRD_IDX_PRD_ID_STORE_ID_CTGR_ID_VISIBILITY` (`product_id`,`store_id`,`category_id`,`visibility`);
 
 --
 -- Indexes for table `catalog_category_product_index_enbl_idx`
 --
 ALTER TABLE `catalog_category_product_index_enbl_idx`
-  ADD KEY `IDX_CAT_CTGR_PRD_IDX_ENBL_IDX_PRD_ID_VISIBILITY` (`product_id`,`visibility`) USING BTREE;
+  ADD KEY `IDX_CAT_CTGR_PRD_IDX_ENBL_IDX_PRD_ID_VISIBILITY` (`product_id`,`visibility`);
 
 --
 -- Indexes for table `catalog_category_product_index_enbl_tmp`
 --
 ALTER TABLE `catalog_category_product_index_enbl_tmp`
-  ADD KEY `IDX_CAT_CTGR_PRD_IDX_ENBL_TMP_PRD_ID_VISIBILITY` (`product_id`,`visibility`) USING HASH;
+  ADD KEY `IDX_CAT_CTGR_PRD_IDX_ENBL_TMP_PRD_ID_VISIBILITY` (`product_id`,`visibility`);
 
 --
 -- Indexes for table `catalog_category_product_index_idx`
 --
 ALTER TABLE `catalog_category_product_index_idx`
-  ADD KEY `IDX_CAT_CTGR_PRD_IDX_IDX_PRD_ID_CTGR_ID_STORE_ID` (`product_id`,`category_id`,`store_id`) USING BTREE;
+  ADD KEY `IDX_CAT_CTGR_PRD_IDX_IDX_PRD_ID_CTGR_ID_STORE_ID` (`product_id`,`category_id`,`store_id`);
 
 --
 -- Indexes for table `catalog_category_product_index_tmp`
 --
 ALTER TABLE `catalog_category_product_index_tmp`
-  ADD KEY `IDX_CAT_CTGR_PRD_IDX_TMP_PRD_ID_CTGR_ID_STORE_ID` (`product_id`,`category_id`,`store_id`) USING HASH;
+  ADD KEY `IDX_CAT_CTGR_PRD_IDX_TMP_PRD_ID_CTGR_ID_STORE_ID` (`product_id`,`category_id`,`store_id`);
 
 --
 -- Indexes for table `catalog_compare_item`
 --
 ALTER TABLE `catalog_compare_item`
   ADD PRIMARY KEY (`catalog_compare_item_id`),
-  ADD KEY `IDX_CATALOG_COMPARE_ITEM_CUSTOMER_ID` (`customer_id`) USING BTREE,
-  ADD KEY `IDX_CATALOG_COMPARE_ITEM_PRODUCT_ID` (`product_id`) USING BTREE,
-  ADD KEY `IDX_CATALOG_COMPARE_ITEM_VISITOR_ID_PRODUCT_ID` (`visitor_id`,`product_id`) USING BTREE,
-  ADD KEY `IDX_CATALOG_COMPARE_ITEM_CUSTOMER_ID_PRODUCT_ID` (`customer_id`,`product_id`) USING BTREE,
-  ADD KEY `IDX_CATALOG_COMPARE_ITEM_STORE_ID` (`store_id`) USING BTREE;
+  ADD KEY `IDX_CATALOG_COMPARE_ITEM_CUSTOMER_ID` (`customer_id`),
+  ADD KEY `IDX_CATALOG_COMPARE_ITEM_PRODUCT_ID` (`product_id`),
+  ADD KEY `IDX_CATALOG_COMPARE_ITEM_VISITOR_ID_PRODUCT_ID` (`visitor_id`,`product_id`),
+  ADD KEY `IDX_CATALOG_COMPARE_ITEM_CUSTOMER_ID_PRODUCT_ID` (`customer_id`,`product_id`),
+  ADD KEY `IDX_CATALOG_COMPARE_ITEM_STORE_ID` (`store_id`);
 
 --
 -- Indexes for table `catalog_eav_attribute`
 --
 ALTER TABLE `catalog_eav_attribute`
   ADD PRIMARY KEY (`attribute_id`),
-  ADD KEY `IDX_CATALOG_EAV_ATTRIBUTE_USED_FOR_SORT_BY` (`used_for_sort_by`) USING BTREE,
-  ADD KEY `IDX_CATALOG_EAV_ATTRIBUTE_USED_IN_PRODUCT_LISTING` (`used_in_product_listing`) USING BTREE;
+  ADD KEY `IDX_CATALOG_EAV_ATTRIBUTE_USED_FOR_SORT_BY` (`used_for_sort_by`),
+  ADD KEY `IDX_CATALOG_EAV_ATTRIBUTE_USED_IN_PRODUCT_LISTING` (`used_in_product_listing`);
 
 --
 -- Indexes for table `catalog_product_bundle_option`
 --
 ALTER TABLE `catalog_product_bundle_option`
   ADD PRIMARY KEY (`option_id`),
-  ADD KEY `IDX_CATALOG_PRODUCT_BUNDLE_OPTION_PARENT_ID` (`parent_id`) USING BTREE;
+  ADD KEY `IDX_CATALOG_PRODUCT_BUNDLE_OPTION_PARENT_ID` (`parent_id`);
 
 --
 -- Indexes for table `catalog_product_bundle_option_value`
 --
 ALTER TABLE `catalog_product_bundle_option_value`
   ADD PRIMARY KEY (`value_id`),
-  ADD UNIQUE KEY `UNQ_CATALOG_PRODUCT_BUNDLE_OPTION_VALUE_OPTION_ID_STORE_ID` (`option_id`,`store_id`) USING BTREE;
+  ADD UNIQUE KEY `UNQ_CATALOG_PRODUCT_BUNDLE_OPTION_VALUE_OPTION_ID_STORE_ID` (`option_id`,`store_id`);
 
 --
 -- Indexes for table `catalog_product_bundle_price_index`
 --
 ALTER TABLE `catalog_product_bundle_price_index`
   ADD PRIMARY KEY (`entity_id`,`website_id`,`customer_group_id`),
-  ADD KEY `IDX_CATALOG_PRODUCT_BUNDLE_PRICE_INDEX_WEBSITE_ID` (`website_id`) USING BTREE,
-  ADD KEY `IDX_CATALOG_PRODUCT_BUNDLE_PRICE_INDEX_CUSTOMER_GROUP_ID` (`customer_group_id`) USING BTREE;
+  ADD KEY `IDX_CATALOG_PRODUCT_BUNDLE_PRICE_INDEX_WEBSITE_ID` (`website_id`),
+  ADD KEY `IDX_CATALOG_PRODUCT_BUNDLE_PRICE_INDEX_CUSTOMER_GROUP_ID` (`customer_group_id`);
 
 --
 -- Indexes for table `catalog_product_bundle_selection`
 --
 ALTER TABLE `catalog_product_bundle_selection`
   ADD PRIMARY KEY (`selection_id`),
-  ADD KEY `IDX_CATALOG_PRODUCT_BUNDLE_SELECTION_OPTION_ID` (`option_id`) USING BTREE,
-  ADD KEY `IDX_CATALOG_PRODUCT_BUNDLE_SELECTION_PRODUCT_ID` (`product_id`) USING BTREE;
+  ADD KEY `IDX_CATALOG_PRODUCT_BUNDLE_SELECTION_OPTION_ID` (`option_id`),
+  ADD KEY `IDX_CATALOG_PRODUCT_BUNDLE_SELECTION_PRODUCT_ID` (`product_id`);
 
 --
 -- Indexes for table `catalog_product_bundle_selection_price`
 --
 ALTER TABLE `catalog_product_bundle_selection_price`
   ADD PRIMARY KEY (`selection_id`,`website_id`),
-  ADD KEY `IDX_CATALOG_PRODUCT_BUNDLE_SELECTION_PRICE_WEBSITE_ID` (`website_id`) USING BTREE;
+  ADD KEY `IDX_CATALOG_PRODUCT_BUNDLE_SELECTION_PRICE_WEBSITE_ID` (`website_id`);
 
 --
 -- Indexes for table `catalog_product_bundle_stock_index`
@@ -7417,201 +6732,219 @@ ALTER TABLE `catalog_product_bundle_stock_index`
 --
 ALTER TABLE `catalog_product_enabled_index`
   ADD PRIMARY KEY (`product_id`,`store_id`),
-  ADD KEY `IDX_CATALOG_PRODUCT_ENABLED_INDEX_STORE_ID` (`store_id`) USING BTREE;
+  ADD KEY `IDX_CATALOG_PRODUCT_ENABLED_INDEX_STORE_ID` (`store_id`);
 
 --
 -- Indexes for table `catalog_product_entity`
 --
 ALTER TABLE `catalog_product_entity`
   ADD PRIMARY KEY (`entity_id`),
-  ADD KEY `IDX_CATALOG_PRODUCT_ENTITY_ENTITY_TYPE_ID` (`entity_type_id`) USING BTREE,
-  ADD KEY `IDX_CATALOG_PRODUCT_ENTITY_ATTRIBUTE_SET_ID` (`attribute_set_id`) USING BTREE,
-  ADD KEY `IDX_CATALOG_PRODUCT_ENTITY_SKU` (`sku`) USING BTREE;
+  ADD KEY `IDX_CATALOG_PRODUCT_ENTITY_ENTITY_TYPE_ID` (`entity_type_id`),
+  ADD KEY `IDX_CATALOG_PRODUCT_ENTITY_ATTRIBUTE_SET_ID` (`attribute_set_id`),
+  ADD KEY `IDX_CATALOG_PRODUCT_ENTITY_SKU` (`sku`);
 
 --
 -- Indexes for table `catalog_product_entity_datetime`
 --
 ALTER TABLE `catalog_product_entity_datetime`
   ADD PRIMARY KEY (`value_id`),
-  ADD UNIQUE KEY `UNQ_CAT_PRD_ENTT_DTIME_ENTT_ID_ATTR_ID_STORE_ID` (`entity_id`,`attribute_id`,`store_id`) USING BTREE,
-  ADD KEY `IDX_CATALOG_PRODUCT_ENTITY_DATETIME_ATTRIBUTE_ID` (`attribute_id`) USING BTREE,
-  ADD KEY `IDX_CATALOG_PRODUCT_ENTITY_DATETIME_STORE_ID` (`store_id`) USING BTREE,
-  ADD KEY `IDX_CATALOG_PRODUCT_ENTITY_DATETIME_ENTITY_ID` (`entity_id`) USING BTREE;
+  ADD UNIQUE KEY `UNQ_CAT_PRD_ENTT_DTIME_ENTT_ID_ATTR_ID_STORE_ID` (`entity_id`,`attribute_id`,`store_id`),
+  ADD KEY `IDX_CATALOG_PRODUCT_ENTITY_DATETIME_ATTRIBUTE_ID` (`attribute_id`),
+  ADD KEY `IDX_CATALOG_PRODUCT_ENTITY_DATETIME_STORE_ID` (`store_id`),
+  ADD KEY `IDX_CATALOG_PRODUCT_ENTITY_DATETIME_ENTITY_ID` (`entity_id`);
 
 --
 -- Indexes for table `catalog_product_entity_decimal`
 --
 ALTER TABLE `catalog_product_entity_decimal`
   ADD PRIMARY KEY (`value_id`),
-  ADD UNIQUE KEY `UNQ_CAT_PRD_ENTT_DEC_ENTT_ID_ATTR_ID_STORE_ID` (`entity_id`,`attribute_id`,`store_id`) USING BTREE,
-  ADD KEY `IDX_CATALOG_PRODUCT_ENTITY_DECIMAL_STORE_ID` (`store_id`) USING BTREE,
-  ADD KEY `IDX_CATALOG_PRODUCT_ENTITY_DECIMAL_ENTITY_ID` (`entity_id`) USING BTREE,
-  ADD KEY `IDX_CATALOG_PRODUCT_ENTITY_DECIMAL_ATTRIBUTE_ID` (`attribute_id`) USING BTREE;
+  ADD UNIQUE KEY `UNQ_CAT_PRD_ENTT_DEC_ENTT_ID_ATTR_ID_STORE_ID` (`entity_id`,`attribute_id`,`store_id`),
+  ADD KEY `IDX_CATALOG_PRODUCT_ENTITY_DECIMAL_STORE_ID` (`store_id`),
+  ADD KEY `IDX_CATALOG_PRODUCT_ENTITY_DECIMAL_ENTITY_ID` (`entity_id`),
+  ADD KEY `IDX_CATALOG_PRODUCT_ENTITY_DECIMAL_ATTRIBUTE_ID` (`attribute_id`);
 
 --
 -- Indexes for table `catalog_product_entity_gallery`
 --
 ALTER TABLE `catalog_product_entity_gallery`
   ADD PRIMARY KEY (`value_id`),
-  ADD UNIQUE KEY `UNQ_CAT_PRD_ENTT_GLR_ENTT_TYPE_ID_ENTT_ID_ATTR_ID_STORE_ID` (`entity_type_id`,`entity_id`,`attribute_id`,`store_id`) USING BTREE,
-  ADD KEY `IDX_CATALOG_PRODUCT_ENTITY_GALLERY_ENTITY_ID` (`entity_id`) USING BTREE,
-  ADD KEY `IDX_CATALOG_PRODUCT_ENTITY_GALLERY_ATTRIBUTE_ID` (`attribute_id`) USING BTREE,
-  ADD KEY `IDX_CATALOG_PRODUCT_ENTITY_GALLERY_STORE_ID` (`store_id`) USING BTREE;
+  ADD UNIQUE KEY `UNQ_CAT_PRD_ENTT_GLR_ENTT_TYPE_ID_ENTT_ID_ATTR_ID_STORE_ID` (`entity_type_id`,`entity_id`,`attribute_id`,`store_id`),
+  ADD KEY `IDX_CATALOG_PRODUCT_ENTITY_GALLERY_ENTITY_ID` (`entity_id`),
+  ADD KEY `IDX_CATALOG_PRODUCT_ENTITY_GALLERY_ATTRIBUTE_ID` (`attribute_id`),
+  ADD KEY `IDX_CATALOG_PRODUCT_ENTITY_GALLERY_STORE_ID` (`store_id`);
 
 --
 -- Indexes for table `catalog_product_entity_group_price`
 --
 ALTER TABLE `catalog_product_entity_group_price`
   ADD PRIMARY KEY (`value_id`),
-  ADD UNIQUE KEY `CC12C83765B562314470A24F2BDD0F36` (`entity_id`,`all_groups`,`customer_group_id`,`website_id`) USING BTREE,
-  ADD KEY `IDX_CATALOG_PRODUCT_ENTITY_GROUP_PRICE_ENTITY_ID` (`entity_id`) USING BTREE,
-  ADD KEY `IDX_CATALOG_PRODUCT_ENTITY_GROUP_PRICE_CUSTOMER_GROUP_ID` (`customer_group_id`) USING BTREE,
-  ADD KEY `IDX_CATALOG_PRODUCT_ENTITY_GROUP_PRICE_WEBSITE_ID` (`website_id`) USING BTREE;
+  ADD UNIQUE KEY `CC12C83765B562314470A24F2BDD0F36` (`entity_id`,`all_groups`,`customer_group_id`,`website_id`),
+  ADD KEY `IDX_CATALOG_PRODUCT_ENTITY_GROUP_PRICE_ENTITY_ID` (`entity_id`),
+  ADD KEY `IDX_CATALOG_PRODUCT_ENTITY_GROUP_PRICE_CUSTOMER_GROUP_ID` (`customer_group_id`),
+  ADD KEY `IDX_CATALOG_PRODUCT_ENTITY_GROUP_PRICE_WEBSITE_ID` (`website_id`);
 
 --
 -- Indexes for table `catalog_product_entity_int`
 --
 ALTER TABLE `catalog_product_entity_int`
   ADD PRIMARY KEY (`value_id`),
-  ADD UNIQUE KEY `UNQ_CATALOG_PRODUCT_ENTITY_INT_ENTITY_ID_ATTRIBUTE_ID_STORE_ID` (`entity_id`,`attribute_id`,`store_id`) USING BTREE,
-  ADD KEY `IDX_CATALOG_PRODUCT_ENTITY_INT_ATTRIBUTE_ID` (`attribute_id`) USING BTREE,
-  ADD KEY `IDX_CATALOG_PRODUCT_ENTITY_INT_STORE_ID` (`store_id`) USING BTREE,
-  ADD KEY `IDX_CATALOG_PRODUCT_ENTITY_INT_ENTITY_ID` (`entity_id`) USING BTREE;
+  ADD UNIQUE KEY `UNQ_CATALOG_PRODUCT_ENTITY_INT_ENTITY_ID_ATTRIBUTE_ID_STORE_ID` (`entity_id`,`attribute_id`,`store_id`),
+  ADD KEY `IDX_CATALOG_PRODUCT_ENTITY_INT_ATTRIBUTE_ID` (`attribute_id`),
+  ADD KEY `IDX_CATALOG_PRODUCT_ENTITY_INT_STORE_ID` (`store_id`),
+  ADD KEY `IDX_CATALOG_PRODUCT_ENTITY_INT_ENTITY_ID` (`entity_id`);
 
 --
 -- Indexes for table `catalog_product_entity_media_gallery`
 --
 ALTER TABLE `catalog_product_entity_media_gallery`
   ADD PRIMARY KEY (`value_id`),
-  ADD KEY `IDX_CATALOG_PRODUCT_ENTITY_MEDIA_GALLERY_ATTRIBUTE_ID` (`attribute_id`) USING BTREE,
-  ADD KEY `IDX_CATALOG_PRODUCT_ENTITY_MEDIA_GALLERY_ENTITY_ID` (`entity_id`) USING BTREE;
+  ADD KEY `IDX_CATALOG_PRODUCT_ENTITY_MEDIA_GALLERY_ATTRIBUTE_ID` (`attribute_id`),
+  ADD KEY `IDX_CATALOG_PRODUCT_ENTITY_MEDIA_GALLERY_ENTITY_ID` (`entity_id`);
 
 --
 -- Indexes for table `catalog_product_entity_media_gallery_value`
 --
 ALTER TABLE `catalog_product_entity_media_gallery_value`
   ADD PRIMARY KEY (`value_id`,`store_id`),
-  ADD KEY `IDX_CATALOG_PRODUCT_ENTITY_MEDIA_GALLERY_VALUE_STORE_ID` (`store_id`) USING BTREE;
+  ADD KEY `IDX_CATALOG_PRODUCT_ENTITY_MEDIA_GALLERY_VALUE_STORE_ID` (`store_id`);
 
 --
 -- Indexes for table `catalog_product_entity_text`
 --
 ALTER TABLE `catalog_product_entity_text`
   ADD PRIMARY KEY (`value_id`),
-  ADD UNIQUE KEY `UNQ_CATALOG_PRODUCT_ENTITY_TEXT_ENTITY_ID_ATTRIBUTE_ID_STORE_ID` (`entity_id`,`attribute_id`,`store_id`) USING BTREE,
-  ADD KEY `IDX_CATALOG_PRODUCT_ENTITY_TEXT_ATTRIBUTE_ID` (`attribute_id`) USING BTREE,
-  ADD KEY `IDX_CATALOG_PRODUCT_ENTITY_TEXT_STORE_ID` (`store_id`) USING BTREE,
-  ADD KEY `IDX_CATALOG_PRODUCT_ENTITY_TEXT_ENTITY_ID` (`entity_id`) USING BTREE;
+  ADD UNIQUE KEY `UNQ_CATALOG_PRODUCT_ENTITY_TEXT_ENTITY_ID_ATTRIBUTE_ID_STORE_ID` (`entity_id`,`attribute_id`,`store_id`),
+  ADD KEY `IDX_CATALOG_PRODUCT_ENTITY_TEXT_ATTRIBUTE_ID` (`attribute_id`),
+  ADD KEY `IDX_CATALOG_PRODUCT_ENTITY_TEXT_STORE_ID` (`store_id`),
+  ADD KEY `IDX_CATALOG_PRODUCT_ENTITY_TEXT_ENTITY_ID` (`entity_id`);
 
 --
 -- Indexes for table `catalog_product_entity_tier_price`
 --
 ALTER TABLE `catalog_product_entity_tier_price`
   ADD PRIMARY KEY (`value_id`),
-  ADD UNIQUE KEY `E8AB433B9ACB00343ABB312AD2FAB087` (`entity_id`,`all_groups`,`customer_group_id`,`qty`,`website_id`) USING BTREE,
-  ADD KEY `IDX_CATALOG_PRODUCT_ENTITY_TIER_PRICE_ENTITY_ID` (`entity_id`) USING BTREE,
-  ADD KEY `IDX_CATALOG_PRODUCT_ENTITY_TIER_PRICE_CUSTOMER_GROUP_ID` (`customer_group_id`) USING BTREE,
-  ADD KEY `IDX_CATALOG_PRODUCT_ENTITY_TIER_PRICE_WEBSITE_ID` (`website_id`) USING BTREE;
+  ADD UNIQUE KEY `E8AB433B9ACB00343ABB312AD2FAB087` (`entity_id`,`all_groups`,`customer_group_id`,`qty`,`website_id`),
+  ADD KEY `IDX_CATALOG_PRODUCT_ENTITY_TIER_PRICE_ENTITY_ID` (`entity_id`),
+  ADD KEY `IDX_CATALOG_PRODUCT_ENTITY_TIER_PRICE_CUSTOMER_GROUP_ID` (`customer_group_id`),
+  ADD KEY `IDX_CATALOG_PRODUCT_ENTITY_TIER_PRICE_WEBSITE_ID` (`website_id`);
 
 --
 -- Indexes for table `catalog_product_entity_varchar`
 --
 ALTER TABLE `catalog_product_entity_varchar`
   ADD PRIMARY KEY (`value_id`),
-  ADD UNIQUE KEY `UNQ_CAT_PRD_ENTT_VCHR_ENTT_ID_ATTR_ID_STORE_ID` (`entity_id`,`attribute_id`,`store_id`) USING BTREE,
-  ADD KEY `IDX_CATALOG_PRODUCT_ENTITY_VARCHAR_ATTRIBUTE_ID` (`attribute_id`) USING BTREE,
-  ADD KEY `IDX_CATALOG_PRODUCT_ENTITY_VARCHAR_STORE_ID` (`store_id`) USING BTREE,
-  ADD KEY `IDX_CATALOG_PRODUCT_ENTITY_VARCHAR_ENTITY_ID` (`entity_id`) USING BTREE;
+  ADD UNIQUE KEY `UNQ_CAT_PRD_ENTT_VCHR_ENTT_ID_ATTR_ID_STORE_ID` (`entity_id`,`attribute_id`,`store_id`),
+  ADD KEY `IDX_CATALOG_PRODUCT_ENTITY_VARCHAR_ATTRIBUTE_ID` (`attribute_id`),
+  ADD KEY `IDX_CATALOG_PRODUCT_ENTITY_VARCHAR_STORE_ID` (`store_id`),
+  ADD KEY `IDX_CATALOG_PRODUCT_ENTITY_VARCHAR_ENTITY_ID` (`entity_id`);
 
 --
 -- Indexes for table `catalog_product_flat_1`
 --
 ALTER TABLE `catalog_product_flat_1`
   ADD PRIMARY KEY (`entity_id`),
-  ADD KEY `IDX_CATALOG_PRODUCT_FLAT_1_TYPE_ID` (`type_id`) USING BTREE,
-  ADD KEY `IDX_CATALOG_PRODUCT_FLAT_1_ATTRIBUTE_SET_ID` (`attribute_set_id`) USING BTREE,
-  ADD KEY `IDX_CATALOG_PRODUCT_FLAT_1_MOST_POPULAR` (`most_popular`) USING BTREE,
-  ADD KEY `IDX_CATALOG_PRODUCT_FLAT_1_NAME` (`name`) USING BTREE,
-  ADD KEY `IDX_CATALOG_PRODUCT_FLAT_1_PRICE` (`price`) USING BTREE,
-  ADD KEY `IDX_CATALOG_PRODUCT_FLAT_1_TEST` (`test`);
+  ADD KEY `IDX_CATALOG_PRODUCT_FLAT_1_TYPE_ID` (`type_id`),
+  ADD KEY `IDX_CATALOG_PRODUCT_FLAT_1_ATTRIBUTE_SET_ID` (`attribute_set_id`),
+  ADD KEY `IDX_CATALOG_PRODUCT_FLAT_1_NAME` (`name`),
+  ADD KEY `IDX_CATALOG_PRODUCT_FLAT_1_PRICE` (`price`);
+
+--
+-- Indexes for table `catalog_product_flat_2`
+--
+ALTER TABLE `catalog_product_flat_2`
+  ADD PRIMARY KEY (`entity_id`),
+  ADD KEY `IDX_CATALOG_PRODUCT_FLAT_2_TYPE_ID` (`type_id`),
+  ADD KEY `IDX_CATALOG_PRODUCT_FLAT_2_ATTRIBUTE_SET_ID` (`attribute_set_id`),
+  ADD KEY `IDX_CATALOG_PRODUCT_FLAT_2_NAME` (`name`),
+  ADD KEY `IDX_CATALOG_PRODUCT_FLAT_2_PRICE` (`price`);
+
+--
+-- Indexes for table `catalog_product_flat_3`
+--
+ALTER TABLE `catalog_product_flat_3`
+  ADD PRIMARY KEY (`entity_id`),
+  ADD KEY `IDX_CATALOG_PRODUCT_FLAT_3_TYPE_ID` (`type_id`),
+  ADD KEY `IDX_CATALOG_PRODUCT_FLAT_3_ATTRIBUTE_SET_ID` (`attribute_set_id`),
+  ADD KEY `IDX_CATALOG_PRODUCT_FLAT_3_NAME` (`name`),
+  ADD KEY `IDX_CATALOG_PRODUCT_FLAT_3_PRICE` (`price`);
 
 --
 -- Indexes for table `catalog_product_index_eav`
 --
 ALTER TABLE `catalog_product_index_eav`
   ADD PRIMARY KEY (`entity_id`,`attribute_id`,`store_id`,`value`),
-  ADD KEY `IDX_CATALOG_PRODUCT_INDEX_EAV_ENTITY_ID` (`entity_id`) USING BTREE,
-  ADD KEY `IDX_CATALOG_PRODUCT_INDEX_EAV_ATTRIBUTE_ID` (`attribute_id`) USING BTREE,
-  ADD KEY `IDX_CATALOG_PRODUCT_INDEX_EAV_STORE_ID` (`store_id`) USING BTREE,
-  ADD KEY `IDX_CATALOG_PRODUCT_INDEX_EAV_VALUE` (`value`) USING BTREE;
+  ADD KEY `IDX_CATALOG_PRODUCT_INDEX_EAV_ENTITY_ID` (`entity_id`),
+  ADD KEY `IDX_CATALOG_PRODUCT_INDEX_EAV_ATTRIBUTE_ID` (`attribute_id`),
+  ADD KEY `IDX_CATALOG_PRODUCT_INDEX_EAV_STORE_ID` (`store_id`),
+  ADD KEY `IDX_CATALOG_PRODUCT_INDEX_EAV_VALUE` (`value`);
 
 --
 -- Indexes for table `catalog_product_index_eav_decimal`
 --
 ALTER TABLE `catalog_product_index_eav_decimal`
   ADD PRIMARY KEY (`entity_id`,`attribute_id`,`store_id`),
-  ADD KEY `IDX_CATALOG_PRODUCT_INDEX_EAV_DECIMAL_ENTITY_ID` (`entity_id`) USING BTREE,
-  ADD KEY `IDX_CATALOG_PRODUCT_INDEX_EAV_DECIMAL_ATTRIBUTE_ID` (`attribute_id`) USING BTREE,
-  ADD KEY `IDX_CATALOG_PRODUCT_INDEX_EAV_DECIMAL_STORE_ID` (`store_id`) USING BTREE,
-  ADD KEY `IDX_CATALOG_PRODUCT_INDEX_EAV_DECIMAL_VALUE` (`value`) USING BTREE;
+  ADD KEY `IDX_CATALOG_PRODUCT_INDEX_EAV_DECIMAL_ENTITY_ID` (`entity_id`),
+  ADD KEY `IDX_CATALOG_PRODUCT_INDEX_EAV_DECIMAL_ATTRIBUTE_ID` (`attribute_id`),
+  ADD KEY `IDX_CATALOG_PRODUCT_INDEX_EAV_DECIMAL_STORE_ID` (`store_id`),
+  ADD KEY `IDX_CATALOG_PRODUCT_INDEX_EAV_DECIMAL_VALUE` (`value`);
 
 --
 -- Indexes for table `catalog_product_index_eav_decimal_idx`
 --
 ALTER TABLE `catalog_product_index_eav_decimal_idx`
   ADD PRIMARY KEY (`entity_id`,`attribute_id`,`store_id`,`value`),
-  ADD KEY `IDX_CATALOG_PRODUCT_INDEX_EAV_DECIMAL_IDX_ENTITY_ID` (`entity_id`) USING BTREE,
-  ADD KEY `IDX_CATALOG_PRODUCT_INDEX_EAV_DECIMAL_IDX_ATTRIBUTE_ID` (`attribute_id`) USING BTREE,
-  ADD KEY `IDX_CATALOG_PRODUCT_INDEX_EAV_DECIMAL_IDX_STORE_ID` (`store_id`) USING BTREE,
-  ADD KEY `IDX_CATALOG_PRODUCT_INDEX_EAV_DECIMAL_IDX_VALUE` (`value`) USING BTREE;
+  ADD KEY `IDX_CATALOG_PRODUCT_INDEX_EAV_DECIMAL_IDX_ENTITY_ID` (`entity_id`),
+  ADD KEY `IDX_CATALOG_PRODUCT_INDEX_EAV_DECIMAL_IDX_ATTRIBUTE_ID` (`attribute_id`),
+  ADD KEY `IDX_CATALOG_PRODUCT_INDEX_EAV_DECIMAL_IDX_STORE_ID` (`store_id`),
+  ADD KEY `IDX_CATALOG_PRODUCT_INDEX_EAV_DECIMAL_IDX_VALUE` (`value`);
 
 --
 -- Indexes for table `catalog_product_index_eav_decimal_tmp`
 --
 ALTER TABLE `catalog_product_index_eav_decimal_tmp`
   ADD PRIMARY KEY (`entity_id`,`attribute_id`,`store_id`),
-  ADD KEY `IDX_CATALOG_PRODUCT_INDEX_EAV_DECIMAL_TMP_ENTITY_ID` (`entity_id`) USING HASH,
-  ADD KEY `IDX_CATALOG_PRODUCT_INDEX_EAV_DECIMAL_TMP_ATTRIBUTE_ID` (`attribute_id`) USING HASH,
-  ADD KEY `IDX_CATALOG_PRODUCT_INDEX_EAV_DECIMAL_TMP_STORE_ID` (`store_id`) USING HASH,
-  ADD KEY `IDX_CATALOG_PRODUCT_INDEX_EAV_DECIMAL_TMP_VALUE` (`value`) USING HASH;
+  ADD KEY `IDX_CATALOG_PRODUCT_INDEX_EAV_DECIMAL_TMP_ENTITY_ID` (`entity_id`),
+  ADD KEY `IDX_CATALOG_PRODUCT_INDEX_EAV_DECIMAL_TMP_ATTRIBUTE_ID` (`attribute_id`),
+  ADD KEY `IDX_CATALOG_PRODUCT_INDEX_EAV_DECIMAL_TMP_STORE_ID` (`store_id`),
+  ADD KEY `IDX_CATALOG_PRODUCT_INDEX_EAV_DECIMAL_TMP_VALUE` (`value`);
 
 --
 -- Indexes for table `catalog_product_index_eav_idx`
 --
 ALTER TABLE `catalog_product_index_eav_idx`
   ADD PRIMARY KEY (`entity_id`,`attribute_id`,`store_id`,`value`),
-  ADD KEY `IDX_CATALOG_PRODUCT_INDEX_EAV_IDX_ENTITY_ID` (`entity_id`) USING BTREE,
-  ADD KEY `IDX_CATALOG_PRODUCT_INDEX_EAV_IDX_ATTRIBUTE_ID` (`attribute_id`) USING BTREE,
-  ADD KEY `IDX_CATALOG_PRODUCT_INDEX_EAV_IDX_STORE_ID` (`store_id`) USING BTREE,
-  ADD KEY `IDX_CATALOG_PRODUCT_INDEX_EAV_IDX_VALUE` (`value`) USING BTREE;
+  ADD KEY `IDX_CATALOG_PRODUCT_INDEX_EAV_IDX_ENTITY_ID` (`entity_id`),
+  ADD KEY `IDX_CATALOG_PRODUCT_INDEX_EAV_IDX_ATTRIBUTE_ID` (`attribute_id`),
+  ADD KEY `IDX_CATALOG_PRODUCT_INDEX_EAV_IDX_STORE_ID` (`store_id`),
+  ADD KEY `IDX_CATALOG_PRODUCT_INDEX_EAV_IDX_VALUE` (`value`);
 
 --
 -- Indexes for table `catalog_product_index_eav_tmp`
 --
 ALTER TABLE `catalog_product_index_eav_tmp`
   ADD PRIMARY KEY (`entity_id`,`attribute_id`,`store_id`,`value`),
-  ADD KEY `IDX_CATALOG_PRODUCT_INDEX_EAV_TMP_ENTITY_ID` (`entity_id`) USING HASH,
-  ADD KEY `IDX_CATALOG_PRODUCT_INDEX_EAV_TMP_ATTRIBUTE_ID` (`attribute_id`) USING HASH,
-  ADD KEY `IDX_CATALOG_PRODUCT_INDEX_EAV_TMP_STORE_ID` (`store_id`) USING HASH,
-  ADD KEY `IDX_CATALOG_PRODUCT_INDEX_EAV_TMP_VALUE` (`value`) USING HASH;
+  ADD KEY `IDX_CATALOG_PRODUCT_INDEX_EAV_TMP_ENTITY_ID` (`entity_id`),
+  ADD KEY `IDX_CATALOG_PRODUCT_INDEX_EAV_TMP_ATTRIBUTE_ID` (`attribute_id`),
+  ADD KEY `IDX_CATALOG_PRODUCT_INDEX_EAV_TMP_STORE_ID` (`store_id`),
+  ADD KEY `IDX_CATALOG_PRODUCT_INDEX_EAV_TMP_VALUE` (`value`);
 
 --
 -- Indexes for table `catalog_product_index_group_price`
 --
 ALTER TABLE `catalog_product_index_group_price`
   ADD PRIMARY KEY (`entity_id`,`customer_group_id`,`website_id`),
-  ADD KEY `IDX_CATALOG_PRODUCT_INDEX_GROUP_PRICE_CUSTOMER_GROUP_ID` (`customer_group_id`) USING BTREE,
-  ADD KEY `IDX_CATALOG_PRODUCT_INDEX_GROUP_PRICE_WEBSITE_ID` (`website_id`) USING BTREE;
+  ADD KEY `IDX_CATALOG_PRODUCT_INDEX_GROUP_PRICE_CUSTOMER_GROUP_ID` (`customer_group_id`),
+  ADD KEY `IDX_CATALOG_PRODUCT_INDEX_GROUP_PRICE_WEBSITE_ID` (`website_id`);
 
 --
 -- Indexes for table `catalog_product_index_price`
 --
 ALTER TABLE `catalog_product_index_price`
   ADD PRIMARY KEY (`entity_id`,`customer_group_id`,`website_id`),
-  ADD KEY `IDX_CATALOG_PRODUCT_INDEX_PRICE_CUSTOMER_GROUP_ID` (`customer_group_id`) USING BTREE,
-  ADD KEY `IDX_CATALOG_PRODUCT_INDEX_PRICE_WEBSITE_ID` (`website_id`) USING BTREE,
-  ADD KEY `IDX_CATALOG_PRODUCT_INDEX_PRICE_MIN_PRICE` (`min_price`) USING BTREE,
-  ADD KEY `IDX_CAT_PRD_IDX_PRICE_WS_ID_CSTR_GROUP_ID_MIN_PRICE` (`website_id`,`customer_group_id`,`min_price`) USING BTREE;
+  ADD KEY `IDX_CATALOG_PRODUCT_INDEX_PRICE_CUSTOMER_GROUP_ID` (`customer_group_id`),
+  ADD KEY `IDX_CATALOG_PRODUCT_INDEX_PRICE_WEBSITE_ID` (`website_id`),
+  ADD KEY `IDX_CATALOG_PRODUCT_INDEX_PRICE_MIN_PRICE` (`min_price`),
+  ADD KEY `IDX_CAT_PRD_IDX_PRICE_WS_ID_CSTR_GROUP_ID_MIN_PRICE` (`website_id`,`customer_group_id`,`min_price`);
 
 --
 -- Indexes for table `catalog_product_index_price_bundle_idx`
@@ -7702,9 +7035,9 @@ ALTER TABLE `catalog_product_index_price_final_tmp`
 --
 ALTER TABLE `catalog_product_index_price_idx`
   ADD PRIMARY KEY (`entity_id`,`customer_group_id`,`website_id`),
-  ADD KEY `IDX_CATALOG_PRODUCT_INDEX_PRICE_IDX_CUSTOMER_GROUP_ID` (`customer_group_id`) USING BTREE,
-  ADD KEY `IDX_CATALOG_PRODUCT_INDEX_PRICE_IDX_WEBSITE_ID` (`website_id`) USING BTREE,
-  ADD KEY `IDX_CATALOG_PRODUCT_INDEX_PRICE_IDX_MIN_PRICE` (`min_price`) USING BTREE;
+  ADD KEY `IDX_CATALOG_PRODUCT_INDEX_PRICE_IDX_CUSTOMER_GROUP_ID` (`customer_group_id`),
+  ADD KEY `IDX_CATALOG_PRODUCT_INDEX_PRICE_IDX_WEBSITE_ID` (`website_id`),
+  ADD KEY `IDX_CATALOG_PRODUCT_INDEX_PRICE_IDX_MIN_PRICE` (`min_price`);
 
 --
 -- Indexes for table `catalog_product_index_price_opt_agr_idx`
@@ -7735,68 +7068,68 @@ ALTER TABLE `catalog_product_index_price_opt_tmp`
 --
 ALTER TABLE `catalog_product_index_price_tmp`
   ADD PRIMARY KEY (`entity_id`,`customer_group_id`,`website_id`),
-  ADD KEY `IDX_CATALOG_PRODUCT_INDEX_PRICE_TMP_CUSTOMER_GROUP_ID` (`customer_group_id`) USING HASH,
-  ADD KEY `IDX_CATALOG_PRODUCT_INDEX_PRICE_TMP_WEBSITE_ID` (`website_id`) USING HASH,
-  ADD KEY `IDX_CATALOG_PRODUCT_INDEX_PRICE_TMP_MIN_PRICE` (`min_price`) USING HASH;
+  ADD KEY `IDX_CATALOG_PRODUCT_INDEX_PRICE_TMP_CUSTOMER_GROUP_ID` (`customer_group_id`),
+  ADD KEY `IDX_CATALOG_PRODUCT_INDEX_PRICE_TMP_WEBSITE_ID` (`website_id`),
+  ADD KEY `IDX_CATALOG_PRODUCT_INDEX_PRICE_TMP_MIN_PRICE` (`min_price`);
 
 --
 -- Indexes for table `catalog_product_index_tier_price`
 --
 ALTER TABLE `catalog_product_index_tier_price`
   ADD PRIMARY KEY (`entity_id`,`customer_group_id`,`website_id`),
-  ADD KEY `IDX_CATALOG_PRODUCT_INDEX_TIER_PRICE_CUSTOMER_GROUP_ID` (`customer_group_id`) USING BTREE,
-  ADD KEY `IDX_CATALOG_PRODUCT_INDEX_TIER_PRICE_WEBSITE_ID` (`website_id`) USING BTREE;
+  ADD KEY `IDX_CATALOG_PRODUCT_INDEX_TIER_PRICE_CUSTOMER_GROUP_ID` (`customer_group_id`),
+  ADD KEY `IDX_CATALOG_PRODUCT_INDEX_TIER_PRICE_WEBSITE_ID` (`website_id`);
 
 --
 -- Indexes for table `catalog_product_index_website`
 --
 ALTER TABLE `catalog_product_index_website`
   ADD PRIMARY KEY (`website_id`),
-  ADD KEY `IDX_CATALOG_PRODUCT_INDEX_WEBSITE_WEBSITE_DATE` (`website_date`) USING BTREE;
+  ADD KEY `IDX_CATALOG_PRODUCT_INDEX_WEBSITE_WEBSITE_DATE` (`website_date`);
 
 --
 -- Indexes for table `catalog_product_link`
 --
 ALTER TABLE `catalog_product_link`
   ADD PRIMARY KEY (`link_id`),
-  ADD UNIQUE KEY `UNQ_CAT_PRD_LNK_LNK_TYPE_ID_PRD_ID_LNKED_PRD_ID` (`link_type_id`,`product_id`,`linked_product_id`) USING BTREE,
-  ADD KEY `IDX_CATALOG_PRODUCT_LINK_PRODUCT_ID` (`product_id`) USING BTREE,
-  ADD KEY `IDX_CATALOG_PRODUCT_LINK_LINKED_PRODUCT_ID` (`linked_product_id`) USING BTREE,
-  ADD KEY `IDX_CATALOG_PRODUCT_LINK_LINK_TYPE_ID` (`link_type_id`) USING BTREE;
+  ADD UNIQUE KEY `UNQ_CAT_PRD_LNK_LNK_TYPE_ID_PRD_ID_LNKED_PRD_ID` (`link_type_id`,`product_id`,`linked_product_id`),
+  ADD KEY `IDX_CATALOG_PRODUCT_LINK_PRODUCT_ID` (`product_id`),
+  ADD KEY `IDX_CATALOG_PRODUCT_LINK_LINKED_PRODUCT_ID` (`linked_product_id`),
+  ADD KEY `IDX_CATALOG_PRODUCT_LINK_LINK_TYPE_ID` (`link_type_id`);
 
 --
 -- Indexes for table `catalog_product_link_attribute`
 --
 ALTER TABLE `catalog_product_link_attribute`
   ADD PRIMARY KEY (`product_link_attribute_id`),
-  ADD KEY `IDX_CATALOG_PRODUCT_LINK_ATTRIBUTE_LINK_TYPE_ID` (`link_type_id`) USING BTREE;
+  ADD KEY `IDX_CATALOG_PRODUCT_LINK_ATTRIBUTE_LINK_TYPE_ID` (`link_type_id`);
 
 --
 -- Indexes for table `catalog_product_link_attribute_decimal`
 --
 ALTER TABLE `catalog_product_link_attribute_decimal`
   ADD PRIMARY KEY (`value_id`),
-  ADD UNIQUE KEY `UNQ_CAT_PRD_LNK_ATTR_DEC_PRD_LNK_ATTR_ID_LNK_ID` (`product_link_attribute_id`,`link_id`) USING BTREE,
-  ADD KEY `IDX_CAT_PRD_LNK_ATTR_DEC_PRD_LNK_ATTR_ID` (`product_link_attribute_id`) USING BTREE,
-  ADD KEY `IDX_CATALOG_PRODUCT_LINK_ATTRIBUTE_DECIMAL_LINK_ID` (`link_id`) USING BTREE;
+  ADD UNIQUE KEY `UNQ_CAT_PRD_LNK_ATTR_DEC_PRD_LNK_ATTR_ID_LNK_ID` (`product_link_attribute_id`,`link_id`),
+  ADD KEY `IDX_CAT_PRD_LNK_ATTR_DEC_PRD_LNK_ATTR_ID` (`product_link_attribute_id`),
+  ADD KEY `IDX_CATALOG_PRODUCT_LINK_ATTRIBUTE_DECIMAL_LINK_ID` (`link_id`);
 
 --
 -- Indexes for table `catalog_product_link_attribute_int`
 --
 ALTER TABLE `catalog_product_link_attribute_int`
   ADD PRIMARY KEY (`value_id`),
-  ADD UNIQUE KEY `UNQ_CAT_PRD_LNK_ATTR_INT_PRD_LNK_ATTR_ID_LNK_ID` (`product_link_attribute_id`,`link_id`) USING BTREE,
-  ADD KEY `IDX_CATALOG_PRODUCT_LINK_ATTRIBUTE_INT_PRODUCT_LINK_ATTRIBUTE_ID` (`product_link_attribute_id`) USING BTREE,
-  ADD KEY `IDX_CATALOG_PRODUCT_LINK_ATTRIBUTE_INT_LINK_ID` (`link_id`) USING BTREE;
+  ADD UNIQUE KEY `UNQ_CAT_PRD_LNK_ATTR_INT_PRD_LNK_ATTR_ID_LNK_ID` (`product_link_attribute_id`,`link_id`),
+  ADD KEY `IDX_CATALOG_PRODUCT_LINK_ATTRIBUTE_INT_PRODUCT_LINK_ATTRIBUTE_ID` (`product_link_attribute_id`),
+  ADD KEY `IDX_CATALOG_PRODUCT_LINK_ATTRIBUTE_INT_LINK_ID` (`link_id`);
 
 --
 -- Indexes for table `catalog_product_link_attribute_varchar`
 --
 ALTER TABLE `catalog_product_link_attribute_varchar`
   ADD PRIMARY KEY (`value_id`),
-  ADD UNIQUE KEY `UNQ_CAT_PRD_LNK_ATTR_VCHR_PRD_LNK_ATTR_ID_LNK_ID` (`product_link_attribute_id`,`link_id`) USING BTREE,
-  ADD KEY `IDX_CAT_PRD_LNK_ATTR_VCHR_PRD_LNK_ATTR_ID` (`product_link_attribute_id`) USING BTREE,
-  ADD KEY `IDX_CATALOG_PRODUCT_LINK_ATTRIBUTE_VARCHAR_LINK_ID` (`link_id`) USING BTREE;
+  ADD UNIQUE KEY `UNQ_CAT_PRD_LNK_ATTR_VCHR_PRD_LNK_ATTR_ID_LNK_ID` (`product_link_attribute_id`,`link_id`),
+  ADD KEY `IDX_CAT_PRD_LNK_ATTR_VCHR_PRD_LNK_ATTR_ID` (`product_link_attribute_id`),
+  ADD KEY `IDX_CATALOG_PRODUCT_LINK_ATTRIBUTE_VARCHAR_LINK_ID` (`link_id`);
 
 --
 -- Indexes for table `catalog_product_link_type`
@@ -7809,99 +7142,99 @@ ALTER TABLE `catalog_product_link_type`
 --
 ALTER TABLE `catalog_product_option`
   ADD PRIMARY KEY (`option_id`),
-  ADD KEY `IDX_CATALOG_PRODUCT_OPTION_PRODUCT_ID` (`product_id`) USING BTREE;
+  ADD KEY `IDX_CATALOG_PRODUCT_OPTION_PRODUCT_ID` (`product_id`);
 
 --
 -- Indexes for table `catalog_product_option_price`
 --
 ALTER TABLE `catalog_product_option_price`
   ADD PRIMARY KEY (`option_price_id`),
-  ADD UNIQUE KEY `UNQ_CATALOG_PRODUCT_OPTION_PRICE_OPTION_ID_STORE_ID` (`option_id`,`store_id`) USING BTREE,
-  ADD KEY `IDX_CATALOG_PRODUCT_OPTION_PRICE_OPTION_ID` (`option_id`) USING BTREE,
-  ADD KEY `IDX_CATALOG_PRODUCT_OPTION_PRICE_STORE_ID` (`store_id`) USING BTREE;
+  ADD UNIQUE KEY `UNQ_CATALOG_PRODUCT_OPTION_PRICE_OPTION_ID_STORE_ID` (`option_id`,`store_id`),
+  ADD KEY `IDX_CATALOG_PRODUCT_OPTION_PRICE_OPTION_ID` (`option_id`),
+  ADD KEY `IDX_CATALOG_PRODUCT_OPTION_PRICE_STORE_ID` (`store_id`);
 
 --
 -- Indexes for table `catalog_product_option_title`
 --
 ALTER TABLE `catalog_product_option_title`
   ADD PRIMARY KEY (`option_title_id`),
-  ADD UNIQUE KEY `UNQ_CATALOG_PRODUCT_OPTION_TITLE_OPTION_ID_STORE_ID` (`option_id`,`store_id`) USING BTREE,
-  ADD KEY `IDX_CATALOG_PRODUCT_OPTION_TITLE_OPTION_ID` (`option_id`) USING BTREE,
-  ADD KEY `IDX_CATALOG_PRODUCT_OPTION_TITLE_STORE_ID` (`store_id`) USING BTREE;
+  ADD UNIQUE KEY `UNQ_CATALOG_PRODUCT_OPTION_TITLE_OPTION_ID_STORE_ID` (`option_id`,`store_id`),
+  ADD KEY `IDX_CATALOG_PRODUCT_OPTION_TITLE_OPTION_ID` (`option_id`),
+  ADD KEY `IDX_CATALOG_PRODUCT_OPTION_TITLE_STORE_ID` (`store_id`);
 
 --
 -- Indexes for table `catalog_product_option_type_price`
 --
 ALTER TABLE `catalog_product_option_type_price`
   ADD PRIMARY KEY (`option_type_price_id`),
-  ADD UNIQUE KEY `UNQ_CATALOG_PRODUCT_OPTION_TYPE_PRICE_OPTION_TYPE_ID_STORE_ID` (`option_type_id`,`store_id`) USING BTREE,
-  ADD KEY `IDX_CATALOG_PRODUCT_OPTION_TYPE_PRICE_OPTION_TYPE_ID` (`option_type_id`) USING BTREE,
-  ADD KEY `IDX_CATALOG_PRODUCT_OPTION_TYPE_PRICE_STORE_ID` (`store_id`) USING BTREE;
+  ADD UNIQUE KEY `UNQ_CATALOG_PRODUCT_OPTION_TYPE_PRICE_OPTION_TYPE_ID_STORE_ID` (`option_type_id`,`store_id`),
+  ADD KEY `IDX_CATALOG_PRODUCT_OPTION_TYPE_PRICE_OPTION_TYPE_ID` (`option_type_id`),
+  ADD KEY `IDX_CATALOG_PRODUCT_OPTION_TYPE_PRICE_STORE_ID` (`store_id`);
 
 --
 -- Indexes for table `catalog_product_option_type_title`
 --
 ALTER TABLE `catalog_product_option_type_title`
   ADD PRIMARY KEY (`option_type_title_id`),
-  ADD UNIQUE KEY `UNQ_CATALOG_PRODUCT_OPTION_TYPE_TITLE_OPTION_TYPE_ID_STORE_ID` (`option_type_id`,`store_id`) USING BTREE,
-  ADD KEY `IDX_CATALOG_PRODUCT_OPTION_TYPE_TITLE_OPTION_TYPE_ID` (`option_type_id`) USING BTREE,
-  ADD KEY `IDX_CATALOG_PRODUCT_OPTION_TYPE_TITLE_STORE_ID` (`store_id`) USING BTREE;
+  ADD UNIQUE KEY `UNQ_CATALOG_PRODUCT_OPTION_TYPE_TITLE_OPTION_TYPE_ID_STORE_ID` (`option_type_id`,`store_id`),
+  ADD KEY `IDX_CATALOG_PRODUCT_OPTION_TYPE_TITLE_OPTION_TYPE_ID` (`option_type_id`),
+  ADD KEY `IDX_CATALOG_PRODUCT_OPTION_TYPE_TITLE_STORE_ID` (`store_id`);
 
 --
 -- Indexes for table `catalog_product_option_type_value`
 --
 ALTER TABLE `catalog_product_option_type_value`
   ADD PRIMARY KEY (`option_type_id`),
-  ADD KEY `IDX_CATALOG_PRODUCT_OPTION_TYPE_VALUE_OPTION_ID` (`option_id`) USING BTREE;
+  ADD KEY `IDX_CATALOG_PRODUCT_OPTION_TYPE_VALUE_OPTION_ID` (`option_id`);
 
 --
 -- Indexes for table `catalog_product_relation`
 --
 ALTER TABLE `catalog_product_relation`
   ADD PRIMARY KEY (`parent_id`,`child_id`),
-  ADD KEY `IDX_CATALOG_PRODUCT_RELATION_CHILD_ID` (`child_id`) USING BTREE;
+  ADD KEY `IDX_CATALOG_PRODUCT_RELATION_CHILD_ID` (`child_id`);
 
 --
 -- Indexes for table `catalog_product_super_attribute`
 --
 ALTER TABLE `catalog_product_super_attribute`
   ADD PRIMARY KEY (`product_super_attribute_id`),
-  ADD UNIQUE KEY `UNQ_CATALOG_PRODUCT_SUPER_ATTRIBUTE_PRODUCT_ID_ATTRIBUTE_ID` (`product_id`,`attribute_id`) USING BTREE,
-  ADD KEY `IDX_CATALOG_PRODUCT_SUPER_ATTRIBUTE_PRODUCT_ID` (`product_id`) USING BTREE;
+  ADD UNIQUE KEY `UNQ_CATALOG_PRODUCT_SUPER_ATTRIBUTE_PRODUCT_ID_ATTRIBUTE_ID` (`product_id`,`attribute_id`),
+  ADD KEY `IDX_CATALOG_PRODUCT_SUPER_ATTRIBUTE_PRODUCT_ID` (`product_id`);
 
 --
 -- Indexes for table `catalog_product_super_attribute_label`
 --
 ALTER TABLE `catalog_product_super_attribute_label`
   ADD PRIMARY KEY (`value_id`),
-  ADD UNIQUE KEY `UNQ_CAT_PRD_SPR_ATTR_LBL_PRD_SPR_ATTR_ID_STORE_ID` (`product_super_attribute_id`,`store_id`) USING BTREE,
-  ADD KEY `IDX_CAT_PRD_SPR_ATTR_LBL_PRD_SPR_ATTR_ID` (`product_super_attribute_id`) USING BTREE,
-  ADD KEY `IDX_CATALOG_PRODUCT_SUPER_ATTRIBUTE_LABEL_STORE_ID` (`store_id`) USING BTREE;
+  ADD UNIQUE KEY `UNQ_CAT_PRD_SPR_ATTR_LBL_PRD_SPR_ATTR_ID_STORE_ID` (`product_super_attribute_id`,`store_id`),
+  ADD KEY `IDX_CAT_PRD_SPR_ATTR_LBL_PRD_SPR_ATTR_ID` (`product_super_attribute_id`),
+  ADD KEY `IDX_CATALOG_PRODUCT_SUPER_ATTRIBUTE_LABEL_STORE_ID` (`store_id`);
 
 --
 -- Indexes for table `catalog_product_super_attribute_pricing`
 --
 ALTER TABLE `catalog_product_super_attribute_pricing`
   ADD PRIMARY KEY (`value_id`),
-  ADD UNIQUE KEY `UNQ_CAT_PRD_SPR_ATTR_PRICING_PRD_SPR_ATTR_ID_VAL_IDX_WS_ID` (`product_super_attribute_id`,`value_index`,`website_id`) USING BTREE,
-  ADD KEY `IDX_CAT_PRD_SPR_ATTR_PRICING_PRD_SPR_ATTR_ID` (`product_super_attribute_id`) USING BTREE,
-  ADD KEY `IDX_CATALOG_PRODUCT_SUPER_ATTRIBUTE_PRICING_WEBSITE_ID` (`website_id`) USING BTREE;
+  ADD UNIQUE KEY `UNQ_CAT_PRD_SPR_ATTR_PRICING_PRD_SPR_ATTR_ID_VAL_IDX_WS_ID` (`product_super_attribute_id`,`value_index`,`website_id`),
+  ADD KEY `IDX_CAT_PRD_SPR_ATTR_PRICING_PRD_SPR_ATTR_ID` (`product_super_attribute_id`),
+  ADD KEY `IDX_CATALOG_PRODUCT_SUPER_ATTRIBUTE_PRICING_WEBSITE_ID` (`website_id`);
 
 --
 -- Indexes for table `catalog_product_super_link`
 --
 ALTER TABLE `catalog_product_super_link`
   ADD PRIMARY KEY (`link_id`),
-  ADD UNIQUE KEY `UNQ_CATALOG_PRODUCT_SUPER_LINK_PRODUCT_ID_PARENT_ID` (`product_id`,`parent_id`) USING BTREE,
-  ADD KEY `IDX_CATALOG_PRODUCT_SUPER_LINK_PARENT_ID` (`parent_id`) USING BTREE,
-  ADD KEY `IDX_CATALOG_PRODUCT_SUPER_LINK_PRODUCT_ID` (`product_id`) USING BTREE;
+  ADD UNIQUE KEY `UNQ_CATALOG_PRODUCT_SUPER_LINK_PRODUCT_ID_PARENT_ID` (`product_id`,`parent_id`),
+  ADD KEY `IDX_CATALOG_PRODUCT_SUPER_LINK_PARENT_ID` (`parent_id`),
+  ADD KEY `IDX_CATALOG_PRODUCT_SUPER_LINK_PRODUCT_ID` (`product_id`);
 
 --
 -- Indexes for table `catalog_product_website`
 --
 ALTER TABLE `catalog_product_website`
   ADD PRIMARY KEY (`product_id`,`website_id`),
-  ADD KEY `IDX_CATALOG_PRODUCT_WEBSITE_WEBSITE_ID` (`website_id`) USING BTREE;
+  ADD KEY `IDX_CATALOG_PRODUCT_WEBSITE_WEBSITE_ID` (`website_id`);
 
 --
 -- Indexes for table `checkout_agreement`
@@ -7914,7 +7247,7 @@ ALTER TABLE `checkout_agreement`
 --
 ALTER TABLE `checkout_agreement_store`
   ADD PRIMARY KEY (`agreement_id`,`store_id`),
-  ADD KEY `FK_CHECKOUT_AGREEMENT_STORE_STORE_ID_CORE_STORE_STORE_ID` (`store_id`) USING BTREE;
+  ADD KEY `FK_CHECKOUT_AGREEMENT_STORE_STORE_ID_CORE_STORE_STORE_ID` (`store_id`);
 
 --
 -- Indexes for table `cms_block`
@@ -7927,44 +7260,28 @@ ALTER TABLE `cms_block`
 --
 ALTER TABLE `cms_block_store`
   ADD PRIMARY KEY (`block_id`,`store_id`),
-  ADD KEY `IDX_UEB_CMS_BLOCK_STORE_STORE_ID` (`store_id`) USING BTREE;
+  ADD KEY `IDX_CMS_BLOCK_STORE_STORE_ID` (`store_id`);
 
 --
 -- Indexes for table `cms_page`
 --
 ALTER TABLE `cms_page`
   ADD PRIMARY KEY (`page_id`),
-  ADD KEY `IDX_UEB_CMS_PAGE_IDENTIFIER` (`identifier`) USING BTREE;
+  ADD KEY `IDX_CMS_PAGE_IDENTIFIER` (`identifier`);
 
 --
 -- Indexes for table `cms_page_store`
 --
 ALTER TABLE `cms_page_store`
   ADD PRIMARY KEY (`page_id`,`store_id`),
-  ADD KEY `IDX_UEB_CMS_PAGE_STORE_STORE_ID` (`store_id`) USING BTREE;
-
---
--- Indexes for table `contacts`
---
-ALTER TABLE `contacts`
-  ADD PRIMARY KEY (`id`),
-  ADD KEY `customer_id` (`customer_id`),
-  ADD KEY `message_id` (`message_id`);
-
---
--- Indexes for table `contacts_feedback`
---
-ALTER TABLE `contacts_feedback`
-  ADD PRIMARY KEY (`id`),
-  ADD KEY `customer_id` (`customer_id`,`created_at`),
-  ADD KEY `contacts_id` (`contacts_id`);
+  ADD KEY `IDX_CMS_PAGE_STORE_STORE_ID` (`store_id`);
 
 --
 -- Indexes for table `core_cache`
 --
 ALTER TABLE `core_cache`
   ADD PRIMARY KEY (`id`),
-  ADD KEY `IDX_CORE_CACHE_EXPIRE_TIME` (`expire_time`) USING BTREE;
+  ADD KEY `IDX_CORE_CACHE_EXPIRE_TIME` (`expire_time`);
 
 --
 -- Indexes for table `core_cache_option`
@@ -7977,52 +7294,45 @@ ALTER TABLE `core_cache_option`
 --
 ALTER TABLE `core_cache_tag`
   ADD PRIMARY KEY (`tag`,`cache_id`),
-  ADD KEY `IDX_CORE_CACHE_TAG_CACHE_ID` (`cache_id`) USING BTREE;
+  ADD KEY `IDX_CORE_CACHE_TAG_CACHE_ID` (`cache_id`);
 
 --
 -- Indexes for table `core_config_data`
 --
 ALTER TABLE `core_config_data`
   ADD PRIMARY KEY (`config_id`),
-  ADD UNIQUE KEY `UNQ_UEB_CORE_CONFIG_DATA_SCOPE_SCOPE_ID_PATH` (`scope`,`scope_id`,`path`) USING BTREE;
-
---
--- Indexes for table `core_config_data_bak`
---
-ALTER TABLE `core_config_data_bak`
-  ADD PRIMARY KEY (`config_id`),
-  ADD UNIQUE KEY `UNQ_UEB_CORE_CONFIG_DATA_SCOPE_SCOPE_ID_PATH` (`scope`,`scope_id`,`path`) USING BTREE;
+  ADD UNIQUE KEY `UNQ_CORE_CONFIG_DATA_SCOPE_SCOPE_ID_PATH` (`scope`,`scope_id`,`path`);
 
 --
 -- Indexes for table `core_email_template`
 --
 ALTER TABLE `core_email_template`
   ADD PRIMARY KEY (`template_id`),
-  ADD UNIQUE KEY `UNQ_CORE_EMAIL_TEMPLATE_TEMPLATE_CODE` (`template_code`) USING BTREE,
-  ADD KEY `IDX_CORE_EMAIL_TEMPLATE_ADDED_AT` (`added_at`) USING BTREE,
-  ADD KEY `IDX_CORE_EMAIL_TEMPLATE_MODIFIED_AT` (`modified_at`) USING BTREE;
+  ADD UNIQUE KEY `UNQ_CORE_EMAIL_TEMPLATE_TEMPLATE_CODE` (`template_code`),
+  ADD KEY `IDX_CORE_EMAIL_TEMPLATE_ADDED_AT` (`added_at`),
+  ADD KEY `IDX_CORE_EMAIL_TEMPLATE_MODIFIED_AT` (`modified_at`);
 
 --
 -- Indexes for table `core_flag`
 --
 ALTER TABLE `core_flag`
   ADD PRIMARY KEY (`flag_id`),
-  ADD KEY `IDX_UEB_CORE_FLAG_LAST_UPDATE` (`last_update`) USING BTREE;
+  ADD KEY `IDX_CORE_FLAG_LAST_UPDATE` (`last_update`);
 
 --
 -- Indexes for table `core_layout_link`
 --
 ALTER TABLE `core_layout_link`
   ADD PRIMARY KEY (`layout_link_id`),
-  ADD UNIQUE KEY `UNQ_UEB_CORE_LAYOUT_LINK_STORE_ID_PACKAGE_THEME_LAYOUT_UPDATE_ID` (`store_id`,`package`,`theme`,`layout_update_id`) USING BTREE,
-  ADD KEY `IDX_UEB_CORE_LAYOUT_LINK_LAYOUT_UPDATE_ID` (`layout_update_id`) USING BTREE;
+  ADD UNIQUE KEY `UNQ_CORE_LAYOUT_LINK_STORE_ID_PACKAGE_THEME_LAYOUT_UPDATE_ID` (`store_id`,`package`,`theme`,`layout_update_id`),
+  ADD KEY `IDX_CORE_LAYOUT_LINK_LAYOUT_UPDATE_ID` (`layout_update_id`);
 
 --
 -- Indexes for table `core_layout_update`
 --
 ALTER TABLE `core_layout_update`
   ADD PRIMARY KEY (`layout_update_id`),
-  ADD KEY `IDX_UEB_CORE_LAYOUT_UPDATE_HANDLE` (`handle`) USING BTREE;
+  ADD KEY `IDX_CORE_LAYOUT_UPDATE_HANDLE` (`handle`);
 
 --
 -- Indexes for table `core_resource`
@@ -8041,173 +7351,160 @@ ALTER TABLE `core_session`
 --
 ALTER TABLE `core_store`
   ADD PRIMARY KEY (`store_id`),
-  ADD UNIQUE KEY `UNQ_core_store_CODE` (`code`) USING BTREE,
-  ADD KEY `IDX_core_store_WEBSITE_ID` (`website_id`) USING BTREE,
-  ADD KEY `IDX_core_store_IS_ACTIVE_SORT_ORDER` (`is_active`,`sort_order`) USING BTREE,
-  ADD KEY `IDX_core_store_GROUP_ID` (`group_id`) USING BTREE;
+  ADD UNIQUE KEY `UNQ_CORE_STORE_CODE` (`code`),
+  ADD KEY `IDX_CORE_STORE_WEBSITE_ID` (`website_id`),
+  ADD KEY `IDX_CORE_STORE_IS_ACTIVE_SORT_ORDER` (`is_active`,`sort_order`),
+  ADD KEY `IDX_CORE_STORE_GROUP_ID` (`group_id`);
 
 --
 -- Indexes for table `core_store_group`
 --
 ALTER TABLE `core_store_group`
   ADD PRIMARY KEY (`group_id`),
-  ADD KEY `IDX_core_store_GROUP_WEBSITE_ID` (`website_id`) USING BTREE,
-  ADD KEY `IDX_core_store_GROUP_DEFAULT_STORE_ID` (`default_store_id`) USING BTREE;
+  ADD KEY `IDX_CORE_STORE_GROUP_WEBSITE_ID` (`website_id`),
+  ADD KEY `IDX_CORE_STORE_GROUP_DEFAULT_STORE_ID` (`default_store_id`);
 
 --
 -- Indexes for table `core_translate`
 --
 ALTER TABLE `core_translate`
   ADD PRIMARY KEY (`key_id`),
-  ADD UNIQUE KEY `UNQ_UEB_CORE_TRANSLATE_STORE_ID_LOCALE_STRING` (`store_id`,`locale`,`string`) USING BTREE,
-  ADD KEY `IDX_UEB_CORE_TRANSLATE_STORE_ID` (`store_id`) USING BTREE;
+  ADD UNIQUE KEY `UNQ_CORE_TRANSLATE_STORE_ID_LOCALE_STRING` (`store_id`,`locale`,`string`),
+  ADD KEY `IDX_CORE_TRANSLATE_STORE_ID` (`store_id`);
 
 --
 -- Indexes for table `core_url_rewrite`
 --
 ALTER TABLE `core_url_rewrite`
   ADD PRIMARY KEY (`url_rewrite_id`),
-  ADD UNIQUE KEY `UNQ_CORE_URL_REWRITE_ID_PATH_IS_SYSTEM_STORE_ID` (`id_path`,`is_system`,`store_id`) USING BTREE,
-  ADD UNIQUE KEY `UNQ_CORE_URL_REWRITE_REQUEST_PATH_STORE_ID` (`request_path`,`store_id`) USING BTREE,
-  ADD KEY `IDX_CORE_URL_REWRITE_TARGET_PATH_STORE_ID` (`target_path`,`store_id`) USING BTREE,
-  ADD KEY `IDX_CORE_URL_REWRITE_ID_PATH` (`id_path`) USING BTREE,
-  ADD KEY `IDX_CORE_URL_REWRITE_STORE_ID` (`store_id`) USING BTREE,
-  ADD KEY `FK_CORE_URL_REWRITE_CTGR_ID_CAT_CTGR_ENTT_ENTT_ID` (`category_id`) USING BTREE,
-  ADD KEY `FK_CORE_URL_REWRITE_PRODUCT_ID_CATALOG_PRODUCT_ENTITY_ENTITY_ID` (`product_id`) USING BTREE;
-
---
--- Indexes for table `core_url_rewrite_new`
---
-ALTER TABLE `core_url_rewrite_new`
-  ADD PRIMARY KEY (`url_rewrite_id`),
-  ADD UNIQUE KEY `UNQ_CORE_URL_REWRITE_REQUEST_PATH_STORE_ID` (`request_path`,`store_id`,`target_path`) USING BTREE,
-  ADD KEY `IDX_CORE_URL_REWRITE_TARGET_PATH_STORE_ID` (`target_path`,`store_id`) USING BTREE,
-  ADD KEY `IDX_CORE_URL_REWRITE_ID_PATH` (`id_path`) USING BTREE,
-  ADD KEY `IDX_CORE_URL_REWRITE_STORE_ID` (`store_id`) USING BTREE,
-  ADD KEY `FK_CORE_URL_REWRITE_CTGR_ID_CAT_CTGR_ENTT_ENTT_ID` (`category_id`) USING BTREE,
-  ADD KEY `UNQ_CORE_URL_REWRITE_ID_PATH_IS_SYSTEM_STORE_ID` (`id_path`,`is_system`,`store_id`) USING BTREE,
-  ADD KEY `FK_CORE_URL_REWRITE_PRODUCT_ID_CATALOG_PRODUCT_ENTITY_ENTITY_ID` (`product_id`) USING BTREE;
+  ADD UNIQUE KEY `UNQ_CORE_URL_REWRITE_REQUEST_PATH_STORE_ID` (`request_path`,`store_id`),
+  ADD UNIQUE KEY `UNQ_CORE_URL_REWRITE_ID_PATH_IS_SYSTEM_STORE_ID` (`id_path`,`is_system`,`store_id`),
+  ADD KEY `IDX_CORE_URL_REWRITE_TARGET_PATH_STORE_ID` (`target_path`,`store_id`),
+  ADD KEY `IDX_CORE_URL_REWRITE_ID_PATH` (`id_path`),
+  ADD KEY `IDX_CORE_URL_REWRITE_STORE_ID` (`store_id`),
+  ADD KEY `FK_CORE_URL_REWRITE_PRODUCT_ID_CATALOG_PRODUCT_ENTITY_ENTITY_ID` (`product_id`),
+  ADD KEY `FK_CORE_URL_REWRITE_CTGR_ID_CAT_CTGR_ENTT_ENTT_ID` (`category_id`);
 
 --
 -- Indexes for table `core_variable`
 --
 ALTER TABLE `core_variable`
   ADD PRIMARY KEY (`variable_id`),
-  ADD UNIQUE KEY `UNQ_UEB_CORE_VARIABLE_CODE` (`code`) USING BTREE;
+  ADD UNIQUE KEY `UNQ_CORE_VARIABLE_CODE` (`code`);
 
 --
 -- Indexes for table `core_variable_value`
 --
 ALTER TABLE `core_variable_value`
   ADD PRIMARY KEY (`value_id`),
-  ADD UNIQUE KEY `UNQ_UEB_CORE_VARIABLE_VALUE_VARIABLE_ID_STORE_ID` (`variable_id`,`store_id`) USING BTREE,
-  ADD KEY `IDX_UEB_CORE_VARIABLE_VALUE_VARIABLE_ID` (`variable_id`) USING BTREE,
-  ADD KEY `IDX_UEB_CORE_VARIABLE_VALUE_STORE_ID` (`store_id`) USING BTREE;
+  ADD UNIQUE KEY `UNQ_CORE_VARIABLE_VALUE_VARIABLE_ID_STORE_ID` (`variable_id`,`store_id`),
+  ADD KEY `IDX_CORE_VARIABLE_VALUE_VARIABLE_ID` (`variable_id`),
+  ADD KEY `IDX_CORE_VARIABLE_VALUE_STORE_ID` (`store_id`);
 
 --
 -- Indexes for table `core_website`
 --
 ALTER TABLE `core_website`
   ADD PRIMARY KEY (`website_id`),
-  ADD UNIQUE KEY `UNQ_core_website_CODE` (`code`) USING BTREE,
-  ADD KEY `IDX_core_website_SORT_ORDER` (`sort_order`) USING BTREE,
-  ADD KEY `IDX_core_website_DEFAULT_GROUP_ID` (`default_group_id`) USING BTREE;
+  ADD UNIQUE KEY `UNQ_CORE_WEBSITE_CODE` (`code`),
+  ADD KEY `IDX_CORE_WEBSITE_SORT_ORDER` (`sort_order`),
+  ADD KEY `IDX_CORE_WEBSITE_DEFAULT_GROUP_ID` (`default_group_id`);
 
 --
 -- Indexes for table `coupon_aggregated`
 --
 ALTER TABLE `coupon_aggregated`
   ADD PRIMARY KEY (`id`),
-  ADD UNIQUE KEY `UNQ_COUPON_AGGRED_PERIOD_STORE_ID_ORDER_STS_COUPON_CODE` (`period`,`store_id`,`order_status`,`coupon_code`) USING BTREE,
-  ADD KEY `IDX_COUPON_AGGREGATED_STORE_ID` (`store_id`) USING BTREE,
-  ADD KEY `IDX_COUPON_AGGREGATED_RULE_NAME` (`rule_name`) USING BTREE;
+  ADD UNIQUE KEY `UNQ_COUPON_AGGREGATED_PERIOD_STORE_ID_ORDER_STATUS_COUPON_CODE` (`period`,`store_id`,`order_status`,`coupon_code`),
+  ADD KEY `IDX_COUPON_AGGREGATED_STORE_ID` (`store_id`),
+  ADD KEY `IDX_COUPON_AGGREGATED_RULE_NAME` (`rule_name`);
 
 --
 -- Indexes for table `coupon_aggregated_order`
 --
 ALTER TABLE `coupon_aggregated_order`
   ADD PRIMARY KEY (`id`),
-  ADD UNIQUE KEY `88AA637ED96D362CA2A54914C5433CBD` (`period`,`store_id`,`order_status`,`coupon_code`) USING BTREE,
-  ADD KEY `IDX_COUPON_AGGREGATED_ORDER_STORE_ID` (`store_id`) USING BTREE,
-  ADD KEY `IDX_COUPON_AGGREGATED_ORDER_RULE_NAME` (`rule_name`) USING BTREE;
+  ADD UNIQUE KEY `UNQ_COUPON_AGGRED_ORDER_PERIOD_STORE_ID_ORDER_STS_COUPON_CODE` (`period`,`store_id`,`order_status`,`coupon_code`),
+  ADD KEY `IDX_COUPON_AGGREGATED_ORDER_STORE_ID` (`store_id`),
+  ADD KEY `IDX_COUPON_AGGREGATED_ORDER_RULE_NAME` (`rule_name`);
 
 --
 -- Indexes for table `coupon_aggregated_updated`
 --
 ALTER TABLE `coupon_aggregated_updated`
   ADD PRIMARY KEY (`id`),
-  ADD UNIQUE KEY `CBD24BA8C63F54809C07EAF9AF763122` (`period`,`store_id`,`order_status`,`coupon_code`) USING BTREE,
-  ADD KEY `IDX_COUPON_AGGREGATED_UPDATED_STORE_ID` (`store_id`) USING BTREE,
-  ADD KEY `IDX_COUPON_AGGREGATED_UPDATED_RULE_NAME` (`rule_name`) USING BTREE;
+  ADD UNIQUE KEY `UNQ_COUPON_AGGRED_UPDATED_PERIOD_STORE_ID_ORDER_STS_COUPON_CODE` (`period`,`store_id`,`order_status`,`coupon_code`),
+  ADD KEY `IDX_COUPON_AGGREGATED_UPDATED_STORE_ID` (`store_id`),
+  ADD KEY `IDX_COUPON_AGGREGATED_UPDATED_RULE_NAME` (`rule_name`);
 
 --
 -- Indexes for table `cron_schedule`
 --
 ALTER TABLE `cron_schedule`
   ADD PRIMARY KEY (`schedule_id`),
-  ADD KEY `IDX_CRON_SCHEDULE_JOB_CODE` (`job_code`) USING BTREE,
-  ADD KEY `IDX_CRON_SCHEDULE_SCHEDULED_AT_STATUS` (`scheduled_at`,`status`) USING BTREE;
+  ADD KEY `IDX_CRON_SCHEDULE_JOB_CODE` (`job_code`),
+  ADD KEY `IDX_CRON_SCHEDULE_SCHEDULED_AT_STATUS` (`scheduled_at`,`status`);
 
 --
 -- Indexes for table `customer_address_entity`
 --
 ALTER TABLE `customer_address_entity`
   ADD PRIMARY KEY (`entity_id`),
-  ADD KEY `IDX_CUSTOMER_ADDRESS_ENTITY_PARENT_ID` (`parent_id`) USING BTREE;
+  ADD KEY `IDX_CUSTOMER_ADDRESS_ENTITY_PARENT_ID` (`parent_id`);
 
 --
 -- Indexes for table `customer_address_entity_datetime`
 --
 ALTER TABLE `customer_address_entity_datetime`
   ADD PRIMARY KEY (`value_id`),
-  ADD UNIQUE KEY `UNQ_CUSTOMER_ADDRESS_ENTITY_DATETIME_ENTITY_ID_ATTRIBUTE_ID` (`entity_id`,`attribute_id`) USING BTREE,
-  ADD KEY `IDX_CUSTOMER_ADDRESS_ENTITY_DATETIME_ENTITY_TYPE_ID` (`entity_type_id`) USING BTREE,
-  ADD KEY `IDX_CUSTOMER_ADDRESS_ENTITY_DATETIME_ATTRIBUTE_ID` (`attribute_id`) USING BTREE,
-  ADD KEY `IDX_CUSTOMER_ADDRESS_ENTITY_DATETIME_ENTITY_ID` (`entity_id`) USING BTREE,
-  ADD KEY `IDX_CSTR_ADDR_ENTT_DTIME_ENTT_ID_ATTR_ID_VAL` (`entity_id`,`attribute_id`,`value`) USING BTREE;
+  ADD UNIQUE KEY `UNQ_CUSTOMER_ADDRESS_ENTITY_DATETIME_ENTITY_ID_ATTRIBUTE_ID` (`entity_id`,`attribute_id`),
+  ADD KEY `IDX_CUSTOMER_ADDRESS_ENTITY_DATETIME_ENTITY_TYPE_ID` (`entity_type_id`),
+  ADD KEY `IDX_CUSTOMER_ADDRESS_ENTITY_DATETIME_ATTRIBUTE_ID` (`attribute_id`),
+  ADD KEY `IDX_CUSTOMER_ADDRESS_ENTITY_DATETIME_ENTITY_ID` (`entity_id`),
+  ADD KEY `IDX_CSTR_ADDR_ENTT_DTIME_ENTT_ID_ATTR_ID_VAL` (`entity_id`,`attribute_id`,`value`);
 
 --
 -- Indexes for table `customer_address_entity_decimal`
 --
 ALTER TABLE `customer_address_entity_decimal`
   ADD PRIMARY KEY (`value_id`),
-  ADD UNIQUE KEY `UNQ_CUSTOMER_ADDRESS_ENTITY_DECIMAL_ENTITY_ID_ATTRIBUTE_ID` (`entity_id`,`attribute_id`) USING BTREE,
-  ADD KEY `IDX_CUSTOMER_ADDRESS_ENTITY_DECIMAL_ENTITY_TYPE_ID` (`entity_type_id`) USING BTREE,
-  ADD KEY `IDX_CUSTOMER_ADDRESS_ENTITY_DECIMAL_ATTRIBUTE_ID` (`attribute_id`) USING BTREE,
-  ADD KEY `IDX_CUSTOMER_ADDRESS_ENTITY_DECIMAL_ENTITY_ID` (`entity_id`) USING BTREE,
-  ADD KEY `IDX_CUSTOMER_ADDRESS_ENTITY_DECIMAL_ENTITY_ID_ATTRIBUTE_ID_VALUE` (`entity_id`,`attribute_id`,`value`) USING BTREE;
+  ADD UNIQUE KEY `UNQ_CUSTOMER_ADDRESS_ENTITY_DECIMAL_ENTITY_ID_ATTRIBUTE_ID` (`entity_id`,`attribute_id`),
+  ADD KEY `IDX_CUSTOMER_ADDRESS_ENTITY_DECIMAL_ENTITY_TYPE_ID` (`entity_type_id`),
+  ADD KEY `IDX_CUSTOMER_ADDRESS_ENTITY_DECIMAL_ATTRIBUTE_ID` (`attribute_id`),
+  ADD KEY `IDX_CUSTOMER_ADDRESS_ENTITY_DECIMAL_ENTITY_ID` (`entity_id`),
+  ADD KEY `IDX_CUSTOMER_ADDRESS_ENTITY_DECIMAL_ENTITY_ID_ATTRIBUTE_ID_VALUE` (`entity_id`,`attribute_id`,`value`);
 
 --
 -- Indexes for table `customer_address_entity_int`
 --
 ALTER TABLE `customer_address_entity_int`
   ADD PRIMARY KEY (`value_id`),
-  ADD UNIQUE KEY `UNQ_CUSTOMER_ADDRESS_ENTITY_INT_ENTITY_ID_ATTRIBUTE_ID` (`entity_id`,`attribute_id`) USING BTREE,
-  ADD KEY `IDX_CUSTOMER_ADDRESS_ENTITY_INT_ENTITY_TYPE_ID` (`entity_type_id`) USING BTREE,
-  ADD KEY `IDX_CUSTOMER_ADDRESS_ENTITY_INT_ATTRIBUTE_ID` (`attribute_id`) USING BTREE,
-  ADD KEY `IDX_CUSTOMER_ADDRESS_ENTITY_INT_ENTITY_ID` (`entity_id`) USING BTREE,
-  ADD KEY `IDX_CUSTOMER_ADDRESS_ENTITY_INT_ENTITY_ID_ATTRIBUTE_ID_VALUE` (`entity_id`,`attribute_id`,`value`) USING BTREE;
+  ADD UNIQUE KEY `UNQ_CUSTOMER_ADDRESS_ENTITY_INT_ENTITY_ID_ATTRIBUTE_ID` (`entity_id`,`attribute_id`),
+  ADD KEY `IDX_CUSTOMER_ADDRESS_ENTITY_INT_ENTITY_TYPE_ID` (`entity_type_id`),
+  ADD KEY `IDX_CUSTOMER_ADDRESS_ENTITY_INT_ATTRIBUTE_ID` (`attribute_id`),
+  ADD KEY `IDX_CUSTOMER_ADDRESS_ENTITY_INT_ENTITY_ID` (`entity_id`),
+  ADD KEY `IDX_CUSTOMER_ADDRESS_ENTITY_INT_ENTITY_ID_ATTRIBUTE_ID_VALUE` (`entity_id`,`attribute_id`,`value`);
 
 --
 -- Indexes for table `customer_address_entity_text`
 --
 ALTER TABLE `customer_address_entity_text`
   ADD PRIMARY KEY (`value_id`),
-  ADD UNIQUE KEY `UNQ_CUSTOMER_ADDRESS_ENTITY_TEXT_ENTITY_ID_ATTRIBUTE_ID` (`entity_id`,`attribute_id`) USING BTREE,
-  ADD KEY `IDX_CUSTOMER_ADDRESS_ENTITY_TEXT_ENTITY_TYPE_ID` (`entity_type_id`) USING BTREE,
-  ADD KEY `IDX_CUSTOMER_ADDRESS_ENTITY_TEXT_ATTRIBUTE_ID` (`attribute_id`) USING BTREE,
-  ADD KEY `IDX_CUSTOMER_ADDRESS_ENTITY_TEXT_ENTITY_ID` (`entity_id`) USING BTREE;
+  ADD UNIQUE KEY `UNQ_CUSTOMER_ADDRESS_ENTITY_TEXT_ENTITY_ID_ATTRIBUTE_ID` (`entity_id`,`attribute_id`),
+  ADD KEY `IDX_CUSTOMER_ADDRESS_ENTITY_TEXT_ENTITY_TYPE_ID` (`entity_type_id`),
+  ADD KEY `IDX_CUSTOMER_ADDRESS_ENTITY_TEXT_ATTRIBUTE_ID` (`attribute_id`),
+  ADD KEY `IDX_CUSTOMER_ADDRESS_ENTITY_TEXT_ENTITY_ID` (`entity_id`);
 
 --
 -- Indexes for table `customer_address_entity_varchar`
 --
 ALTER TABLE `customer_address_entity_varchar`
   ADD PRIMARY KEY (`value_id`),
-  ADD UNIQUE KEY `UNQ_CUSTOMER_ADDRESS_ENTITY_VARCHAR_ENTITY_ID_ATTRIBUTE_ID` (`entity_id`,`attribute_id`) USING BTREE,
-  ADD KEY `IDX_CUSTOMER_ADDRESS_ENTITY_VARCHAR_ENTITY_TYPE_ID` (`entity_type_id`) USING BTREE,
-  ADD KEY `IDX_CUSTOMER_ADDRESS_ENTITY_VARCHAR_ATTRIBUTE_ID` (`attribute_id`) USING BTREE,
-  ADD KEY `IDX_CUSTOMER_ADDRESS_ENTITY_VARCHAR_ENTITY_ID` (`entity_id`) USING BTREE,
-  ADD KEY `IDX_CUSTOMER_ADDRESS_ENTITY_VARCHAR_ENTITY_ID_ATTRIBUTE_ID_VALUE` (`entity_id`,`attribute_id`,`value`) USING BTREE;
+  ADD UNIQUE KEY `UNQ_CUSTOMER_ADDRESS_ENTITY_VARCHAR_ENTITY_ID_ATTRIBUTE_ID` (`entity_id`,`attribute_id`),
+  ADD KEY `IDX_CUSTOMER_ADDRESS_ENTITY_VARCHAR_ENTITY_TYPE_ID` (`entity_type_id`),
+  ADD KEY `IDX_CUSTOMER_ADDRESS_ENTITY_VARCHAR_ATTRIBUTE_ID` (`attribute_id`),
+  ADD KEY `IDX_CUSTOMER_ADDRESS_ENTITY_VARCHAR_ENTITY_ID` (`entity_id`),
+  ADD KEY `IDX_CUSTOMER_ADDRESS_ENTITY_VARCHAR_ENTITY_ID_ATTRIBUTE_ID_VALUE` (`entity_id`,`attribute_id`,`value`);
 
 --
 -- Indexes for table `customer_eav_attribute`
@@ -8220,78 +7517,78 @@ ALTER TABLE `customer_eav_attribute`
 --
 ALTER TABLE `customer_eav_attribute_website`
   ADD PRIMARY KEY (`attribute_id`,`website_id`),
-  ADD KEY `IDX_CUSTOMER_EAV_ATTRIBUTE_WEBSITE_WEBSITE_ID` (`website_id`) USING BTREE;
+  ADD KEY `IDX_CUSTOMER_EAV_ATTRIBUTE_WEBSITE_WEBSITE_ID` (`website_id`);
 
 --
 -- Indexes for table `customer_entity`
 --
 ALTER TABLE `customer_entity`
   ADD PRIMARY KEY (`entity_id`),
-  ADD KEY `IDX_CUSTOMER_ENTITY_STORE_ID` (`store_id`) USING BTREE,
-  ADD KEY `IDX_CUSTOMER_ENTITY_ENTITY_TYPE_ID` (`entity_type_id`) USING BTREE,
-  ADD KEY `IDX_CUSTOMER_ENTITY_EMAIL_WEBSITE_ID` (`email`,`website_id`) USING BTREE,
-  ADD KEY `IDX_CUSTOMER_ENTITY_WEBSITE_ID` (`website_id`) USING BTREE;
+  ADD KEY `IDX_CUSTOMER_ENTITY_STORE_ID` (`store_id`),
+  ADD KEY `IDX_CUSTOMER_ENTITY_ENTITY_TYPE_ID` (`entity_type_id`),
+  ADD KEY `IDX_CUSTOMER_ENTITY_EMAIL_WEBSITE_ID` (`email`,`website_id`),
+  ADD KEY `IDX_CUSTOMER_ENTITY_WEBSITE_ID` (`website_id`);
 
 --
 -- Indexes for table `customer_entity_datetime`
 --
 ALTER TABLE `customer_entity_datetime`
   ADD PRIMARY KEY (`value_id`),
-  ADD UNIQUE KEY `UNQ_CUSTOMER_ENTITY_DATETIME_ENTITY_ID_ATTRIBUTE_ID` (`entity_id`,`attribute_id`) USING BTREE,
-  ADD KEY `IDX_CUSTOMER_ENTITY_DATETIME_ENTITY_TYPE_ID` (`entity_type_id`) USING BTREE,
-  ADD KEY `IDX_CUSTOMER_ENTITY_DATETIME_ATTRIBUTE_ID` (`attribute_id`) USING BTREE,
-  ADD KEY `IDX_CUSTOMER_ENTITY_DATETIME_ENTITY_ID` (`entity_id`) USING BTREE,
-  ADD KEY `IDX_CUSTOMER_ENTITY_DATETIME_ENTITY_ID_ATTRIBUTE_ID_VALUE` (`entity_id`,`attribute_id`,`value`) USING BTREE;
+  ADD UNIQUE KEY `UNQ_CUSTOMER_ENTITY_DATETIME_ENTITY_ID_ATTRIBUTE_ID` (`entity_id`,`attribute_id`),
+  ADD KEY `IDX_CUSTOMER_ENTITY_DATETIME_ENTITY_TYPE_ID` (`entity_type_id`),
+  ADD KEY `IDX_CUSTOMER_ENTITY_DATETIME_ATTRIBUTE_ID` (`attribute_id`),
+  ADD KEY `IDX_CUSTOMER_ENTITY_DATETIME_ENTITY_ID` (`entity_id`),
+  ADD KEY `IDX_CUSTOMER_ENTITY_DATETIME_ENTITY_ID_ATTRIBUTE_ID_VALUE` (`entity_id`,`attribute_id`,`value`);
 
 --
 -- Indexes for table `customer_entity_decimal`
 --
 ALTER TABLE `customer_entity_decimal`
   ADD PRIMARY KEY (`value_id`),
-  ADD UNIQUE KEY `UNQ_CUSTOMER_ENTITY_DECIMAL_ENTITY_ID_ATTRIBUTE_ID` (`entity_id`,`attribute_id`) USING BTREE,
-  ADD KEY `IDX_CUSTOMER_ENTITY_DECIMAL_ENTITY_TYPE_ID` (`entity_type_id`) USING BTREE,
-  ADD KEY `IDX_CUSTOMER_ENTITY_DECIMAL_ATTRIBUTE_ID` (`attribute_id`) USING BTREE,
-  ADD KEY `IDX_CUSTOMER_ENTITY_DECIMAL_ENTITY_ID` (`entity_id`) USING BTREE,
-  ADD KEY `IDX_CUSTOMER_ENTITY_DECIMAL_ENTITY_ID_ATTRIBUTE_ID_VALUE` (`entity_id`,`attribute_id`,`value`) USING BTREE;
+  ADD UNIQUE KEY `UNQ_CUSTOMER_ENTITY_DECIMAL_ENTITY_ID_ATTRIBUTE_ID` (`entity_id`,`attribute_id`),
+  ADD KEY `IDX_CUSTOMER_ENTITY_DECIMAL_ENTITY_TYPE_ID` (`entity_type_id`),
+  ADD KEY `IDX_CUSTOMER_ENTITY_DECIMAL_ATTRIBUTE_ID` (`attribute_id`),
+  ADD KEY `IDX_CUSTOMER_ENTITY_DECIMAL_ENTITY_ID` (`entity_id`),
+  ADD KEY `IDX_CUSTOMER_ENTITY_DECIMAL_ENTITY_ID_ATTRIBUTE_ID_VALUE` (`entity_id`,`attribute_id`,`value`);
 
 --
 -- Indexes for table `customer_entity_int`
 --
 ALTER TABLE `customer_entity_int`
   ADD PRIMARY KEY (`value_id`),
-  ADD UNIQUE KEY `UNQ_CUSTOMER_ENTITY_INT_ENTITY_ID_ATTRIBUTE_ID` (`entity_id`,`attribute_id`) USING BTREE,
-  ADD KEY `IDX_CUSTOMER_ENTITY_INT_ENTITY_TYPE_ID` (`entity_type_id`) USING BTREE,
-  ADD KEY `IDX_CUSTOMER_ENTITY_INT_ATTRIBUTE_ID` (`attribute_id`) USING BTREE,
-  ADD KEY `IDX_CUSTOMER_ENTITY_INT_ENTITY_ID` (`entity_id`) USING BTREE,
-  ADD KEY `IDX_CUSTOMER_ENTITY_INT_ENTITY_ID_ATTRIBUTE_ID_VALUE` (`entity_id`,`attribute_id`,`value`) USING BTREE;
+  ADD UNIQUE KEY `UNQ_CUSTOMER_ENTITY_INT_ENTITY_ID_ATTRIBUTE_ID` (`entity_id`,`attribute_id`),
+  ADD KEY `IDX_CUSTOMER_ENTITY_INT_ENTITY_TYPE_ID` (`entity_type_id`),
+  ADD KEY `IDX_CUSTOMER_ENTITY_INT_ATTRIBUTE_ID` (`attribute_id`),
+  ADD KEY `IDX_CUSTOMER_ENTITY_INT_ENTITY_ID` (`entity_id`),
+  ADD KEY `IDX_CUSTOMER_ENTITY_INT_ENTITY_ID_ATTRIBUTE_ID_VALUE` (`entity_id`,`attribute_id`,`value`);
 
 --
 -- Indexes for table `customer_entity_text`
 --
 ALTER TABLE `customer_entity_text`
   ADD PRIMARY KEY (`value_id`),
-  ADD UNIQUE KEY `UNQ_CUSTOMER_ENTITY_TEXT_ENTITY_ID_ATTRIBUTE_ID` (`entity_id`,`attribute_id`) USING BTREE,
-  ADD KEY `IDX_CUSTOMER_ENTITY_TEXT_ENTITY_TYPE_ID` (`entity_type_id`) USING BTREE,
-  ADD KEY `IDX_CUSTOMER_ENTITY_TEXT_ATTRIBUTE_ID` (`attribute_id`) USING BTREE,
-  ADD KEY `IDX_CUSTOMER_ENTITY_TEXT_ENTITY_ID` (`entity_id`) USING BTREE;
+  ADD UNIQUE KEY `UNQ_CUSTOMER_ENTITY_TEXT_ENTITY_ID_ATTRIBUTE_ID` (`entity_id`,`attribute_id`),
+  ADD KEY `IDX_CUSTOMER_ENTITY_TEXT_ENTITY_TYPE_ID` (`entity_type_id`),
+  ADD KEY `IDX_CUSTOMER_ENTITY_TEXT_ATTRIBUTE_ID` (`attribute_id`),
+  ADD KEY `IDX_CUSTOMER_ENTITY_TEXT_ENTITY_ID` (`entity_id`);
 
 --
 -- Indexes for table `customer_entity_varchar`
 --
 ALTER TABLE `customer_entity_varchar`
   ADD PRIMARY KEY (`value_id`),
-  ADD UNIQUE KEY `UNQ_CUSTOMER_ENTITY_VARCHAR_ENTITY_ID_ATTRIBUTE_ID` (`entity_id`,`attribute_id`) USING BTREE,
-  ADD KEY `IDX_CUSTOMER_ENTITY_VARCHAR_ENTITY_TYPE_ID` (`entity_type_id`) USING BTREE,
-  ADD KEY `IDX_CUSTOMER_ENTITY_VARCHAR_ATTRIBUTE_ID` (`attribute_id`) USING BTREE,
-  ADD KEY `IDX_CUSTOMER_ENTITY_VARCHAR_ENTITY_ID` (`entity_id`) USING BTREE,
-  ADD KEY `IDX_CUSTOMER_ENTITY_VARCHAR_ENTITY_ID_ATTRIBUTE_ID_VALUE` (`entity_id`,`attribute_id`,`value`) USING BTREE;
+  ADD UNIQUE KEY `UNQ_CUSTOMER_ENTITY_VARCHAR_ENTITY_ID_ATTRIBUTE_ID` (`entity_id`,`attribute_id`),
+  ADD KEY `IDX_CUSTOMER_ENTITY_VARCHAR_ENTITY_TYPE_ID` (`entity_type_id`),
+  ADD KEY `IDX_CUSTOMER_ENTITY_VARCHAR_ATTRIBUTE_ID` (`attribute_id`),
+  ADD KEY `IDX_CUSTOMER_ENTITY_VARCHAR_ENTITY_ID` (`entity_id`),
+  ADD KEY `IDX_CUSTOMER_ENTITY_VARCHAR_ENTITY_ID_ATTRIBUTE_ID_VALUE` (`entity_id`,`attribute_id`,`value`);
 
 --
 -- Indexes for table `customer_form_attribute`
 --
 ALTER TABLE `customer_form_attribute`
   ADD PRIMARY KEY (`form_code`,`attribute_id`),
-  ADD KEY `IDX_CUSTOMER_FORM_ATTRIBUTE_ATTRIBUTE_ID` (`attribute_id`) USING BTREE;
+  ADD KEY `IDX_CUSTOMER_FORM_ATTRIBUTE_ATTRIBUTE_ID` (`attribute_id`);
 
 --
 -- Indexes for table `customer_group`
@@ -8304,30 +7601,30 @@ ALTER TABLE `customer_group`
 --
 ALTER TABLE `dataflow_batch`
   ADD PRIMARY KEY (`batch_id`),
-  ADD KEY `IDX_DATAFLOW_BATCH_PROFILE_ID` (`profile_id`) USING BTREE,
-  ADD KEY `IDX_DATAFLOW_BATCH_STORE_ID` (`store_id`) USING BTREE,
-  ADD KEY `IDX_DATAFLOW_BATCH_CREATED_AT` (`created_at`) USING BTREE;
+  ADD KEY `IDX_DATAFLOW_BATCH_PROFILE_ID` (`profile_id`),
+  ADD KEY `IDX_DATAFLOW_BATCH_STORE_ID` (`store_id`),
+  ADD KEY `IDX_DATAFLOW_BATCH_CREATED_AT` (`created_at`);
 
 --
 -- Indexes for table `dataflow_batch_export`
 --
 ALTER TABLE `dataflow_batch_export`
   ADD PRIMARY KEY (`batch_export_id`),
-  ADD KEY `IDX_DATAFLOW_BATCH_EXPORT_BATCH_ID` (`batch_id`) USING BTREE;
+  ADD KEY `IDX_DATAFLOW_BATCH_EXPORT_BATCH_ID` (`batch_id`);
 
 --
 -- Indexes for table `dataflow_batch_import`
 --
 ALTER TABLE `dataflow_batch_import`
   ADD PRIMARY KEY (`batch_import_id`),
-  ADD KEY `IDX_DATAFLOW_BATCH_IMPORT_BATCH_ID` (`batch_id`) USING BTREE;
+  ADD KEY `IDX_DATAFLOW_BATCH_IMPORT_BATCH_ID` (`batch_id`);
 
 --
 -- Indexes for table `dataflow_import_data`
 --
 ALTER TABLE `dataflow_import_data`
   ADD PRIMARY KEY (`import_id`),
-  ADD KEY `IDX_DATAFLOW_IMPORT_DATA_SESSION_ID` (`session_id`) USING BTREE;
+  ADD KEY `IDX_DATAFLOW_IMPORT_DATA_SESSION_ID` (`session_id`);
 
 --
 -- Indexes for table `dataflow_profile`
@@ -8340,7 +7637,7 @@ ALTER TABLE `dataflow_profile`
 --
 ALTER TABLE `dataflow_profile_history`
   ADD PRIMARY KEY (`history_id`),
-  ADD KEY `IDX_DATAFLOW_PROFILE_HISTORY_PROFILE_ID` (`profile_id`) USING BTREE;
+  ADD KEY `IDX_DATAFLOW_PROFILE_HISTORY_PROFILE_ID` (`profile_id`);
 
 --
 -- Indexes for table `dataflow_session`
@@ -8353,7 +7650,7 @@ ALTER TABLE `dataflow_session`
 --
 ALTER TABLE `design_change`
   ADD PRIMARY KEY (`design_change_id`),
-  ADD KEY `IDX_DESIGN_CHANGE_STORE_ID` (`store_id`) USING BTREE;
+  ADD KEY `IDX_DESIGN_CHANGE_STORE_ID` (`store_id`);
 
 --
 -- Indexes for table `directory_country`
@@ -8366,21 +7663,21 @@ ALTER TABLE `directory_country`
 --
 ALTER TABLE `directory_country_format`
   ADD PRIMARY KEY (`country_format_id`),
-  ADD UNIQUE KEY `UNQ_DIRECTORY_COUNTRY_FORMAT_COUNTRY_ID_TYPE` (`country_id`,`type`) USING BTREE;
+  ADD UNIQUE KEY `UNQ_DIRECTORY_COUNTRY_FORMAT_COUNTRY_ID_TYPE` (`country_id`,`type`);
 
 --
 -- Indexes for table `directory_country_region`
 --
 ALTER TABLE `directory_country_region`
   ADD PRIMARY KEY (`region_id`),
-  ADD KEY `IDX_DIRECTORY_COUNTRY_REGION_COUNTRY_ID` (`country_id`) USING BTREE;
+  ADD KEY `IDX_DIRECTORY_COUNTRY_REGION_COUNTRY_ID` (`country_id`);
 
 --
 -- Indexes for table `directory_country_region_name`
 --
 ALTER TABLE `directory_country_region_name`
   ADD PRIMARY KEY (`locale`,`region_id`),
-  ADD KEY `IDX_DIRECTORY_COUNTRY_REGION_NAME_REGION_ID` (`region_id`) USING BTREE;
+  ADD KEY `IDX_DIRECTORY_COUNTRY_REGION_NAME_REGION_ID` (`region_id`);
 
 --
 -- Indexes for table `directory_currency_rate`
@@ -8394,304 +7691,250 @@ ALTER TABLE `directory_currency_rate`
 --
 ALTER TABLE `downloadable_link`
   ADD PRIMARY KEY (`link_id`),
-  ADD KEY `IDX_DOWNLOADABLE_LINK_PRODUCT_ID` (`product_id`) USING BTREE,
-  ADD KEY `IDX_DOWNLOADABLE_LINK_PRODUCT_ID_SORT_ORDER` (`product_id`,`sort_order`) USING BTREE;
+  ADD KEY `IDX_DOWNLOADABLE_LINK_PRODUCT_ID` (`product_id`),
+  ADD KEY `IDX_DOWNLOADABLE_LINK_PRODUCT_ID_SORT_ORDER` (`product_id`,`sort_order`);
 
 --
 -- Indexes for table `downloadable_link_price`
 --
 ALTER TABLE `downloadable_link_price`
   ADD PRIMARY KEY (`price_id`),
-  ADD KEY `IDX_DOWNLOADABLE_LINK_PRICE_LINK_ID` (`link_id`) USING BTREE,
-  ADD KEY `IDX_DOWNLOADABLE_LINK_PRICE_WEBSITE_ID` (`website_id`) USING BTREE;
+  ADD KEY `IDX_DOWNLOADABLE_LINK_PRICE_LINK_ID` (`link_id`),
+  ADD KEY `IDX_DOWNLOADABLE_LINK_PRICE_WEBSITE_ID` (`website_id`);
 
 --
 -- Indexes for table `downloadable_link_purchased`
 --
 ALTER TABLE `downloadable_link_purchased`
   ADD PRIMARY KEY (`purchased_id`),
-  ADD KEY `IDX_DOWNLOADABLE_LINK_PURCHASED_ORDER_ID` (`order_id`) USING BTREE,
-  ADD KEY `IDX_DOWNLOADABLE_LINK_PURCHASED_ORDER_ITEM_ID` (`order_item_id`) USING BTREE,
-  ADD KEY `IDX_DOWNLOADABLE_LINK_PURCHASED_CUSTOMER_ID` (`customer_id`) USING BTREE;
+  ADD KEY `IDX_DOWNLOADABLE_LINK_PURCHASED_ORDER_ID` (`order_id`),
+  ADD KEY `IDX_DOWNLOADABLE_LINK_PURCHASED_ORDER_ITEM_ID` (`order_item_id`),
+  ADD KEY `IDX_DOWNLOADABLE_LINK_PURCHASED_CUSTOMER_ID` (`customer_id`);
 
 --
 -- Indexes for table `downloadable_link_purchased_item`
 --
 ALTER TABLE `downloadable_link_purchased_item`
   ADD PRIMARY KEY (`item_id`),
-  ADD KEY `IDX_DOWNLOADABLE_LINK_PURCHASED_ITEM_LINK_HASH` (`link_hash`) USING BTREE,
-  ADD KEY `IDX_DOWNLOADABLE_LINK_PURCHASED_ITEM_ORDER_ITEM_ID` (`order_item_id`) USING BTREE,
-  ADD KEY `IDX_DOWNLOADABLE_LINK_PURCHASED_ITEM_PURCHASED_ID` (`purchased_id`) USING BTREE;
+  ADD KEY `IDX_DOWNLOADABLE_LINK_PURCHASED_ITEM_LINK_HASH` (`link_hash`),
+  ADD KEY `IDX_DOWNLOADABLE_LINK_PURCHASED_ITEM_ORDER_ITEM_ID` (`order_item_id`),
+  ADD KEY `IDX_DOWNLOADABLE_LINK_PURCHASED_ITEM_PURCHASED_ID` (`purchased_id`);
 
 --
 -- Indexes for table `downloadable_link_title`
 --
 ALTER TABLE `downloadable_link_title`
   ADD PRIMARY KEY (`title_id`),
-  ADD UNIQUE KEY `UNQ_DOWNLOADABLE_LINK_TITLE_LINK_ID_STORE_ID` (`link_id`,`store_id`) USING BTREE,
-  ADD KEY `IDX_DOWNLOADABLE_LINK_TITLE_LINK_ID` (`link_id`) USING BTREE,
-  ADD KEY `IDX_DOWNLOADABLE_LINK_TITLE_STORE_ID` (`store_id`) USING BTREE;
+  ADD UNIQUE KEY `UNQ_DOWNLOADABLE_LINK_TITLE_LINK_ID_STORE_ID` (`link_id`,`store_id`),
+  ADD KEY `IDX_DOWNLOADABLE_LINK_TITLE_LINK_ID` (`link_id`),
+  ADD KEY `IDX_DOWNLOADABLE_LINK_TITLE_STORE_ID` (`store_id`);
 
 --
 -- Indexes for table `downloadable_sample`
 --
 ALTER TABLE `downloadable_sample`
   ADD PRIMARY KEY (`sample_id`),
-  ADD KEY `IDX_DOWNLOADABLE_SAMPLE_PRODUCT_ID` (`product_id`) USING BTREE;
+  ADD KEY `IDX_DOWNLOADABLE_SAMPLE_PRODUCT_ID` (`product_id`);
 
 --
 -- Indexes for table `downloadable_sample_title`
 --
 ALTER TABLE `downloadable_sample_title`
   ADD PRIMARY KEY (`title_id`),
-  ADD UNIQUE KEY `UNQ_DOWNLOADABLE_SAMPLE_TITLE_SAMPLE_ID_STORE_ID` (`sample_id`,`store_id`) USING BTREE,
-  ADD KEY `IDX_DOWNLOADABLE_SAMPLE_TITLE_SAMPLE_ID` (`sample_id`) USING BTREE,
-  ADD KEY `IDX_DOWNLOADABLE_SAMPLE_TITLE_STORE_ID` (`store_id`) USING BTREE;
+  ADD UNIQUE KEY `UNQ_DOWNLOADABLE_SAMPLE_TITLE_SAMPLE_ID_STORE_ID` (`sample_id`,`store_id`),
+  ADD KEY `IDX_DOWNLOADABLE_SAMPLE_TITLE_SAMPLE_ID` (`sample_id`),
+  ADD KEY `IDX_DOWNLOADABLE_SAMPLE_TITLE_STORE_ID` (`store_id`);
 
 --
 -- Indexes for table `eav_attribute`
 --
 ALTER TABLE `eav_attribute`
   ADD PRIMARY KEY (`attribute_id`),
-  ADD UNIQUE KEY `UNQ_EAV_ATTRIBUTE_ENTITY_TYPE_ID_ATTRIBUTE_CODE` (`entity_type_id`,`attribute_code`) USING BTREE,
-  ADD KEY `IDX_EAV_ATTRIBUTE_ENTITY_TYPE_ID` (`entity_type_id`) USING BTREE;
+  ADD UNIQUE KEY `UNQ_EAV_ATTRIBUTE_ENTITY_TYPE_ID_ATTRIBUTE_CODE` (`entity_type_id`,`attribute_code`),
+  ADD KEY `IDX_EAV_ATTRIBUTE_ENTITY_TYPE_ID` (`entity_type_id`);
 
 --
 -- Indexes for table `eav_attribute_group`
 --
 ALTER TABLE `eav_attribute_group`
   ADD PRIMARY KEY (`attribute_group_id`),
-  ADD UNIQUE KEY `UNQ_EAV_ATTRIBUTE_GROUP_ATTRIBUTE_SET_ID_ATTRIBUTE_GROUP_NAME` (`attribute_set_id`,`attribute_group_name`) USING BTREE,
-  ADD KEY `IDX_EAV_ATTRIBUTE_GROUP_ATTRIBUTE_SET_ID_SORT_ORDER` (`attribute_set_id`,`sort_order`) USING BTREE;
+  ADD UNIQUE KEY `UNQ_EAV_ATTRIBUTE_GROUP_ATTRIBUTE_SET_ID_ATTRIBUTE_GROUP_NAME` (`attribute_set_id`,`attribute_group_name`),
+  ADD KEY `IDX_EAV_ATTRIBUTE_GROUP_ATTRIBUTE_SET_ID_SORT_ORDER` (`attribute_set_id`,`sort_order`);
 
 --
 -- Indexes for table `eav_attribute_label`
 --
 ALTER TABLE `eav_attribute_label`
   ADD PRIMARY KEY (`attribute_label_id`),
-  ADD KEY `IDX_EAV_ATTRIBUTE_LABEL_ATTRIBUTE_ID` (`attribute_id`) USING BTREE,
-  ADD KEY `IDX_EAV_ATTRIBUTE_LABEL_STORE_ID` (`store_id`) USING BTREE,
-  ADD KEY `IDX_EAV_ATTRIBUTE_LABEL_ATTRIBUTE_ID_STORE_ID` (`attribute_id`,`store_id`) USING BTREE;
+  ADD KEY `IDX_EAV_ATTRIBUTE_LABEL_ATTRIBUTE_ID` (`attribute_id`),
+  ADD KEY `IDX_EAV_ATTRIBUTE_LABEL_STORE_ID` (`store_id`),
+  ADD KEY `IDX_EAV_ATTRIBUTE_LABEL_ATTRIBUTE_ID_STORE_ID` (`attribute_id`,`store_id`);
 
 --
 -- Indexes for table `eav_attribute_option`
 --
 ALTER TABLE `eav_attribute_option`
   ADD PRIMARY KEY (`option_id`),
-  ADD KEY `IDX_EAV_ATTRIBUTE_OPTION_ATTRIBUTE_ID` (`attribute_id`) USING BTREE;
+  ADD KEY `IDX_EAV_ATTRIBUTE_OPTION_ATTRIBUTE_ID` (`attribute_id`);
 
 --
 -- Indexes for table `eav_attribute_option_value`
 --
 ALTER TABLE `eav_attribute_option_value`
   ADD PRIMARY KEY (`value_id`),
-  ADD KEY `IDX_EAV_ATTRIBUTE_OPTION_VALUE_OPTION_ID` (`option_id`) USING BTREE,
-  ADD KEY `IDX_EAV_ATTRIBUTE_OPTION_VALUE_STORE_ID` (`store_id`) USING BTREE;
+  ADD KEY `IDX_EAV_ATTRIBUTE_OPTION_VALUE_OPTION_ID` (`option_id`),
+  ADD KEY `IDX_EAV_ATTRIBUTE_OPTION_VALUE_STORE_ID` (`store_id`);
 
 --
 -- Indexes for table `eav_attribute_set`
 --
 ALTER TABLE `eav_attribute_set`
   ADD PRIMARY KEY (`attribute_set_id`),
-  ADD UNIQUE KEY `UNQ_EAV_ATTRIBUTE_SET_ENTITY_TYPE_ID_ATTRIBUTE_SET_NAME` (`entity_type_id`,`attribute_set_name`) USING BTREE,
-  ADD KEY `IDX_EAV_ATTRIBUTE_SET_ENTITY_TYPE_ID_SORT_ORDER` (`entity_type_id`,`sort_order`) USING BTREE;
+  ADD UNIQUE KEY `UNQ_EAV_ATTRIBUTE_SET_ENTITY_TYPE_ID_ATTRIBUTE_SET_NAME` (`entity_type_id`,`attribute_set_name`),
+  ADD KEY `IDX_EAV_ATTRIBUTE_SET_ENTITY_TYPE_ID_SORT_ORDER` (`entity_type_id`,`sort_order`);
 
 --
 -- Indexes for table `eav_entity`
 --
 ALTER TABLE `eav_entity`
   ADD PRIMARY KEY (`entity_id`),
-  ADD KEY `IDX_EAV_ENTITY_ENTITY_TYPE_ID` (`entity_type_id`) USING BTREE,
-  ADD KEY `IDX_EAV_ENTITY_STORE_ID` (`store_id`) USING BTREE;
+  ADD KEY `IDX_EAV_ENTITY_ENTITY_TYPE_ID` (`entity_type_id`),
+  ADD KEY `IDX_EAV_ENTITY_STORE_ID` (`store_id`);
 
 --
 -- Indexes for table `eav_entity_attribute`
 --
 ALTER TABLE `eav_entity_attribute`
   ADD PRIMARY KEY (`entity_attribute_id`),
-  ADD UNIQUE KEY `UNQ_EAV_ENTITY_ATTRIBUTE_ATTRIBUTE_SET_ID_ATTRIBUTE_ID` (`attribute_set_id`,`attribute_id`) USING BTREE,
-  ADD UNIQUE KEY `UNQ_EAV_ENTITY_ATTRIBUTE_ATTRIBUTE_GROUP_ID_ATTRIBUTE_ID` (`attribute_group_id`,`attribute_id`) USING BTREE,
-  ADD KEY `IDX_EAV_ENTITY_ATTRIBUTE_ATTRIBUTE_SET_ID_SORT_ORDER` (`attribute_set_id`,`sort_order`) USING BTREE,
-  ADD KEY `IDX_EAV_ENTITY_ATTRIBUTE_ATTRIBUTE_ID` (`attribute_id`) USING BTREE;
+  ADD UNIQUE KEY `UNQ_EAV_ENTITY_ATTRIBUTE_ATTRIBUTE_SET_ID_ATTRIBUTE_ID` (`attribute_set_id`,`attribute_id`),
+  ADD UNIQUE KEY `UNQ_EAV_ENTITY_ATTRIBUTE_ATTRIBUTE_GROUP_ID_ATTRIBUTE_ID` (`attribute_group_id`,`attribute_id`),
+  ADD KEY `IDX_EAV_ENTITY_ATTRIBUTE_ATTRIBUTE_SET_ID_SORT_ORDER` (`attribute_set_id`,`sort_order`),
+  ADD KEY `IDX_EAV_ENTITY_ATTRIBUTE_ATTRIBUTE_ID` (`attribute_id`);
 
 --
 -- Indexes for table `eav_entity_datetime`
 --
 ALTER TABLE `eav_entity_datetime`
   ADD PRIMARY KEY (`value_id`),
-  ADD UNIQUE KEY `UNQ_EAV_ENTITY_DATETIME_ENTITY_ID_ATTRIBUTE_ID_STORE_ID` (`entity_id`,`attribute_id`,`store_id`) USING BTREE,
-  ADD KEY `IDX_EAV_ENTITY_DATETIME_ENTITY_TYPE_ID` (`entity_type_id`) USING BTREE,
-  ADD KEY `IDX_EAV_ENTITY_DATETIME_ATTRIBUTE_ID` (`attribute_id`) USING BTREE,
-  ADD KEY `IDX_EAV_ENTITY_DATETIME_STORE_ID` (`store_id`) USING BTREE,
-  ADD KEY `IDX_EAV_ENTITY_DATETIME_ENTITY_ID` (`entity_id`) USING BTREE,
-  ADD KEY `IDX_EAV_ENTITY_DATETIME_ATTRIBUTE_ID_VALUE` (`attribute_id`,`value`) USING BTREE,
-  ADD KEY `IDX_EAV_ENTITY_DATETIME_ENTITY_TYPE_ID_VALUE` (`entity_type_id`,`value`) USING BTREE;
+  ADD UNIQUE KEY `UNQ_EAV_ENTITY_DATETIME_ENTITY_ID_ATTRIBUTE_ID_STORE_ID` (`entity_id`,`attribute_id`,`store_id`),
+  ADD KEY `IDX_EAV_ENTITY_DATETIME_ENTITY_TYPE_ID` (`entity_type_id`),
+  ADD KEY `IDX_EAV_ENTITY_DATETIME_ATTRIBUTE_ID` (`attribute_id`),
+  ADD KEY `IDX_EAV_ENTITY_DATETIME_STORE_ID` (`store_id`),
+  ADD KEY `IDX_EAV_ENTITY_DATETIME_ENTITY_ID` (`entity_id`),
+  ADD KEY `IDX_EAV_ENTITY_DATETIME_ATTRIBUTE_ID_VALUE` (`attribute_id`,`value`),
+  ADD KEY `IDX_EAV_ENTITY_DATETIME_ENTITY_TYPE_ID_VALUE` (`entity_type_id`,`value`);
 
 --
 -- Indexes for table `eav_entity_decimal`
 --
 ALTER TABLE `eav_entity_decimal`
   ADD PRIMARY KEY (`value_id`),
-  ADD UNIQUE KEY `UNQ_EAV_ENTITY_DECIMAL_ENTITY_ID_ATTRIBUTE_ID_STORE_ID` (`entity_id`,`attribute_id`,`store_id`) USING BTREE,
-  ADD KEY `IDX_EAV_ENTITY_DECIMAL_ENTITY_TYPE_ID` (`entity_type_id`) USING BTREE,
-  ADD KEY `IDX_EAV_ENTITY_DECIMAL_ATTRIBUTE_ID` (`attribute_id`) USING BTREE,
-  ADD KEY `IDX_EAV_ENTITY_DECIMAL_STORE_ID` (`store_id`) USING BTREE,
-  ADD KEY `IDX_EAV_ENTITY_DECIMAL_ENTITY_ID` (`entity_id`) USING BTREE,
-  ADD KEY `IDX_EAV_ENTITY_DECIMAL_ATTRIBUTE_ID_VALUE` (`attribute_id`,`value`) USING BTREE,
-  ADD KEY `IDX_EAV_ENTITY_DECIMAL_ENTITY_TYPE_ID_VALUE` (`entity_type_id`,`value`) USING BTREE;
+  ADD UNIQUE KEY `UNQ_EAV_ENTITY_DECIMAL_ENTITY_ID_ATTRIBUTE_ID_STORE_ID` (`entity_id`,`attribute_id`,`store_id`),
+  ADD KEY `IDX_EAV_ENTITY_DECIMAL_ENTITY_TYPE_ID` (`entity_type_id`),
+  ADD KEY `IDX_EAV_ENTITY_DECIMAL_ATTRIBUTE_ID` (`attribute_id`),
+  ADD KEY `IDX_EAV_ENTITY_DECIMAL_STORE_ID` (`store_id`),
+  ADD KEY `IDX_EAV_ENTITY_DECIMAL_ENTITY_ID` (`entity_id`),
+  ADD KEY `IDX_EAV_ENTITY_DECIMAL_ATTRIBUTE_ID_VALUE` (`attribute_id`,`value`),
+  ADD KEY `IDX_EAV_ENTITY_DECIMAL_ENTITY_TYPE_ID_VALUE` (`entity_type_id`,`value`);
 
 --
 -- Indexes for table `eav_entity_int`
 --
 ALTER TABLE `eav_entity_int`
   ADD PRIMARY KEY (`value_id`),
-  ADD UNIQUE KEY `UNQ_EAV_ENTITY_INT_ENTITY_ID_ATTRIBUTE_ID_STORE_ID` (`entity_id`,`attribute_id`,`store_id`) USING BTREE,
-  ADD KEY `IDX_EAV_ENTITY_INT_ENTITY_TYPE_ID` (`entity_type_id`) USING BTREE,
-  ADD KEY `IDX_EAV_ENTITY_INT_ATTRIBUTE_ID` (`attribute_id`) USING BTREE,
-  ADD KEY `IDX_EAV_ENTITY_INT_STORE_ID` (`store_id`) USING BTREE,
-  ADD KEY `IDX_EAV_ENTITY_INT_ENTITY_ID` (`entity_id`) USING BTREE,
-  ADD KEY `IDX_EAV_ENTITY_INT_ATTRIBUTE_ID_VALUE` (`attribute_id`,`value`) USING BTREE,
-  ADD KEY `IDX_EAV_ENTITY_INT_ENTITY_TYPE_ID_VALUE` (`entity_type_id`,`value`) USING BTREE;
+  ADD UNIQUE KEY `UNQ_EAV_ENTITY_INT_ENTITY_ID_ATTRIBUTE_ID_STORE_ID` (`entity_id`,`attribute_id`,`store_id`),
+  ADD KEY `IDX_EAV_ENTITY_INT_ENTITY_TYPE_ID` (`entity_type_id`),
+  ADD KEY `IDX_EAV_ENTITY_INT_ATTRIBUTE_ID` (`attribute_id`),
+  ADD KEY `IDX_EAV_ENTITY_INT_STORE_ID` (`store_id`),
+  ADD KEY `IDX_EAV_ENTITY_INT_ENTITY_ID` (`entity_id`),
+  ADD KEY `IDX_EAV_ENTITY_INT_ATTRIBUTE_ID_VALUE` (`attribute_id`,`value`),
+  ADD KEY `IDX_EAV_ENTITY_INT_ENTITY_TYPE_ID_VALUE` (`entity_type_id`,`value`);
 
 --
 -- Indexes for table `eav_entity_store`
 --
 ALTER TABLE `eav_entity_store`
   ADD PRIMARY KEY (`entity_store_id`),
-  ADD KEY `IDX_EAV_ENTITY_STORE_ENTITY_TYPE_ID` (`entity_type_id`) USING BTREE,
-  ADD KEY `IDX_EAV_ENTITY_STORE_STORE_ID` (`store_id`) USING BTREE;
+  ADD KEY `IDX_EAV_ENTITY_STORE_ENTITY_TYPE_ID` (`entity_type_id`),
+  ADD KEY `IDX_EAV_ENTITY_STORE_STORE_ID` (`store_id`);
 
 --
 -- Indexes for table `eav_entity_text`
 --
 ALTER TABLE `eav_entity_text`
   ADD PRIMARY KEY (`value_id`),
-  ADD UNIQUE KEY `UNQ_EAV_ENTITY_TEXT_ENTITY_ID_ATTRIBUTE_ID_STORE_ID` (`entity_id`,`attribute_id`,`store_id`) USING BTREE,
-  ADD KEY `IDX_EAV_ENTITY_TEXT_ENTITY_TYPE_ID` (`entity_type_id`) USING BTREE,
-  ADD KEY `IDX_EAV_ENTITY_TEXT_ATTRIBUTE_ID` (`attribute_id`) USING BTREE,
-  ADD KEY `IDX_EAV_ENTITY_TEXT_STORE_ID` (`store_id`) USING BTREE,
-  ADD KEY `IDX_EAV_ENTITY_TEXT_ENTITY_ID` (`entity_id`) USING BTREE;
+  ADD UNIQUE KEY `UNQ_EAV_ENTITY_TEXT_ENTITY_ID_ATTRIBUTE_ID_STORE_ID` (`entity_id`,`attribute_id`,`store_id`),
+  ADD KEY `IDX_EAV_ENTITY_TEXT_ENTITY_TYPE_ID` (`entity_type_id`),
+  ADD KEY `IDX_EAV_ENTITY_TEXT_ATTRIBUTE_ID` (`attribute_id`),
+  ADD KEY `IDX_EAV_ENTITY_TEXT_STORE_ID` (`store_id`),
+  ADD KEY `IDX_EAV_ENTITY_TEXT_ENTITY_ID` (`entity_id`);
 
 --
 -- Indexes for table `eav_entity_type`
 --
 ALTER TABLE `eav_entity_type`
   ADD PRIMARY KEY (`entity_type_id`),
-  ADD KEY `IDX_EAV_ENTITY_TYPE_ENTITY_TYPE_CODE` (`entity_type_code`) USING BTREE;
+  ADD KEY `IDX_EAV_ENTITY_TYPE_ENTITY_TYPE_CODE` (`entity_type_code`);
 
 --
 -- Indexes for table `eav_entity_varchar`
 --
 ALTER TABLE `eav_entity_varchar`
   ADD PRIMARY KEY (`value_id`),
-  ADD UNIQUE KEY `UNQ_EAV_ENTITY_VARCHAR_ENTITY_ID_ATTRIBUTE_ID_STORE_ID` (`entity_id`,`attribute_id`,`store_id`) USING BTREE,
-  ADD KEY `IDX_EAV_ENTITY_VARCHAR_ENTITY_TYPE_ID` (`entity_type_id`) USING BTREE,
-  ADD KEY `IDX_EAV_ENTITY_VARCHAR_ATTRIBUTE_ID` (`attribute_id`) USING BTREE,
-  ADD KEY `IDX_EAV_ENTITY_VARCHAR_STORE_ID` (`store_id`) USING BTREE,
-  ADD KEY `IDX_EAV_ENTITY_VARCHAR_ENTITY_ID` (`entity_id`) USING BTREE,
-  ADD KEY `IDX_EAV_ENTITY_VARCHAR_ATTRIBUTE_ID_VALUE` (`attribute_id`,`value`) USING BTREE,
-  ADD KEY `IDX_EAV_ENTITY_VARCHAR_ENTITY_TYPE_ID_VALUE` (`entity_type_id`,`value`) USING BTREE;
+  ADD UNIQUE KEY `UNQ_EAV_ENTITY_VARCHAR_ENTITY_ID_ATTRIBUTE_ID_STORE_ID` (`entity_id`,`attribute_id`,`store_id`),
+  ADD KEY `IDX_EAV_ENTITY_VARCHAR_ENTITY_TYPE_ID` (`entity_type_id`),
+  ADD KEY `IDX_EAV_ENTITY_VARCHAR_ATTRIBUTE_ID` (`attribute_id`),
+  ADD KEY `IDX_EAV_ENTITY_VARCHAR_STORE_ID` (`store_id`),
+  ADD KEY `IDX_EAV_ENTITY_VARCHAR_ENTITY_ID` (`entity_id`),
+  ADD KEY `IDX_EAV_ENTITY_VARCHAR_ATTRIBUTE_ID_VALUE` (`attribute_id`,`value`),
+  ADD KEY `IDX_EAV_ENTITY_VARCHAR_ENTITY_TYPE_ID_VALUE` (`entity_type_id`,`value`);
 
 --
 -- Indexes for table `eav_form_element`
 --
 ALTER TABLE `eav_form_element`
   ADD PRIMARY KEY (`element_id`),
-  ADD UNIQUE KEY `UNQ_EAV_FORM_ELEMENT_TYPE_ID_ATTRIBUTE_ID` (`type_id`,`attribute_id`) USING BTREE,
-  ADD KEY `IDX_EAV_FORM_ELEMENT_TYPE_ID` (`type_id`) USING BTREE,
-  ADD KEY `IDX_EAV_FORM_ELEMENT_FIELDSET_ID` (`fieldset_id`) USING BTREE,
-  ADD KEY `IDX_EAV_FORM_ELEMENT_ATTRIBUTE_ID` (`attribute_id`) USING BTREE;
+  ADD UNIQUE KEY `UNQ_EAV_FORM_ELEMENT_TYPE_ID_ATTRIBUTE_ID` (`type_id`,`attribute_id`),
+  ADD KEY `IDX_EAV_FORM_ELEMENT_TYPE_ID` (`type_id`),
+  ADD KEY `IDX_EAV_FORM_ELEMENT_FIELDSET_ID` (`fieldset_id`),
+  ADD KEY `IDX_EAV_FORM_ELEMENT_ATTRIBUTE_ID` (`attribute_id`);
 
 --
 -- Indexes for table `eav_form_fieldset`
 --
 ALTER TABLE `eav_form_fieldset`
   ADD PRIMARY KEY (`fieldset_id`),
-  ADD UNIQUE KEY `UNQ_EAV_FORM_FIELDSET_TYPE_ID_CODE` (`type_id`,`code`) USING BTREE,
-  ADD KEY `IDX_EAV_FORM_FIELDSET_TYPE_ID` (`type_id`) USING BTREE;
+  ADD UNIQUE KEY `UNQ_EAV_FORM_FIELDSET_TYPE_ID_CODE` (`type_id`,`code`),
+  ADD KEY `IDX_EAV_FORM_FIELDSET_TYPE_ID` (`type_id`);
 
 --
 -- Indexes for table `eav_form_fieldset_label`
 --
 ALTER TABLE `eav_form_fieldset_label`
   ADD PRIMARY KEY (`fieldset_id`,`store_id`),
-  ADD KEY `IDX_EAV_FORM_FIELDSET_LABEL_FIELDSET_ID` (`fieldset_id`) USING BTREE,
-  ADD KEY `IDX_EAV_FORM_FIELDSET_LABEL_STORE_ID` (`store_id`) USING BTREE;
+  ADD KEY `IDX_EAV_FORM_FIELDSET_LABEL_FIELDSET_ID` (`fieldset_id`),
+  ADD KEY `IDX_EAV_FORM_FIELDSET_LABEL_STORE_ID` (`store_id`);
 
 --
 -- Indexes for table `eav_form_type`
 --
 ALTER TABLE `eav_form_type`
   ADD PRIMARY KEY (`type_id`),
-  ADD UNIQUE KEY `UNQ_EAV_FORM_TYPE_CODE_THEME_STORE_ID` (`code`,`theme`,`store_id`) USING BTREE,
-  ADD KEY `IDX_EAV_FORM_TYPE_STORE_ID` (`store_id`) USING BTREE;
+  ADD UNIQUE KEY `UNQ_EAV_FORM_TYPE_CODE_THEME_STORE_ID` (`code`,`theme`,`store_id`),
+  ADD KEY `IDX_EAV_FORM_TYPE_STORE_ID` (`store_id`);
 
 --
 -- Indexes for table `eav_form_type_entity`
 --
 ALTER TABLE `eav_form_type_entity`
   ADD PRIMARY KEY (`type_id`,`entity_type_id`),
-  ADD KEY `IDX_EAV_FORM_TYPE_ENTITY_ENTITY_TYPE_ID` (`entity_type_id`) USING BTREE;
-
---
--- Indexes for table `errorpay`
---
-ALTER TABLE `errorpay`
-  ADD PRIMARY KEY (`errorpay_id`);
-
---
--- Indexes for table `express_rates`
---
-ALTER TABLE `express_rates`
-  ADD PRIMARY KEY (`id`);
-
---
--- Indexes for table `fox_quote_id`
---
-ALTER TABLE `fox_quote_id`
-  ADD PRIMARY KEY (`quote_id`);
+  ADD KEY `IDX_EAV_FORM_TYPE_ENTITY_ENTITY_TYPE_ID` (`entity_type_id`);
 
 --
 -- Indexes for table `gift_message`
 --
 ALTER TABLE `gift_message`
   ADD PRIMARY KEY (`gift_message_id`);
-
---
--- Indexes for table `globalcollect_order_sent`
---
-ALTER TABLE `globalcollect_order_sent`
-  ADD PRIMARY KEY (`order_id`),
-  ADD KEY `increment_id` (`increment_id`),
-  ADD KEY `created_at` (`created_at`),
-  ADD KEY `checked_at` (`checked_at`),
-  ADD KEY `processed` (`processed`);
-
---
--- Indexes for table `globalcollect_payment_method`
---
-ALTER TABLE `globalcollect_payment_method`
-  ADD PRIMARY KEY (`payment_method_id`);
-
---
--- Indexes for table `globalcollect_payment_product`
---
-ALTER TABLE `globalcollect_payment_product`
-  ADD PRIMARY KEY (`payment_product_id`),
-  ADD KEY `GLOBALCOLLECT_PAYMENT_PRODUCT_METHOD` (`payment_method_id`);
-
---
--- Indexes for table `globalcollect_payment_scope`
---
-ALTER TABLE `globalcollect_payment_scope`
-  ADD KEY `IDX_GLOBALCOLLECT_PAYMENT_SCOPE_PAYMENT_PRODUCT_ID_COUNTRY_ID` (`payment_product_id`,`country_id`);
-
---
--- Indexes for table `globalcollect_token`
---
-ALTER TABLE `globalcollect_token`
-  ADD PRIMARY KEY (`token_id`),
-  ADD KEY `IDX_GLOBALCOLLECT_TOKEN_CUSTOMER_ID_CC_NUMBER` (`customer_id`,`cc_number`);
 
 --
 -- Indexes for table `googlecheckout_notification`
@@ -8710,28 +7953,28 @@ ALTER TABLE `importexport_importdata`
 --
 ALTER TABLE `index_event`
   ADD PRIMARY KEY (`event_id`),
-  ADD UNIQUE KEY `UNQ_INDEX_EVENT_TYPE_ENTITY_ENTITY_PK` (`type`,`entity`,`entity_pk`) USING BTREE;
+  ADD UNIQUE KEY `UNQ_INDEX_EVENT_TYPE_ENTITY_ENTITY_PK` (`type`,`entity`,`entity_pk`);
 
 --
 -- Indexes for table `index_process`
 --
 ALTER TABLE `index_process`
   ADD PRIMARY KEY (`process_id`),
-  ADD UNIQUE KEY `UNQ_INDEX_PROCESS_INDEXER_CODE` (`indexer_code`) USING BTREE;
+  ADD UNIQUE KEY `UNQ_INDEX_PROCESS_INDEXER_CODE` (`indexer_code`);
 
 --
 -- Indexes for table `index_process_event`
 --
 ALTER TABLE `index_process_event`
   ADD PRIMARY KEY (`process_id`,`event_id`),
-  ADD KEY `IDX_INDEX_PROCESS_EVENT_EVENT_ID` (`event_id`) USING BTREE;
+  ADD KEY `IDX_INDEX_PROCESS_EVENT_EVENT_ID` (`event_id`);
 
 --
 -- Indexes for table `log_customer`
 --
 ALTER TABLE `log_customer`
   ADD PRIMARY KEY (`log_id`),
-  ADD KEY `IDX_LOG_CUSTOMER_VISITOR_ID` (`visitor_id`) USING BTREE;
+  ADD KEY `IDX_LOG_CUSTOMER_VISITOR_ID` (`visitor_id`);
 
 --
 -- Indexes for table `log_quote`
@@ -8756,7 +7999,7 @@ ALTER TABLE `log_summary_type`
 --
 ALTER TABLE `log_url`
   ADD PRIMARY KEY (`url_id`),
-  ADD KEY `IDX_LOG_URL_VISITOR_ID` (`visitor_id`) USING BTREE;
+  ADD KEY `IDX_LOG_URL_VISITOR_ID` (`visitor_id`);
 
 --
 -- Indexes for table `log_url_info`
@@ -8781,343 +8024,241 @@ ALTER TABLE `log_visitor_info`
 --
 ALTER TABLE `log_visitor_online`
   ADD PRIMARY KEY (`visitor_id`),
-  ADD KEY `IDX_LOG_VISITOR_ONLINE_VISITOR_TYPE` (`visitor_type`) USING BTREE,
-  ADD KEY `IDX_LOG_VISITOR_ONLINE_FIRST_VISIT_AT_LAST_VISIT_AT` (`first_visit_at`,`last_visit_at`) USING BTREE,
-  ADD KEY `IDX_LOG_VISITOR_ONLINE_CUSTOMER_ID` (`customer_id`) USING BTREE;
-
---
--- Indexes for table `mdg_giftregistry_entity`
---
-ALTER TABLE `mdg_giftregistry_entity`
-  ADD PRIMARY KEY (`entity_id`),
-  ADD KEY `IDX_MDG_GIFTREGISTRY_ENTITY_CUSTOMER_ID` (`customer_id`),
-  ADD KEY `IDX_MDG_GIFTREGISTRY_ENTITY_WEBSITE_ID` (`website_id`),
-  ADD KEY `IDX_MDG_GIFTREGISTRY_ENTITY_TYPE_ID` (`type_id`);
-
---
--- Indexes for table `mdg_giftregistry_type`
---
-ALTER TABLE `mdg_giftregistry_type`
-  ADD PRIMARY KEY (`type_id`);
-
---
--- Indexes for table `newfrog_catalog_relation`
---
-ALTER TABLE `newfrog_catalog_relation`
-  ADD PRIMARY KEY (`id`);
-
---
--- Indexes for table `newfrog_category_new`
---
-ALTER TABLE `newfrog_category_new`
-  ADD PRIMARY KEY (`category_id`),
-  ADD KEY `category_id` (`category_id`);
-
---
--- Indexes for table `newfrog_clearance`
---
-ALTER TABLE `newfrog_clearance`
-  ADD PRIMARY KEY (`id`);
-
---
--- Indexes for table `newfrog_erorreport`
---
-ALTER TABLE `newfrog_erorreport`
-  ADD PRIMARY KEY (`id`);
-
---
--- Indexes for table `newfrog_lover`
---
-ALTER TABLE `newfrog_lover`
-  ADD PRIMARY KEY (`id`);
-
---
--- Indexes for table `newfrog_lover_click`
---
-ALTER TABLE `newfrog_lover_click`
-  ADD PRIMARY KEY (`id`);
-
---
--- Indexes for table `newfrog_lover_remark`
---
-ALTER TABLE `newfrog_lover_remark`
-  ADD PRIMARY KEY (`id`);
-
---
--- Indexes for table `newfrog_newzone_entity`
---
-ALTER TABLE `newfrog_newzone_entity`
-  ADD PRIMARY KEY (`entity_id`),
-  ADD KEY `IDX_NEWFROG_NEWZONE_ENTITY_WEBSITE_ID` (`website_id`),
-  ADD KEY `IDX_NEWFROG_NEWZONE_ENTITY_TYPE_ID` (`type_id`);
-
---
--- Indexes for table `newfrog_newzone_type`
---
-ALTER TABLE `newfrog_newzone_type`
-  ADD PRIMARY KEY (`type_id`);
-
---
--- Indexes for table `newfrog_online_price_tmp`
---
-ALTER TABLE `newfrog_online_price_tmp`
-  ADD PRIMARY KEY (`id`),
-  ADD KEY `sku` (`sku`) USING BTREE;
-
---
--- Indexes for table `newfrog_pricematch`
---
-ALTER TABLE `newfrog_pricematch`
-  ADD PRIMARY KEY (`id`);
-
---
--- Indexes for table `newfrog_Saveproduct`
---
-ALTER TABLE `newfrog_Saveproduct`
-  ADD PRIMARY KEY (`id`);
-
---
--- Indexes for table `newfrog_save_product`
---
-ALTER TABLE `newfrog_save_product`
-  ADD PRIMARY KEY (`id`);
-
---
--- Indexes for table `newfrog_wholesale`
---
-ALTER TABLE `newfrog_wholesale`
-  ADD PRIMARY KEY (`id`);
+  ADD KEY `IDX_LOG_VISITOR_ONLINE_VISITOR_TYPE` (`visitor_type`),
+  ADD KEY `IDX_LOG_VISITOR_ONLINE_FIRST_VISIT_AT_LAST_VISIT_AT` (`first_visit_at`,`last_visit_at`),
+  ADD KEY `IDX_LOG_VISITOR_ONLINE_CUSTOMER_ID` (`customer_id`);
 
 --
 -- Indexes for table `newsletter_problem`
 --
 ALTER TABLE `newsletter_problem`
   ADD PRIMARY KEY (`problem_id`),
-  ADD KEY `IDX_NEWSLETTER_PROBLEM_SUBSCRIBER_ID` (`subscriber_id`) USING BTREE,
-  ADD KEY `IDX_NEWSLETTER_PROBLEM_QUEUE_ID` (`queue_id`) USING BTREE;
+  ADD KEY `IDX_NEWSLETTER_PROBLEM_SUBSCRIBER_ID` (`subscriber_id`),
+  ADD KEY `IDX_NEWSLETTER_PROBLEM_QUEUE_ID` (`queue_id`);
 
 --
 -- Indexes for table `newsletter_queue`
 --
 ALTER TABLE `newsletter_queue`
   ADD PRIMARY KEY (`queue_id`),
-  ADD KEY `IDX_NEWSLETTER_QUEUE_TEMPLATE_ID` (`template_id`) USING BTREE;
+  ADD KEY `IDX_NEWSLETTER_QUEUE_TEMPLATE_ID` (`template_id`);
 
 --
 -- Indexes for table `newsletter_queue_link`
 --
 ALTER TABLE `newsletter_queue_link`
   ADD PRIMARY KEY (`queue_link_id`),
-  ADD KEY `IDX_NEWSLETTER_QUEUE_LINK_SUBSCRIBER_ID` (`subscriber_id`) USING BTREE,
-  ADD KEY `IDX_NEWSLETTER_QUEUE_LINK_QUEUE_ID` (`queue_id`) USING BTREE,
-  ADD KEY `IDX_NEWSLETTER_QUEUE_LINK_QUEUE_ID_LETTER_SENT_AT` (`queue_id`,`letter_sent_at`) USING BTREE;
+  ADD KEY `IDX_NEWSLETTER_QUEUE_LINK_SUBSCRIBER_ID` (`subscriber_id`),
+  ADD KEY `IDX_NEWSLETTER_QUEUE_LINK_QUEUE_ID` (`queue_id`),
+  ADD KEY `IDX_NEWSLETTER_QUEUE_LINK_QUEUE_ID_LETTER_SENT_AT` (`queue_id`,`letter_sent_at`);
 
 --
 -- Indexes for table `newsletter_queue_store_link`
 --
 ALTER TABLE `newsletter_queue_store_link`
   ADD PRIMARY KEY (`queue_id`,`store_id`),
-  ADD KEY `IDX_NEWSLETTER_QUEUE_STORE_LINK_STORE_ID` (`store_id`) USING BTREE;
+  ADD KEY `IDX_NEWSLETTER_QUEUE_STORE_LINK_STORE_ID` (`store_id`);
 
 --
 -- Indexes for table `newsletter_subscriber`
 --
 ALTER TABLE `newsletter_subscriber`
   ADD PRIMARY KEY (`subscriber_id`),
-  ADD KEY `IDX_NEWSLETTER_SUBSCRIBER_CUSTOMER_ID` (`customer_id`) USING BTREE,
-  ADD KEY `IDX_NEWSLETTER_SUBSCRIBER_STORE_ID` (`store_id`) USING BTREE;
+  ADD KEY `IDX_NEWSLETTER_SUBSCRIBER_CUSTOMER_ID` (`customer_id`),
+  ADD KEY `IDX_NEWSLETTER_SUBSCRIBER_STORE_ID` (`store_id`);
 
 --
 -- Indexes for table `newsletter_template`
 --
 ALTER TABLE `newsletter_template`
   ADD PRIMARY KEY (`template_id`),
-  ADD KEY `IDX_NEWSLETTER_TEMPLATE_TEMPLATE_ACTUAL` (`template_actual`) USING BTREE,
-  ADD KEY `IDX_NEWSLETTER_TEMPLATE_ADDED_AT` (`added_at`) USING BTREE,
-  ADD KEY `IDX_NEWSLETTER_TEMPLATE_MODIFIED_AT` (`modified_at`) USING BTREE;
+  ADD KEY `IDX_NEWSLETTER_TEMPLATE_TEMPLATE_ACTUAL` (`template_actual`),
+  ADD KEY `IDX_NEWSLETTER_TEMPLATE_ADDED_AT` (`added_at`),
+  ADD KEY `IDX_NEWSLETTER_TEMPLATE_MODIFIED_AT` (`modified_at`);
 
 --
 -- Indexes for table `oauth_consumer`
 --
 ALTER TABLE `oauth_consumer`
   ADD PRIMARY KEY (`entity_id`),
-  ADD UNIQUE KEY `UNQ_OAUTH_CONSUMER_KEY` (`key`) USING BTREE,
-  ADD UNIQUE KEY `UNQ_OAUTH_CONSUMER_SECRET` (`secret`) USING BTREE,
-  ADD KEY `IDX_OAUTH_CONSUMER_CREATED_AT` (`created_at`) USING BTREE,
-  ADD KEY `IDX_OAUTH_CONSUMER_UPDATED_AT` (`updated_at`) USING BTREE;
+  ADD UNIQUE KEY `UNQ_OAUTH_CONSUMER_KEY` (`key`),
+  ADD UNIQUE KEY `UNQ_OAUTH_CONSUMER_SECRET` (`secret`),
+  ADD KEY `IDX_OAUTH_CONSUMER_CREATED_AT` (`created_at`),
+  ADD KEY `IDX_OAUTH_CONSUMER_UPDATED_AT` (`updated_at`);
 
 --
 -- Indexes for table `oauth_nonce`
 --
 ALTER TABLE `oauth_nonce`
-  ADD UNIQUE KEY `UNQ_OAUTH_NONCE_NONCE` (`nonce`) USING BTREE;
+  ADD UNIQUE KEY `UNQ_OAUTH_NONCE_NONCE` (`nonce`);
 
 --
 -- Indexes for table `oauth_token`
 --
 ALTER TABLE `oauth_token`
   ADD PRIMARY KEY (`entity_id`),
-  ADD UNIQUE KEY `UNQ_OAUTH_TOKEN_TOKEN` (`token`) USING BTREE,
-  ADD KEY `IDX_OAUTH_TOKEN_CONSUMER_ID` (`consumer_id`) USING BTREE,
-  ADD KEY `FK_OAUTH_TOKEN_ADMIN_ID_ADMIN_USER_USER_ID` (`admin_id`) USING BTREE,
-  ADD KEY `FK_OAUTH_TOKEN_CUSTOMER_ID_CUSTOMER_ENTITY_ENTITY_ID` (`customer_id`) USING BTREE;
-
---
--- Indexes for table `outofstocksubscription_info`
---
-ALTER TABLE `outofstocksubscription_info`
-  ADD PRIMARY KEY (`id`),
-  ADD KEY `FK_OUTOFSTOCKSUBSCRIPTION_PRODUCT_ID` (`product_id`);
+  ADD UNIQUE KEY `UNQ_OAUTH_TOKEN_TOKEN` (`token`),
+  ADD KEY `IDX_OAUTH_TOKEN_CONSUMER_ID` (`consumer_id`),
+  ADD KEY `FK_OAUTH_TOKEN_ADMIN_ID_ADMIN_USER_USER_ID` (`admin_id`),
+  ADD KEY `FK_OAUTH_TOKEN_CUSTOMER_ID_CUSTOMER_ENTITY_ENTITY_ID` (`customer_id`);
 
 --
 -- Indexes for table `paypal_cert`
 --
 ALTER TABLE `paypal_cert`
   ADD PRIMARY KEY (`cert_id`),
-  ADD KEY `IDX_PAYPAL_CERT_WEBSITE_ID` (`website_id`) USING BTREE;
+  ADD KEY `IDX_PAYPAL_CERT_WEBSITE_ID` (`website_id`);
 
 --
 -- Indexes for table `paypal_payment_transaction`
 --
 ALTER TABLE `paypal_payment_transaction`
   ADD PRIMARY KEY (`transaction_id`),
-  ADD UNIQUE KEY `UNQ_PAYPAL_PAYMENT_TRANSACTION_TXN_ID` (`txn_id`) USING BTREE;
+  ADD UNIQUE KEY `UNQ_PAYPAL_PAYMENT_TRANSACTION_TXN_ID` (`txn_id`);
 
 --
 -- Indexes for table `paypal_settlement_report`
 --
 ALTER TABLE `paypal_settlement_report`
   ADD PRIMARY KEY (`report_id`),
-  ADD UNIQUE KEY `UNQ_PAYPAL_SETTLEMENT_REPORT_REPORT_DATE_ACCOUNT_ID` (`report_date`,`account_id`) USING BTREE;
+  ADD UNIQUE KEY `UNQ_PAYPAL_SETTLEMENT_REPORT_REPORT_DATE_ACCOUNT_ID` (`report_date`,`account_id`);
 
 --
 -- Indexes for table `paypal_settlement_report_row`
 --
 ALTER TABLE `paypal_settlement_report_row`
   ADD PRIMARY KEY (`row_id`),
-  ADD KEY `IDX_PAYPAL_SETTLEMENT_REPORT_ROW_REPORT_ID` (`report_id`) USING BTREE;
+  ADD KEY `IDX_PAYPAL_SETTLEMENT_REPORT_ROW_REPORT_ID` (`report_id`);
 
 --
 -- Indexes for table `persistent_session`
 --
 ALTER TABLE `persistent_session`
   ADD PRIMARY KEY (`persistent_id`),
-  ADD UNIQUE KEY `IDX_PERSISTENT_SESSION_KEY` (`key`) USING BTREE,
-  ADD UNIQUE KEY `IDX_PERSISTENT_SESSION_CUSTOMER_ID` (`customer_id`) USING BTREE,
-  ADD KEY `IDX_PERSISTENT_SESSION_UPDATED_AT` (`updated_at`) USING BTREE,
-  ADD KEY `FK_PERSISTENT_SESSION_WEBSITE_ID_CORE_WEBSITE_WEBSITE_ID` (`website_id`) USING BTREE;
+  ADD UNIQUE KEY `IDX_PERSISTENT_SESSION_KEY` (`key`),
+  ADD UNIQUE KEY `IDX_PERSISTENT_SESSION_CUSTOMER_ID` (`customer_id`),
+  ADD KEY `IDX_PERSISTENT_SESSION_UPDATED_AT` (`updated_at`),
+  ADD KEY `FK_PERSISTENT_SESSION_WEBSITE_ID_CORE_WEBSITE_WEBSITE_ID` (`website_id`);
 
 --
 -- Indexes for table `poll`
 --
 ALTER TABLE `poll`
-  ADD PRIMARY KEY (`poll_id`);
+  ADD PRIMARY KEY (`poll_id`),
+  ADD KEY `IDX_POLL_STORE_ID` (`store_id`);
+
+--
+-- Indexes for table `poll_answer`
+--
+ALTER TABLE `poll_answer`
+  ADD PRIMARY KEY (`answer_id`),
+  ADD KEY `IDX_POLL_ANSWER_POLL_ID` (`poll_id`);
 
 --
 -- Indexes for table `poll_store`
 --
 ALTER TABLE `poll_store`
   ADD PRIMARY KEY (`poll_id`,`store_id`),
-  ADD KEY `IDX_POLL_STORE_STORE_ID` (`store_id`) USING BTREE;
+  ADD KEY `IDX_POLL_STORE_STORE_ID` (`store_id`);
 
 --
 -- Indexes for table `poll_vote`
 --
 ALTER TABLE `poll_vote`
   ADD PRIMARY KEY (`vote_id`),
-  ADD KEY `IDX_POLL_VOTE_POLL_ANSWER_ID` (`poll_answer_id`) USING BTREE;
+  ADD KEY `IDX_POLL_VOTE_POLL_ANSWER_ID` (`poll_answer_id`);
 
 --
 -- Indexes for table `product_alert_price`
 --
 ALTER TABLE `product_alert_price`
   ADD PRIMARY KEY (`alert_price_id`),
-  ADD KEY `IDX_PRODUCT_ALERT_PRICE_CUSTOMER_ID` (`customer_id`) USING BTREE,
-  ADD KEY `IDX_PRODUCT_ALERT_PRICE_PRODUCT_ID` (`product_id`) USING BTREE,
-  ADD KEY `IDX_PRODUCT_ALERT_PRICE_WEBSITE_ID` (`website_id`) USING BTREE;
+  ADD KEY `IDX_PRODUCT_ALERT_PRICE_CUSTOMER_ID` (`customer_id`),
+  ADD KEY `IDX_PRODUCT_ALERT_PRICE_PRODUCT_ID` (`product_id`),
+  ADD KEY `IDX_PRODUCT_ALERT_PRICE_WEBSITE_ID` (`website_id`);
 
 --
 -- Indexes for table `product_alert_stock`
 --
 ALTER TABLE `product_alert_stock`
   ADD PRIMARY KEY (`alert_stock_id`),
-  ADD KEY `IDX_PRODUCT_ALERT_STOCK_CUSTOMER_ID` (`customer_id`) USING BTREE,
-  ADD KEY `IDX_PRODUCT_ALERT_STOCK_PRODUCT_ID` (`product_id`) USING BTREE,
-  ADD KEY `IDX_PRODUCT_ALERT_STOCK_WEBSITE_ID` (`website_id`) USING BTREE;
+  ADD KEY `IDX_PRODUCT_ALERT_STOCK_CUSTOMER_ID` (`customer_id`),
+  ADD KEY `IDX_PRODUCT_ALERT_STOCK_PRODUCT_ID` (`product_id`),
+  ADD KEY `IDX_PRODUCT_ALERT_STOCK_WEBSITE_ID` (`website_id`);
 
 --
 -- Indexes for table `rating`
 --
 ALTER TABLE `rating`
   ADD PRIMARY KEY (`rating_id`),
-  ADD UNIQUE KEY `UNQ_RATING_RATING_CODE` (`rating_code`) USING BTREE,
-  ADD KEY `IDX_RATING_ENTITY_ID` (`entity_id`) USING BTREE;
+  ADD UNIQUE KEY `UNQ_RATING_RATING_CODE` (`rating_code`),
+  ADD KEY `IDX_RATING_ENTITY_ID` (`entity_id`);
 
 --
 -- Indexes for table `rating_entity`
 --
 ALTER TABLE `rating_entity`
   ADD PRIMARY KEY (`entity_id`),
-  ADD UNIQUE KEY `UNQ_RATING_ENTITY_ENTITY_CODE` (`entity_code`) USING BTREE;
+  ADD UNIQUE KEY `UNQ_RATING_ENTITY_ENTITY_CODE` (`entity_code`);
 
 --
 -- Indexes for table `rating_option`
 --
 ALTER TABLE `rating_option`
   ADD PRIMARY KEY (`option_id`),
-  ADD KEY `IDX_RATING_OPTION_RATING_ID` (`rating_id`) USING BTREE;
+  ADD KEY `IDX_RATING_OPTION_RATING_ID` (`rating_id`);
 
 --
 -- Indexes for table `rating_option_vote`
 --
 ALTER TABLE `rating_option_vote`
   ADD PRIMARY KEY (`vote_id`),
-  ADD KEY `IDX_RATING_OPTION_VOTE_OPTION_ID` (`option_id`) USING BTREE,
-  ADD KEY `FK_RATING_OPTION_VOTE_REVIEW_ID_REVIEW_REVIEW_ID` (`review_id`) USING BTREE;
+  ADD KEY `IDX_RATING_OPTION_VOTE_OPTION_ID` (`option_id`),
+  ADD KEY `FK_RATING_OPTION_VOTE_REVIEW_ID_REVIEW_REVIEW_ID` (`review_id`);
 
 --
 -- Indexes for table `rating_option_vote_aggregated`
 --
 ALTER TABLE `rating_option_vote_aggregated`
   ADD PRIMARY KEY (`primary_id`),
-  ADD KEY `IDX_RATING_OPTION_VOTE_AGGREGATED_RATING_ID` (`rating_id`) USING BTREE,
-  ADD KEY `IDX_RATING_OPTION_VOTE_AGGREGATED_STORE_ID` (`store_id`) USING BTREE;
+  ADD KEY `IDX_RATING_OPTION_VOTE_AGGREGATED_RATING_ID` (`rating_id`),
+  ADD KEY `IDX_RATING_OPTION_VOTE_AGGREGATED_STORE_ID` (`store_id`);
 
 --
 -- Indexes for table `rating_store`
 --
 ALTER TABLE `rating_store`
   ADD PRIMARY KEY (`rating_id`,`store_id`),
-  ADD KEY `IDX_RATING_STORE_STORE_ID` (`store_id`) USING BTREE;
+  ADD KEY `IDX_RATING_STORE_STORE_ID` (`store_id`);
 
 --
 -- Indexes for table `rating_title`
 --
 ALTER TABLE `rating_title`
   ADD PRIMARY KEY (`rating_id`,`store_id`),
-  ADD KEY `IDX_RATING_TITLE_STORE_ID` (`store_id`) USING BTREE;
+  ADD KEY `IDX_RATING_TITLE_STORE_ID` (`store_id`);
 
 --
 -- Indexes for table `report_compared_product_index`
 --
 ALTER TABLE `report_compared_product_index`
   ADD PRIMARY KEY (`index_id`),
-  ADD UNIQUE KEY `UNQ_REPORT_COMPARED_PRODUCT_INDEX_VISITOR_ID_PRODUCT_ID` (`visitor_id`,`product_id`) USING BTREE,
-  ADD UNIQUE KEY `UNQ_REPORT_COMPARED_PRODUCT_INDEX_CUSTOMER_ID_PRODUCT_ID` (`customer_id`,`product_id`) USING BTREE,
-  ADD KEY `IDX_REPORT_COMPARED_PRODUCT_INDEX_STORE_ID` (`store_id`) USING BTREE,
-  ADD KEY `IDX_REPORT_COMPARED_PRODUCT_INDEX_ADDED_AT` (`added_at`) USING BTREE,
-  ADD KEY `IDX_REPORT_COMPARED_PRODUCT_INDEX_PRODUCT_ID` (`product_id`) USING BTREE;
+  ADD UNIQUE KEY `UNQ_REPORT_COMPARED_PRODUCT_INDEX_VISITOR_ID_PRODUCT_ID` (`visitor_id`,`product_id`),
+  ADD UNIQUE KEY `UNQ_REPORT_COMPARED_PRODUCT_INDEX_CUSTOMER_ID_PRODUCT_ID` (`customer_id`,`product_id`),
+  ADD KEY `IDX_REPORT_COMPARED_PRODUCT_INDEX_STORE_ID` (`store_id`),
+  ADD KEY `IDX_REPORT_COMPARED_PRODUCT_INDEX_ADDED_AT` (`added_at`),
+  ADD KEY `IDX_REPORT_COMPARED_PRODUCT_INDEX_PRODUCT_ID` (`product_id`);
 
 --
 -- Indexes for table `report_event`
 --
 ALTER TABLE `report_event`
   ADD PRIMARY KEY (`event_id`),
-  ADD KEY `IDX_REPORT_EVENT_EVENT_TYPE_ID` (`event_type_id`) USING BTREE,
-  ADD KEY `IDX_REPORT_EVENT_SUBJECT_ID` (`subject_id`) USING BTREE,
-  ADD KEY `IDX_REPORT_EVENT_OBJECT_ID` (`object_id`) USING BTREE,
-  ADD KEY `IDX_REPORT_EVENT_SUBTYPE` (`subtype`) USING BTREE,
-  ADD KEY `IDX_REPORT_EVENT_STORE_ID` (`store_id`) USING BTREE;
+  ADD KEY `IDX_REPORT_EVENT_EVENT_TYPE_ID` (`event_type_id`),
+  ADD KEY `IDX_REPORT_EVENT_SUBJECT_ID` (`subject_id`),
+  ADD KEY `IDX_REPORT_EVENT_OBJECT_ID` (`object_id`),
+  ADD KEY `IDX_REPORT_EVENT_SUBTYPE` (`subtype`),
+  ADD KEY `IDX_REPORT_EVENT_STORE_ID` (`store_id`);
 
 --
 -- Indexes for table `report_event_types`
@@ -9130,56 +8271,56 @@ ALTER TABLE `report_event_types`
 --
 ALTER TABLE `report_viewed_product_aggregated_daily`
   ADD PRIMARY KEY (`id`),
-  ADD UNIQUE KEY `UNQ_REPORT_VIEWED_PRD_AGGRED_DAILY_PERIOD_STORE_ID_PRD_ID` (`period`,`store_id`,`product_id`) USING BTREE,
-  ADD KEY `IDX_REPORT_VIEWED_PRODUCT_AGGREGATED_DAILY_STORE_ID` (`store_id`) USING BTREE,
-  ADD KEY `IDX_REPORT_VIEWED_PRODUCT_AGGREGATED_DAILY_PRODUCT_ID` (`product_id`) USING BTREE;
+  ADD UNIQUE KEY `UNQ_REPORT_VIEWED_PRD_AGGRED_DAILY_PERIOD_STORE_ID_PRD_ID` (`period`,`store_id`,`product_id`),
+  ADD KEY `IDX_REPORT_VIEWED_PRODUCT_AGGREGATED_DAILY_STORE_ID` (`store_id`),
+  ADD KEY `IDX_REPORT_VIEWED_PRODUCT_AGGREGATED_DAILY_PRODUCT_ID` (`product_id`);
 
 --
 -- Indexes for table `report_viewed_product_aggregated_monthly`
 --
 ALTER TABLE `report_viewed_product_aggregated_monthly`
   ADD PRIMARY KEY (`id`),
-  ADD UNIQUE KEY `UNQ_REPORT_VIEWED_PRD_AGGRED_MONTHLY_PERIOD_STORE_ID_PRD_ID` (`period`,`store_id`,`product_id`) USING BTREE,
-  ADD KEY `IDX_REPORT_VIEWED_PRODUCT_AGGREGATED_MONTHLY_STORE_ID` (`store_id`) USING BTREE,
-  ADD KEY `IDX_REPORT_VIEWED_PRODUCT_AGGREGATED_MONTHLY_PRODUCT_ID` (`product_id`) USING BTREE;
+  ADD UNIQUE KEY `UNQ_REPORT_VIEWED_PRD_AGGRED_MONTHLY_PERIOD_STORE_ID_PRD_ID` (`period`,`store_id`,`product_id`),
+  ADD KEY `IDX_REPORT_VIEWED_PRODUCT_AGGREGATED_MONTHLY_STORE_ID` (`store_id`),
+  ADD KEY `IDX_REPORT_VIEWED_PRODUCT_AGGREGATED_MONTHLY_PRODUCT_ID` (`product_id`);
 
 --
 -- Indexes for table `report_viewed_product_aggregated_yearly`
 --
 ALTER TABLE `report_viewed_product_aggregated_yearly`
   ADD PRIMARY KEY (`id`),
-  ADD UNIQUE KEY `UNQ_REPORT_VIEWED_PRD_AGGRED_YEARLY_PERIOD_STORE_ID_PRD_ID` (`period`,`store_id`,`product_id`) USING BTREE,
-  ADD KEY `IDX_REPORT_VIEWED_PRODUCT_AGGREGATED_YEARLY_STORE_ID` (`store_id`) USING BTREE,
-  ADD KEY `IDX_REPORT_VIEWED_PRODUCT_AGGREGATED_YEARLY_PRODUCT_ID` (`product_id`) USING BTREE;
+  ADD UNIQUE KEY `UNQ_REPORT_VIEWED_PRD_AGGRED_YEARLY_PERIOD_STORE_ID_PRD_ID` (`period`,`store_id`,`product_id`),
+  ADD KEY `IDX_REPORT_VIEWED_PRODUCT_AGGREGATED_YEARLY_STORE_ID` (`store_id`),
+  ADD KEY `IDX_REPORT_VIEWED_PRODUCT_AGGREGATED_YEARLY_PRODUCT_ID` (`product_id`);
 
 --
 -- Indexes for table `report_viewed_product_index`
 --
 ALTER TABLE `report_viewed_product_index`
   ADD PRIMARY KEY (`index_id`),
-  ADD UNIQUE KEY `UNQ_REPORT_VIEWED_PRODUCT_INDEX_VISITOR_ID_PRODUCT_ID` (`visitor_id`,`product_id`) USING BTREE,
-  ADD UNIQUE KEY `UNQ_REPORT_VIEWED_PRODUCT_INDEX_CUSTOMER_ID_PRODUCT_ID` (`customer_id`,`product_id`) USING BTREE,
-  ADD KEY `IDX_REPORT_VIEWED_PRODUCT_INDEX_STORE_ID` (`store_id`) USING BTREE,
-  ADD KEY `IDX_REPORT_VIEWED_PRODUCT_INDEX_ADDED_AT` (`added_at`) USING BTREE,
-  ADD KEY `IDX_REPORT_VIEWED_PRODUCT_INDEX_PRODUCT_ID` (`product_id`) USING BTREE;
+  ADD UNIQUE KEY `UNQ_REPORT_VIEWED_PRODUCT_INDEX_VISITOR_ID_PRODUCT_ID` (`visitor_id`,`product_id`),
+  ADD UNIQUE KEY `UNQ_REPORT_VIEWED_PRODUCT_INDEX_CUSTOMER_ID_PRODUCT_ID` (`customer_id`,`product_id`),
+  ADD KEY `IDX_REPORT_VIEWED_PRODUCT_INDEX_STORE_ID` (`store_id`),
+  ADD KEY `IDX_REPORT_VIEWED_PRODUCT_INDEX_ADDED_AT` (`added_at`),
+  ADD KEY `IDX_REPORT_VIEWED_PRODUCT_INDEX_PRODUCT_ID` (`product_id`);
 
 --
 -- Indexes for table `review`
 --
 ALTER TABLE `review`
   ADD PRIMARY KEY (`review_id`),
-  ADD KEY `IDX_REVIEW_ENTITY_ID` (`entity_id`) USING BTREE,
-  ADD KEY `IDX_REVIEW_STATUS_ID` (`status_id`) USING BTREE,
-  ADD KEY `IDX_REVIEW_ENTITY_PK_VALUE` (`entity_pk_value`) USING BTREE;
+  ADD KEY `IDX_REVIEW_ENTITY_ID` (`entity_id`),
+  ADD KEY `IDX_REVIEW_STATUS_ID` (`status_id`),
+  ADD KEY `IDX_REVIEW_ENTITY_PK_VALUE` (`entity_pk_value`);
 
 --
 -- Indexes for table `review_detail`
 --
 ALTER TABLE `review_detail`
   ADD PRIMARY KEY (`detail_id`),
-  ADD KEY `IDX_REVIEW_DETAIL_REVIEW_ID` (`review_id`) USING BTREE,
-  ADD KEY `IDX_REVIEW_DETAIL_STORE_ID` (`store_id`) USING BTREE,
-  ADD KEY `IDX_REVIEW_DETAIL_CUSTOMER_ID` (`customer_id`) USING BTREE;
+  ADD KEY `IDX_REVIEW_DETAIL_REVIEW_ID` (`review_id`),
+  ADD KEY `IDX_REVIEW_DETAIL_STORE_ID` (`store_id`),
+  ADD KEY `IDX_REVIEW_DETAIL_CUSTOMER_ID` (`customer_id`);
 
 --
 -- Indexes for table `review_entity`
@@ -9192,24 +8333,7 @@ ALTER TABLE `review_entity`
 --
 ALTER TABLE `review_entity_summary`
   ADD PRIMARY KEY (`primary_id`),
-  ADD KEY `IDX_REVIEW_ENTITY_SUMMARY_STORE_ID` (`store_id`) USING BTREE,
-  ADD KEY `IND_REVIEW_ENTITY_SUMMARY_PK` (`entity_pk_value`) USING BTREE;
-
---
--- Indexes for table `review_photo`
---
-ALTER TABLE `review_photo`
-  ADD PRIMARY KEY (`id`),
-  ADD KEY `customer_id` (`customer_id`,`entity_id`) USING BTREE,
-  ADD KEY `FK_REVIEW_ENTITY_ID` (`entity_id`) USING BTREE,
-  ADD KEY `FK_REVIEW_CUSTOMER_ID` (`customer_id`) USING BTREE;
-
---
--- Indexes for table `review_photo_review`
---
-ALTER TABLE `review_photo_review`
-  ADD PRIMARY KEY (`pk_id`),
-  ADD KEY `INDEX_REVIEW_PHOTO_ID` (`review_photo_id`) USING BTREE;
+  ADD KEY `IDX_REVIEW_ENTITY_SUMMARY_STORE_ID` (`store_id`);
 
 --
 -- Indexes for table `review_status`
@@ -9222,426 +8346,402 @@ ALTER TABLE `review_status`
 --
 ALTER TABLE `review_store`
   ADD PRIMARY KEY (`review_id`,`store_id`),
-  ADD KEY `IDX_REVIEW_STORE_STORE_ID` (`store_id`) USING BTREE;
-
---
--- Indexes for table `rewardpoints_account`
---
-ALTER TABLE `rewardpoints_account`
-  ADD PRIMARY KEY (`rewardpoints_account_id`),
-  ADD KEY `FK_sales_order_ENTITY_STORE` (`order_id`) USING BTREE,
-  ADD KEY `customer_id` (`customer_id`) USING BTREE;
-
---
--- Indexes for table `rewardpoints_referral`
---
-ALTER TABLE `rewardpoints_referral`
-  ADD PRIMARY KEY (`rewardpoints_referral_id`),
-  ADD UNIQUE KEY `email` (`rewardpoints_referral_email`) USING BTREE,
-  ADD UNIQUE KEY `son_id` (`rewardpoints_referral_child_id`) USING BTREE,
-  ADD KEY `FK_customer_entity` (`rewardpoints_referral_parent_id`) USING BTREE;
-
---
--- Indexes for table `rewardpoints_rule`
---
-ALTER TABLE `rewardpoints_rule`
-  ADD PRIMARY KEY (`rewardpoints_rule_id`);
+  ADD KEY `IDX_REVIEW_STORE_STORE_ID` (`store_id`);
 
 --
 -- Indexes for table `salesrule`
 --
 ALTER TABLE `salesrule`
   ADD PRIMARY KEY (`rule_id`),
-  ADD KEY `IDX_SALESRULE_IS_ACTIVE_SORT_ORDER_TO_DATE_FROM_DATE` (`is_active`,`sort_order`,`to_date`,`from_date`) USING BTREE;
+  ADD KEY `IDX_SALESRULE_IS_ACTIVE_SORT_ORDER_TO_DATE_FROM_DATE` (`is_active`,`sort_order`,`to_date`,`from_date`);
 
 --
 -- Indexes for table `salesrule_coupon`
 --
 ALTER TABLE `salesrule_coupon`
   ADD PRIMARY KEY (`coupon_id`),
-  ADD UNIQUE KEY `UNQ_SALESRULE_COUPON_CODE` (`code`) USING BTREE,
-  ADD UNIQUE KEY `UNQ_SALESRULE_COUPON_RULE_ID_IS_PRIMARY` (`rule_id`,`is_primary`) USING BTREE,
-  ADD KEY `IDX_SALESRULE_COUPON_RULE_ID` (`rule_id`) USING BTREE;
+  ADD UNIQUE KEY `UNQ_SALESRULE_COUPON_CODE` (`code`),
+  ADD UNIQUE KEY `UNQ_SALESRULE_COUPON_RULE_ID_IS_PRIMARY` (`rule_id`,`is_primary`),
+  ADD KEY `IDX_SALESRULE_COUPON_RULE_ID` (`rule_id`);
 
 --
 -- Indexes for table `salesrule_coupon_usage`
 --
 ALTER TABLE `salesrule_coupon_usage`
   ADD PRIMARY KEY (`coupon_id`,`customer_id`),
-  ADD KEY `IDX_SALESRULE_COUPON_USAGE_COUPON_ID` (`coupon_id`) USING BTREE,
-  ADD KEY `IDX_SALESRULE_COUPON_USAGE_CUSTOMER_ID` (`customer_id`) USING BTREE;
+  ADD KEY `IDX_SALESRULE_COUPON_USAGE_COUPON_ID` (`coupon_id`),
+  ADD KEY `IDX_SALESRULE_COUPON_USAGE_CUSTOMER_ID` (`customer_id`);
 
 --
 -- Indexes for table `salesrule_customer`
 --
 ALTER TABLE `salesrule_customer`
   ADD PRIMARY KEY (`rule_customer_id`),
-  ADD KEY `IDX_SALESRULE_CUSTOMER_RULE_ID_CUSTOMER_ID` (`rule_id`,`customer_id`) USING BTREE,
-  ADD KEY `IDX_SALESRULE_CUSTOMER_CUSTOMER_ID_RULE_ID` (`customer_id`,`rule_id`) USING BTREE;
+  ADD KEY `IDX_SALESRULE_CUSTOMER_RULE_ID_CUSTOMER_ID` (`rule_id`,`customer_id`),
+  ADD KEY `IDX_SALESRULE_CUSTOMER_CUSTOMER_ID_RULE_ID` (`customer_id`,`rule_id`);
 
 --
 -- Indexes for table `salesrule_customer_group`
 --
 ALTER TABLE `salesrule_customer_group`
   ADD PRIMARY KEY (`rule_id`,`customer_group_id`),
-  ADD KEY `IDX_SALESRULE_CUSTOMER_GROUP_RULE_ID` (`rule_id`) USING BTREE,
-  ADD KEY `IDX_SALESRULE_CUSTOMER_GROUP_CUSTOMER_GROUP_ID` (`customer_group_id`) USING BTREE;
+  ADD KEY `IDX_SALESRULE_CUSTOMER_GROUP_RULE_ID` (`rule_id`),
+  ADD KEY `IDX_SALESRULE_CUSTOMER_GROUP_CUSTOMER_GROUP_ID` (`customer_group_id`);
 
 --
 -- Indexes for table `salesrule_label`
 --
 ALTER TABLE `salesrule_label`
   ADD PRIMARY KEY (`label_id`),
-  ADD UNIQUE KEY `UNQ_SALESRULE_LABEL_RULE_ID_STORE_ID` (`rule_id`,`store_id`) USING BTREE,
-  ADD KEY `IDX_SALESRULE_LABEL_STORE_ID` (`store_id`) USING BTREE,
-  ADD KEY `IDX_SALESRULE_LABEL_RULE_ID` (`rule_id`) USING BTREE;
+  ADD UNIQUE KEY `UNQ_SALESRULE_LABEL_RULE_ID_STORE_ID` (`rule_id`,`store_id`),
+  ADD KEY `IDX_SALESRULE_LABEL_STORE_ID` (`store_id`),
+  ADD KEY `IDX_SALESRULE_LABEL_RULE_ID` (`rule_id`);
 
 --
 -- Indexes for table `salesrule_product_attribute`
 --
 ALTER TABLE `salesrule_product_attribute`
   ADD PRIMARY KEY (`rule_id`,`website_id`,`customer_group_id`,`attribute_id`),
-  ADD KEY `IDX_SALESRULE_PRODUCT_ATTRIBUTE_WEBSITE_ID` (`website_id`) USING BTREE,
-  ADD KEY `IDX_SALESRULE_PRODUCT_ATTRIBUTE_CUSTOMER_GROUP_ID` (`customer_group_id`) USING BTREE,
-  ADD KEY `IDX_SALESRULE_PRODUCT_ATTRIBUTE_ATTRIBUTE_ID` (`attribute_id`) USING BTREE;
+  ADD KEY `IDX_SALESRULE_PRODUCT_ATTRIBUTE_WEBSITE_ID` (`website_id`),
+  ADD KEY `IDX_SALESRULE_PRODUCT_ATTRIBUTE_CUSTOMER_GROUP_ID` (`customer_group_id`),
+  ADD KEY `IDX_SALESRULE_PRODUCT_ATTRIBUTE_ATTRIBUTE_ID` (`attribute_id`);
 
 --
 -- Indexes for table `salesrule_website`
 --
 ALTER TABLE `salesrule_website`
   ADD PRIMARY KEY (`rule_id`,`website_id`),
-  ADD KEY `IDX_SALESRULE_WEBSITE_RULE_ID` (`rule_id`) USING BTREE,
-  ADD KEY `IDX_SALESRULE_WEBSITE_WEBSITE_ID` (`website_id`) USING BTREE;
+  ADD KEY `IDX_SALESRULE_WEBSITE_RULE_ID` (`rule_id`),
+  ADD KEY `IDX_SALESRULE_WEBSITE_WEBSITE_ID` (`website_id`);
 
 --
 -- Indexes for table `sales_bestsellers_aggregated_daily`
 --
 ALTER TABLE `sales_bestsellers_aggregated_daily`
   ADD PRIMARY KEY (`id`),
-  ADD UNIQUE KEY `UNQ_SALES_BESTSELLERS_AGGRED_DAILY_PERIOD_STORE_ID_PRD_ID` (`period`,`store_id`,`product_id`) USING BTREE,
-  ADD KEY `IDX_SALES_BESTSELLERS_AGGREGATED_DAILY_STORE_ID` (`store_id`) USING BTREE,
-  ADD KEY `IDX_SALES_BESTSELLERS_AGGREGATED_DAILY_PRODUCT_ID` (`product_id`) USING BTREE;
+  ADD UNIQUE KEY `UNQ_SALES_BESTSELLERS_AGGRED_DAILY_PERIOD_STORE_ID_PRD_ID` (`period`,`store_id`,`product_id`),
+  ADD KEY `IDX_SALES_BESTSELLERS_AGGREGATED_DAILY_STORE_ID` (`store_id`),
+  ADD KEY `IDX_SALES_BESTSELLERS_AGGREGATED_DAILY_PRODUCT_ID` (`product_id`);
 
 --
 -- Indexes for table `sales_bestsellers_aggregated_monthly`
 --
 ALTER TABLE `sales_bestsellers_aggregated_monthly`
   ADD PRIMARY KEY (`id`),
-  ADD UNIQUE KEY `UNQ_SALES_BESTSELLERS_AGGRED_MONTHLY_PERIOD_STORE_ID_PRD_ID` (`period`,`store_id`,`product_id`) USING BTREE,
-  ADD KEY `IDX_SALES_BESTSELLERS_AGGREGATED_MONTHLY_STORE_ID` (`store_id`) USING BTREE,
-  ADD KEY `IDX_SALES_BESTSELLERS_AGGREGATED_MONTHLY_PRODUCT_ID` (`product_id`) USING BTREE;
+  ADD UNIQUE KEY `UNQ_SALES_BESTSELLERS_AGGRED_MONTHLY_PERIOD_STORE_ID_PRD_ID` (`period`,`store_id`,`product_id`),
+  ADD KEY `IDX_SALES_BESTSELLERS_AGGREGATED_MONTHLY_STORE_ID` (`store_id`),
+  ADD KEY `IDX_SALES_BESTSELLERS_AGGREGATED_MONTHLY_PRODUCT_ID` (`product_id`);
 
 --
 -- Indexes for table `sales_bestsellers_aggregated_yearly`
 --
 ALTER TABLE `sales_bestsellers_aggregated_yearly`
   ADD PRIMARY KEY (`id`),
-  ADD UNIQUE KEY `UNQ_SALES_BESTSELLERS_AGGRED_YEARLY_PERIOD_STORE_ID_PRD_ID` (`period`,`store_id`,`product_id`) USING BTREE,
-  ADD KEY `IDX_SALES_BESTSELLERS_AGGREGATED_YEARLY_STORE_ID` (`store_id`) USING BTREE,
-  ADD KEY `IDX_SALES_BESTSELLERS_AGGREGATED_YEARLY_PRODUCT_ID` (`product_id`) USING BTREE;
+  ADD UNIQUE KEY `UNQ_SALES_BESTSELLERS_AGGRED_YEARLY_PERIOD_STORE_ID_PRD_ID` (`period`,`store_id`,`product_id`),
+  ADD KEY `IDX_SALES_BESTSELLERS_AGGREGATED_YEARLY_STORE_ID` (`store_id`),
+  ADD KEY `IDX_SALES_BESTSELLERS_AGGREGATED_YEARLY_PRODUCT_ID` (`product_id`);
 
 --
 -- Indexes for table `sales_billing_agreement`
 --
 ALTER TABLE `sales_billing_agreement`
   ADD PRIMARY KEY (`agreement_id`),
-  ADD KEY `IDX_SALES_BILLING_AGREEMENT_CUSTOMER_ID` (`customer_id`) USING BTREE,
-  ADD KEY `IDX_SALES_BILLING_AGREEMENT_STORE_ID` (`store_id`) USING BTREE;
+  ADD KEY `IDX_SALES_BILLING_AGREEMENT_CUSTOMER_ID` (`customer_id`),
+  ADD KEY `IDX_SALES_BILLING_AGREEMENT_STORE_ID` (`store_id`);
 
 --
 -- Indexes for table `sales_billing_agreement_order`
 --
 ALTER TABLE `sales_billing_agreement_order`
   ADD PRIMARY KEY (`agreement_id`,`order_id`),
-  ADD KEY `IDX_SALES_BILLING_AGREEMENT_ORDER_ORDER_ID` (`order_id`) USING BTREE;
+  ADD KEY `IDX_SALES_BILLING_AGREEMENT_ORDER_ORDER_ID` (`order_id`);
 
 --
 -- Indexes for table `sales_flat_creditmemo`
 --
 ALTER TABLE `sales_flat_creditmemo`
   ADD PRIMARY KEY (`entity_id`),
-  ADD UNIQUE KEY `UNQ_SALES_FLAT_CREDITMEMO_INCREMENT_ID` (`increment_id`) USING BTREE,
-  ADD KEY `IDX_SALES_FLAT_CREDITMEMO_STORE_ID` (`store_id`) USING BTREE,
-  ADD KEY `IDX_SALES_FLAT_CREDITMEMO_ORDER_ID` (`order_id`) USING BTREE,
-  ADD KEY `IDX_SALES_FLAT_CREDITMEMO_CREDITMEMO_STATUS` (`creditmemo_status`) USING BTREE,
-  ADD KEY `IDX_SALES_FLAT_CREDITMEMO_STATE` (`state`) USING BTREE,
-  ADD KEY `IDX_SALES_FLAT_CREDITMEMO_CREATED_AT` (`created_at`) USING BTREE;
+  ADD UNIQUE KEY `UNQ_SALES_FLAT_CREDITMEMO_INCREMENT_ID` (`increment_id`),
+  ADD KEY `IDX_SALES_FLAT_CREDITMEMO_STORE_ID` (`store_id`),
+  ADD KEY `IDX_SALES_FLAT_CREDITMEMO_ORDER_ID` (`order_id`),
+  ADD KEY `IDX_SALES_FLAT_CREDITMEMO_CREDITMEMO_STATUS` (`creditmemo_status`),
+  ADD KEY `IDX_SALES_FLAT_CREDITMEMO_STATE` (`state`),
+  ADD KEY `IDX_SALES_FLAT_CREDITMEMO_CREATED_AT` (`created_at`);
 
 --
 -- Indexes for table `sales_flat_creditmemo_comment`
 --
 ALTER TABLE `sales_flat_creditmemo_comment`
   ADD PRIMARY KEY (`entity_id`),
-  ADD KEY `IDX_SALES_FLAT_CREDITMEMO_COMMENT_CREATED_AT` (`created_at`) USING BTREE,
-  ADD KEY `IDX_SALES_FLAT_CREDITMEMO_COMMENT_PARENT_ID` (`parent_id`) USING BTREE;
+  ADD KEY `IDX_SALES_FLAT_CREDITMEMO_COMMENT_CREATED_AT` (`created_at`),
+  ADD KEY `IDX_SALES_FLAT_CREDITMEMO_COMMENT_PARENT_ID` (`parent_id`);
 
 --
 -- Indexes for table `sales_flat_creditmemo_grid`
 --
 ALTER TABLE `sales_flat_creditmemo_grid`
   ADD PRIMARY KEY (`entity_id`),
-  ADD UNIQUE KEY `UNQ_SALES_FLAT_CREDITMEMO_GRID_INCREMENT_ID` (`increment_id`) USING BTREE,
-  ADD KEY `IDX_SALES_FLAT_CREDITMEMO_GRID_STORE_ID` (`store_id`) USING BTREE,
-  ADD KEY `IDX_SALES_FLAT_CREDITMEMO_GRID_GRAND_TOTAL` (`grand_total`) USING BTREE,
-  ADD KEY `IDX_SALES_FLAT_CREDITMEMO_GRID_BASE_GRAND_TOTAL` (`base_grand_total`) USING BTREE,
-  ADD KEY `IDX_SALES_FLAT_CREDITMEMO_GRID_ORDER_ID` (`order_id`) USING BTREE,
-  ADD KEY `IDX_SALES_FLAT_CREDITMEMO_GRID_CREDITMEMO_STATUS` (`creditmemo_status`) USING BTREE,
-  ADD KEY `IDX_SALES_FLAT_CREDITMEMO_GRID_STATE` (`state`) USING BTREE,
-  ADD KEY `IDX_SALES_FLAT_CREDITMEMO_GRID_ORDER_INCREMENT_ID` (`order_increment_id`) USING BTREE,
-  ADD KEY `IDX_SALES_FLAT_CREDITMEMO_GRID_CREATED_AT` (`created_at`) USING BTREE,
-  ADD KEY `IDX_SALES_FLAT_CREDITMEMO_GRID_ORDER_CREATED_AT` (`order_created_at`) USING BTREE,
-  ADD KEY `IDX_SALES_FLAT_CREDITMEMO_GRID_BILLING_NAME` (`billing_name`) USING BTREE;
+  ADD UNIQUE KEY `UNQ_SALES_FLAT_CREDITMEMO_GRID_INCREMENT_ID` (`increment_id`),
+  ADD KEY `IDX_SALES_FLAT_CREDITMEMO_GRID_STORE_ID` (`store_id`),
+  ADD KEY `IDX_SALES_FLAT_CREDITMEMO_GRID_GRAND_TOTAL` (`grand_total`),
+  ADD KEY `IDX_SALES_FLAT_CREDITMEMO_GRID_BASE_GRAND_TOTAL` (`base_grand_total`),
+  ADD KEY `IDX_SALES_FLAT_CREDITMEMO_GRID_ORDER_ID` (`order_id`),
+  ADD KEY `IDX_SALES_FLAT_CREDITMEMO_GRID_CREDITMEMO_STATUS` (`creditmemo_status`),
+  ADD KEY `IDX_SALES_FLAT_CREDITMEMO_GRID_STATE` (`state`),
+  ADD KEY `IDX_SALES_FLAT_CREDITMEMO_GRID_ORDER_INCREMENT_ID` (`order_increment_id`),
+  ADD KEY `IDX_SALES_FLAT_CREDITMEMO_GRID_CREATED_AT` (`created_at`),
+  ADD KEY `IDX_SALES_FLAT_CREDITMEMO_GRID_ORDER_CREATED_AT` (`order_created_at`),
+  ADD KEY `IDX_SALES_FLAT_CREDITMEMO_GRID_BILLING_NAME` (`billing_name`);
 
 --
 -- Indexes for table `sales_flat_creditmemo_item`
 --
 ALTER TABLE `sales_flat_creditmemo_item`
   ADD PRIMARY KEY (`entity_id`),
-  ADD KEY `IDX_SALES_FLAT_CREDITMEMO_ITEM_PARENT_ID` (`parent_id`) USING BTREE;
+  ADD KEY `IDX_SALES_FLAT_CREDITMEMO_ITEM_PARENT_ID` (`parent_id`);
 
 --
 -- Indexes for table `sales_flat_invoice`
 --
 ALTER TABLE `sales_flat_invoice`
   ADD PRIMARY KEY (`entity_id`),
-  ADD UNIQUE KEY `UNQ_SALES_FLAT_INVOICE_INCREMENT_ID` (`increment_id`) USING BTREE,
-  ADD KEY `IDX_SALES_FLAT_INVOICE_STORE_ID` (`store_id`) USING BTREE,
-  ADD KEY `IDX_SALES_FLAT_INVOICE_GRAND_TOTAL` (`grand_total`) USING BTREE,
-  ADD KEY `IDX_SALES_FLAT_INVOICE_ORDER_ID` (`order_id`) USING BTREE,
-  ADD KEY `IDX_SALES_FLAT_INVOICE_STATE` (`state`) USING BTREE,
-  ADD KEY `IDX_SALES_FLAT_INVOICE_CREATED_AT` (`created_at`) USING BTREE;
+  ADD UNIQUE KEY `UNQ_SALES_FLAT_INVOICE_INCREMENT_ID` (`increment_id`),
+  ADD KEY `IDX_SALES_FLAT_INVOICE_STORE_ID` (`store_id`),
+  ADD KEY `IDX_SALES_FLAT_INVOICE_GRAND_TOTAL` (`grand_total`),
+  ADD KEY `IDX_SALES_FLAT_INVOICE_ORDER_ID` (`order_id`),
+  ADD KEY `IDX_SALES_FLAT_INVOICE_STATE` (`state`),
+  ADD KEY `IDX_SALES_FLAT_INVOICE_CREATED_AT` (`created_at`);
 
 --
 -- Indexes for table `sales_flat_invoice_comment`
 --
 ALTER TABLE `sales_flat_invoice_comment`
   ADD PRIMARY KEY (`entity_id`),
-  ADD KEY `IDX_SALES_FLAT_INVOICE_COMMENT_CREATED_AT` (`created_at`) USING BTREE,
-  ADD KEY `IDX_SALES_FLAT_INVOICE_COMMENT_PARENT_ID` (`parent_id`) USING BTREE;
+  ADD KEY `IDX_SALES_FLAT_INVOICE_COMMENT_CREATED_AT` (`created_at`),
+  ADD KEY `IDX_SALES_FLAT_INVOICE_COMMENT_PARENT_ID` (`parent_id`);
 
 --
 -- Indexes for table `sales_flat_invoice_grid`
 --
 ALTER TABLE `sales_flat_invoice_grid`
   ADD PRIMARY KEY (`entity_id`),
-  ADD UNIQUE KEY `UNQ_SALES_FLAT_INVOICE_GRID_INCREMENT_ID` (`increment_id`) USING BTREE,
-  ADD KEY `IDX_SALES_FLAT_INVOICE_GRID_STORE_ID` (`store_id`) USING BTREE,
-  ADD KEY `IDX_SALES_FLAT_INVOICE_GRID_GRAND_TOTAL` (`grand_total`) USING BTREE,
-  ADD KEY `IDX_SALES_FLAT_INVOICE_GRID_ORDER_ID` (`order_id`) USING BTREE,
-  ADD KEY `IDX_SALES_FLAT_INVOICE_GRID_STATE` (`state`) USING BTREE,
-  ADD KEY `IDX_SALES_FLAT_INVOICE_GRID_ORDER_INCREMENT_ID` (`order_increment_id`) USING BTREE,
-  ADD KEY `IDX_SALES_FLAT_INVOICE_GRID_CREATED_AT` (`created_at`) USING BTREE,
-  ADD KEY `IDX_SALES_FLAT_INVOICE_GRID_ORDER_CREATED_AT` (`order_created_at`) USING BTREE,
-  ADD KEY `IDX_SALES_FLAT_INVOICE_GRID_BILLING_NAME` (`billing_name`) USING BTREE;
+  ADD UNIQUE KEY `UNQ_SALES_FLAT_INVOICE_GRID_INCREMENT_ID` (`increment_id`),
+  ADD KEY `IDX_SALES_FLAT_INVOICE_GRID_STORE_ID` (`store_id`),
+  ADD KEY `IDX_SALES_FLAT_INVOICE_GRID_GRAND_TOTAL` (`grand_total`),
+  ADD KEY `IDX_SALES_FLAT_INVOICE_GRID_ORDER_ID` (`order_id`),
+  ADD KEY `IDX_SALES_FLAT_INVOICE_GRID_STATE` (`state`),
+  ADD KEY `IDX_SALES_FLAT_INVOICE_GRID_ORDER_INCREMENT_ID` (`order_increment_id`),
+  ADD KEY `IDX_SALES_FLAT_INVOICE_GRID_CREATED_AT` (`created_at`),
+  ADD KEY `IDX_SALES_FLAT_INVOICE_GRID_ORDER_CREATED_AT` (`order_created_at`),
+  ADD KEY `IDX_SALES_FLAT_INVOICE_GRID_BILLING_NAME` (`billing_name`);
 
 --
 -- Indexes for table `sales_flat_invoice_item`
 --
 ALTER TABLE `sales_flat_invoice_item`
   ADD PRIMARY KEY (`entity_id`),
-  ADD KEY `IDX_SALES_FLAT_INVOICE_ITEM_PARENT_ID` (`parent_id`) USING BTREE;
+  ADD KEY `IDX_SALES_FLAT_INVOICE_ITEM_PARENT_ID` (`parent_id`);
 
 --
 -- Indexes for table `sales_flat_order`
 --
 ALTER TABLE `sales_flat_order`
   ADD PRIMARY KEY (`entity_id`),
-  ADD UNIQUE KEY `UNQ_SALES_FLAT_ORDER_INCREMENT_ID` (`increment_id`) USING BTREE,
-  ADD KEY `IDX_SALES_FLAT_ORDER_STATUS` (`status`) USING BTREE,
-  ADD KEY `IDX_SALES_FLAT_ORDER_STATE` (`state`) USING BTREE,
-  ADD KEY `IDX_SALES_FLAT_ORDER_STORE_ID` (`store_id`) USING BTREE,
-  ADD KEY `IDX_SALES_FLAT_ORDER_CREATED_AT` (`created_at`) USING BTREE,
-  ADD KEY `IDX_SALES_FLAT_ORDER_CUSTOMER_ID` (`customer_id`) USING BTREE,
-  ADD KEY `IDX_SALES_FLAT_ORDER_EXT_ORDER_ID` (`ext_order_id`) USING BTREE,
-  ADD KEY `IDX_SALES_FLAT_ORDER_QUOTE_ID` (`quote_id`) USING BTREE,
-  ADD KEY `IDX_SALES_FLAT_ORDER_UPDATED_AT` (`updated_at`) USING BTREE;
+  ADD UNIQUE KEY `UNQ_SALES_FLAT_ORDER_INCREMENT_ID` (`increment_id`),
+  ADD KEY `IDX_SALES_FLAT_ORDER_STATUS` (`status`),
+  ADD KEY `IDX_SALES_FLAT_ORDER_STATE` (`state`),
+  ADD KEY `IDX_SALES_FLAT_ORDER_STORE_ID` (`store_id`),
+  ADD KEY `IDX_SALES_FLAT_ORDER_CREATED_AT` (`created_at`),
+  ADD KEY `IDX_SALES_FLAT_ORDER_CUSTOMER_ID` (`customer_id`),
+  ADD KEY `IDX_SALES_FLAT_ORDER_EXT_ORDER_ID` (`ext_order_id`),
+  ADD KEY `IDX_SALES_FLAT_ORDER_QUOTE_ID` (`quote_id`),
+  ADD KEY `IDX_SALES_FLAT_ORDER_UPDATED_AT` (`updated_at`);
 
 --
 -- Indexes for table `sales_flat_order_address`
 --
 ALTER TABLE `sales_flat_order_address`
   ADD PRIMARY KEY (`entity_id`),
-  ADD KEY `IDX_SALES_FLAT_ORDER_ADDRESS_PARENT_ID` (`parent_id`) USING BTREE;
+  ADD KEY `IDX_SALES_FLAT_ORDER_ADDRESS_PARENT_ID` (`parent_id`);
 
 --
 -- Indexes for table `sales_flat_order_grid`
 --
 ALTER TABLE `sales_flat_order_grid`
   ADD PRIMARY KEY (`entity_id`),
-  ADD UNIQUE KEY `UNQ_SALES_FLAT_ORDER_GRID_INCREMENT_ID` (`increment_id`) USING BTREE,
-  ADD KEY `IDX_SALES_FLAT_ORDER_GRID_STATUS` (`status`) USING BTREE,
-  ADD KEY `IDX_SALES_FLAT_ORDER_GRID_STORE_ID` (`store_id`) USING BTREE,
-  ADD KEY `IDX_SALES_FLAT_ORDER_GRID_BASE_GRAND_TOTAL` (`base_grand_total`) USING BTREE,
-  ADD KEY `IDX_SALES_FLAT_ORDER_GRID_BASE_TOTAL_PAID` (`base_total_paid`) USING BTREE,
-  ADD KEY `IDX_SALES_FLAT_ORDER_GRID_GRAND_TOTAL` (`grand_total`) USING BTREE,
-  ADD KEY `IDX_SALES_FLAT_ORDER_GRID_TOTAL_PAID` (`total_paid`) USING BTREE,
-  ADD KEY `IDX_SALES_FLAT_ORDER_GRID_SHIPPING_NAME` (`shipping_name`) USING BTREE,
-  ADD KEY `IDX_SALES_FLAT_ORDER_GRID_BILLING_NAME` (`billing_name`) USING BTREE,
-  ADD KEY `IDX_SALES_FLAT_ORDER_GRID_CREATED_AT` (`created_at`) USING BTREE,
-  ADD KEY `IDX_SALES_FLAT_ORDER_GRID_CUSTOMER_ID` (`customer_id`) USING BTREE,
-  ADD KEY `IDX_SALES_FLAT_ORDER_GRID_UPDATED_AT` (`updated_at`) USING BTREE;
+  ADD UNIQUE KEY `UNQ_SALES_FLAT_ORDER_GRID_INCREMENT_ID` (`increment_id`),
+  ADD KEY `IDX_SALES_FLAT_ORDER_GRID_STATUS` (`status`),
+  ADD KEY `IDX_SALES_FLAT_ORDER_GRID_STORE_ID` (`store_id`),
+  ADD KEY `IDX_SALES_FLAT_ORDER_GRID_BASE_GRAND_TOTAL` (`base_grand_total`),
+  ADD KEY `IDX_SALES_FLAT_ORDER_GRID_BASE_TOTAL_PAID` (`base_total_paid`),
+  ADD KEY `IDX_SALES_FLAT_ORDER_GRID_GRAND_TOTAL` (`grand_total`),
+  ADD KEY `IDX_SALES_FLAT_ORDER_GRID_TOTAL_PAID` (`total_paid`),
+  ADD KEY `IDX_SALES_FLAT_ORDER_GRID_SHIPPING_NAME` (`shipping_name`),
+  ADD KEY `IDX_SALES_FLAT_ORDER_GRID_BILLING_NAME` (`billing_name`),
+  ADD KEY `IDX_SALES_FLAT_ORDER_GRID_CREATED_AT` (`created_at`),
+  ADD KEY `IDX_SALES_FLAT_ORDER_GRID_CUSTOMER_ID` (`customer_id`),
+  ADD KEY `IDX_SALES_FLAT_ORDER_GRID_UPDATED_AT` (`updated_at`);
 
 --
 -- Indexes for table `sales_flat_order_item`
 --
 ALTER TABLE `sales_flat_order_item`
   ADD PRIMARY KEY (`item_id`),
-  ADD KEY `IDX_SALES_FLAT_ORDER_ITEM_ORDER_ID` (`order_id`) USING BTREE,
-  ADD KEY `IDX_SALES_FLAT_ORDER_ITEM_STORE_ID` (`store_id`) USING BTREE;
+  ADD KEY `IDX_SALES_FLAT_ORDER_ITEM_ORDER_ID` (`order_id`),
+  ADD KEY `IDX_SALES_FLAT_ORDER_ITEM_STORE_ID` (`store_id`);
 
 --
 -- Indexes for table `sales_flat_order_payment`
 --
 ALTER TABLE `sales_flat_order_payment`
   ADD PRIMARY KEY (`entity_id`),
-  ADD KEY `IDX_SALES_FLAT_ORDER_PAYMENT_PARENT_ID` (`parent_id`) USING BTREE;
+  ADD KEY `IDX_SALES_FLAT_ORDER_PAYMENT_PARENT_ID` (`parent_id`);
 
 --
 -- Indexes for table `sales_flat_order_status_history`
 --
 ALTER TABLE `sales_flat_order_status_history`
   ADD PRIMARY KEY (`entity_id`),
-  ADD KEY `IDX_SALES_FLAT_ORDER_STATUS_HISTORY_PARENT_ID` (`parent_id`) USING BTREE,
-  ADD KEY `IDX_SALES_FLAT_ORDER_STATUS_HISTORY_CREATED_AT` (`created_at`) USING BTREE;
+  ADD KEY `IDX_SALES_FLAT_ORDER_STATUS_HISTORY_PARENT_ID` (`parent_id`),
+  ADD KEY `IDX_SALES_FLAT_ORDER_STATUS_HISTORY_CREATED_AT` (`created_at`);
 
 --
 -- Indexes for table `sales_flat_quote`
 --
 ALTER TABLE `sales_flat_quote`
   ADD PRIMARY KEY (`entity_id`),
-  ADD KEY `IDX_SALES_FLAT_QUOTE_CUSTOMER_ID_STORE_ID_IS_ACTIVE` (`customer_id`,`store_id`,`is_active`) USING BTREE,
-  ADD KEY `IDX_SALES_FLAT_QUOTE_STORE_ID` (`store_id`) USING BTREE;
+  ADD KEY `IDX_SALES_FLAT_QUOTE_CUSTOMER_ID_STORE_ID_IS_ACTIVE` (`customer_id`,`store_id`,`is_active`),
+  ADD KEY `IDX_SALES_FLAT_QUOTE_STORE_ID` (`store_id`);
 
 --
 -- Indexes for table `sales_flat_quote_address`
 --
 ALTER TABLE `sales_flat_quote_address`
   ADD PRIMARY KEY (`address_id`),
-  ADD KEY `IDX_SALES_FLAT_QUOTE_ADDRESS_QUOTE_ID` (`quote_id`) USING BTREE;
+  ADD KEY `IDX_SALES_FLAT_QUOTE_ADDRESS_QUOTE_ID` (`quote_id`);
 
 --
 -- Indexes for table `sales_flat_quote_address_item`
 --
 ALTER TABLE `sales_flat_quote_address_item`
   ADD PRIMARY KEY (`address_item_id`),
-  ADD KEY `IDX_PARENT_ITEM_ID` (`parent_item_id`) USING BTREE,
-  ADD KEY `IDX_SALES_FLAT_QUOTE_ADDRESS_ITEM_QUOTE_ADDRESS_ID` (`quote_address_id`) USING BTREE,
-  ADD KEY `IDX_SALES_FLAT_QUOTE_ADDRESS_ITEM_PARENT_ITEM_ID` (`parent_item_id`) USING BTREE,
-  ADD KEY `IDX_SALES_FLAT_QUOTE_ADDRESS_ITEM_QUOTE_ITEM_ID` (`quote_item_id`) USING BTREE;
+  ADD KEY `IDX_SALES_FLAT_QUOTE_ADDRESS_ITEM_QUOTE_ADDRESS_ID` (`quote_address_id`),
+  ADD KEY `IDX_SALES_FLAT_QUOTE_ADDRESS_ITEM_PARENT_ITEM_ID` (`parent_item_id`),
+  ADD KEY `IDX_SALES_FLAT_QUOTE_ADDRESS_ITEM_QUOTE_ITEM_ID` (`quote_item_id`);
 
 --
 -- Indexes for table `sales_flat_quote_item`
 --
 ALTER TABLE `sales_flat_quote_item`
   ADD PRIMARY KEY (`item_id`),
-  ADD KEY `IDX_SALES_FLAT_QUOTE_ITEM_PARENT_ITEM_ID` (`parent_item_id`) USING BTREE,
-  ADD KEY `IDX_SALES_FLAT_QUOTE_ITEM_PRODUCT_ID` (`product_id`) USING BTREE,
-  ADD KEY `IDX_SALES_FLAT_QUOTE_ITEM_QUOTE_ID` (`quote_id`) USING BTREE,
-  ADD KEY `IDX_SALES_FLAT_QUOTE_ITEM_STORE_ID` (`store_id`) USING BTREE;
+  ADD KEY `IDX_SALES_FLAT_QUOTE_ITEM_PARENT_ITEM_ID` (`parent_item_id`),
+  ADD KEY `IDX_SALES_FLAT_QUOTE_ITEM_PRODUCT_ID` (`product_id`),
+  ADD KEY `IDX_SALES_FLAT_QUOTE_ITEM_QUOTE_ID` (`quote_id`),
+  ADD KEY `IDX_SALES_FLAT_QUOTE_ITEM_STORE_ID` (`store_id`);
 
 --
 -- Indexes for table `sales_flat_quote_item_option`
 --
 ALTER TABLE `sales_flat_quote_item_option`
   ADD PRIMARY KEY (`option_id`),
-  ADD KEY `IDX_SALES_FLAT_QUOTE_ITEM_OPTION_ITEM_ID` (`item_id`) USING BTREE;
+  ADD KEY `IDX_SALES_FLAT_QUOTE_ITEM_OPTION_ITEM_ID` (`item_id`);
 
 --
 -- Indexes for table `sales_flat_quote_payment`
 --
 ALTER TABLE `sales_flat_quote_payment`
   ADD PRIMARY KEY (`payment_id`),
-  ADD KEY `IDX_SALES_FLAT_QUOTE_PAYMENT_QUOTE_ID` (`quote_id`) USING BTREE;
+  ADD KEY `IDX_SALES_FLAT_QUOTE_PAYMENT_QUOTE_ID` (`quote_id`);
 
 --
 -- Indexes for table `sales_flat_quote_shipping_rate`
 --
 ALTER TABLE `sales_flat_quote_shipping_rate`
   ADD PRIMARY KEY (`rate_id`),
-  ADD KEY `IDX_SALES_FLAT_QUOTE_SHIPPING_RATE_ADDRESS_ID` (`address_id`) USING BTREE;
+  ADD KEY `IDX_SALES_FLAT_QUOTE_SHIPPING_RATE_ADDRESS_ID` (`address_id`);
 
 --
 -- Indexes for table `sales_flat_shipment`
 --
 ALTER TABLE `sales_flat_shipment`
   ADD PRIMARY KEY (`entity_id`),
-  ADD UNIQUE KEY `UNQ_SALES_FLAT_SHIPMENT_INCREMENT_ID` (`increment_id`) USING BTREE,
-  ADD KEY `IDX_SALES_FLAT_SHIPMENT_STORE_ID` (`store_id`) USING BTREE,
-  ADD KEY `IDX_SALES_FLAT_SHIPMENT_TOTAL_QTY` (`total_qty`) USING BTREE,
-  ADD KEY `IDX_SALES_FLAT_SHIPMENT_ORDER_ID` (`order_id`) USING BTREE,
-  ADD KEY `IDX_SALES_FLAT_SHIPMENT_CREATED_AT` (`created_at`) USING BTREE,
-  ADD KEY `IDX_SALES_FLAT_SHIPMENT_UPDATED_AT` (`updated_at`) USING BTREE;
+  ADD UNIQUE KEY `UNQ_SALES_FLAT_SHIPMENT_INCREMENT_ID` (`increment_id`),
+  ADD KEY `IDX_SALES_FLAT_SHIPMENT_STORE_ID` (`store_id`),
+  ADD KEY `IDX_SALES_FLAT_SHIPMENT_TOTAL_QTY` (`total_qty`),
+  ADD KEY `IDX_SALES_FLAT_SHIPMENT_ORDER_ID` (`order_id`),
+  ADD KEY `IDX_SALES_FLAT_SHIPMENT_CREATED_AT` (`created_at`),
+  ADD KEY `IDX_SALES_FLAT_SHIPMENT_UPDATED_AT` (`updated_at`);
 
 --
 -- Indexes for table `sales_flat_shipment_comment`
 --
 ALTER TABLE `sales_flat_shipment_comment`
   ADD PRIMARY KEY (`entity_id`),
-  ADD KEY `IDX_SALES_FLAT_SHIPMENT_COMMENT_CREATED_AT` (`created_at`) USING BTREE,
-  ADD KEY `IDX_SALES_FLAT_SHIPMENT_COMMENT_PARENT_ID` (`parent_id`) USING BTREE;
+  ADD KEY `IDX_SALES_FLAT_SHIPMENT_COMMENT_CREATED_AT` (`created_at`),
+  ADD KEY `IDX_SALES_FLAT_SHIPMENT_COMMENT_PARENT_ID` (`parent_id`);
 
 --
 -- Indexes for table `sales_flat_shipment_grid`
 --
 ALTER TABLE `sales_flat_shipment_grid`
   ADD PRIMARY KEY (`entity_id`),
-  ADD UNIQUE KEY `UNQ_SALES_FLAT_SHIPMENT_GRID_INCREMENT_ID` (`increment_id`) USING BTREE,
-  ADD KEY `IDX_SALES_FLAT_SHIPMENT_GRID_STORE_ID` (`store_id`) USING BTREE,
-  ADD KEY `IDX_SALES_FLAT_SHIPMENT_GRID_TOTAL_QTY` (`total_qty`) USING BTREE,
-  ADD KEY `IDX_SALES_FLAT_SHIPMENT_GRID_ORDER_ID` (`order_id`) USING BTREE,
-  ADD KEY `IDX_SALES_FLAT_SHIPMENT_GRID_SHIPMENT_STATUS` (`shipment_status`) USING BTREE,
-  ADD KEY `IDX_SALES_FLAT_SHIPMENT_GRID_ORDER_INCREMENT_ID` (`order_increment_id`) USING BTREE,
-  ADD KEY `IDX_SALES_FLAT_SHIPMENT_GRID_CREATED_AT` (`created_at`) USING BTREE,
-  ADD KEY `IDX_SALES_FLAT_SHIPMENT_GRID_ORDER_CREATED_AT` (`order_created_at`) USING BTREE,
-  ADD KEY `IDX_SALES_FLAT_SHIPMENT_GRID_SHIPPING_NAME` (`shipping_name`) USING BTREE;
+  ADD UNIQUE KEY `UNQ_SALES_FLAT_SHIPMENT_GRID_INCREMENT_ID` (`increment_id`),
+  ADD KEY `IDX_SALES_FLAT_SHIPMENT_GRID_STORE_ID` (`store_id`),
+  ADD KEY `IDX_SALES_FLAT_SHIPMENT_GRID_TOTAL_QTY` (`total_qty`),
+  ADD KEY `IDX_SALES_FLAT_SHIPMENT_GRID_ORDER_ID` (`order_id`),
+  ADD KEY `IDX_SALES_FLAT_SHIPMENT_GRID_SHIPMENT_STATUS` (`shipment_status`),
+  ADD KEY `IDX_SALES_FLAT_SHIPMENT_GRID_ORDER_INCREMENT_ID` (`order_increment_id`),
+  ADD KEY `IDX_SALES_FLAT_SHIPMENT_GRID_CREATED_AT` (`created_at`),
+  ADD KEY `IDX_SALES_FLAT_SHIPMENT_GRID_ORDER_CREATED_AT` (`order_created_at`),
+  ADD KEY `IDX_SALES_FLAT_SHIPMENT_GRID_SHIPPING_NAME` (`shipping_name`);
 
 --
 -- Indexes for table `sales_flat_shipment_item`
 --
 ALTER TABLE `sales_flat_shipment_item`
   ADD PRIMARY KEY (`entity_id`),
-  ADD KEY `IDX_SALES_FLAT_SHIPMENT_ITEM_PARENT_ID` (`parent_id`) USING BTREE;
+  ADD KEY `IDX_SALES_FLAT_SHIPMENT_ITEM_PARENT_ID` (`parent_id`);
 
 --
 -- Indexes for table `sales_flat_shipment_track`
 --
 ALTER TABLE `sales_flat_shipment_track`
   ADD PRIMARY KEY (`entity_id`),
-  ADD KEY `IDX_SALES_FLAT_SHIPMENT_TRACK_PARENT_ID` (`parent_id`) USING BTREE,
-  ADD KEY `IDX_SALES_FLAT_SHIPMENT_TRACK_ORDER_ID` (`order_id`) USING BTREE,
-  ADD KEY `IDX_SALES_FLAT_SHIPMENT_TRACK_CREATED_AT` (`created_at`) USING BTREE;
+  ADD KEY `IDX_SALES_FLAT_SHIPMENT_TRACK_PARENT_ID` (`parent_id`),
+  ADD KEY `IDX_SALES_FLAT_SHIPMENT_TRACK_ORDER_ID` (`order_id`),
+  ADD KEY `IDX_SALES_FLAT_SHIPMENT_TRACK_CREATED_AT` (`created_at`);
 
 --
 -- Indexes for table `sales_invoiced_aggregated`
 --
 ALTER TABLE `sales_invoiced_aggregated`
   ADD PRIMARY KEY (`id`),
-  ADD UNIQUE KEY `UNQ_SALES_INVOICED_AGGREGATED_PERIOD_STORE_ID_ORDER_STATUS` (`period`,`store_id`,`order_status`) USING BTREE,
-  ADD KEY `IDX_SALES_INVOICED_AGGREGATED_STORE_ID` (`store_id`) USING BTREE;
+  ADD UNIQUE KEY `UNQ_SALES_INVOICED_AGGREGATED_PERIOD_STORE_ID_ORDER_STATUS` (`period`,`store_id`,`order_status`),
+  ADD KEY `IDX_SALES_INVOICED_AGGREGATED_STORE_ID` (`store_id`);
 
 --
 -- Indexes for table `sales_invoiced_aggregated_order`
 --
 ALTER TABLE `sales_invoiced_aggregated_order`
   ADD PRIMARY KEY (`id`),
-  ADD UNIQUE KEY `UNQ_SALES_INVOICED_AGGREGATED_ORDER_PERIOD_STORE_ID_ORDER_STATUS` (`period`,`store_id`,`order_status`) USING BTREE,
-  ADD KEY `IDX_SALES_INVOICED_AGGREGATED_ORDER_STORE_ID` (`store_id`) USING BTREE;
+  ADD UNIQUE KEY `UNQ_SALES_INVOICED_AGGREGATED_ORDER_PERIOD_STORE_ID_ORDER_STATUS` (`period`,`store_id`,`order_status`),
+  ADD KEY `IDX_SALES_INVOICED_AGGREGATED_ORDER_STORE_ID` (`store_id`);
 
 --
 -- Indexes for table `sales_order_aggregated_created`
 --
 ALTER TABLE `sales_order_aggregated_created`
   ADD PRIMARY KEY (`id`),
-  ADD UNIQUE KEY `UNQ_SALES_ORDER_AGGREGATED_CREATED_PERIOD_STORE_ID_ORDER_STATUS` (`period`,`store_id`,`order_status`) USING BTREE,
-  ADD KEY `IDX_SALES_ORDER_AGGREGATED_CREATED_STORE_ID` (`store_id`) USING BTREE;
+  ADD UNIQUE KEY `UNQ_SALES_ORDER_AGGREGATED_CREATED_PERIOD_STORE_ID_ORDER_STATUS` (`period`,`store_id`,`order_status`),
+  ADD KEY `IDX_SALES_ORDER_AGGREGATED_CREATED_STORE_ID` (`store_id`);
 
 --
 -- Indexes for table `sales_order_aggregated_updated`
 --
 ALTER TABLE `sales_order_aggregated_updated`
   ADD PRIMARY KEY (`id`),
-  ADD UNIQUE KEY `UNQ_SALES_ORDER_AGGREGATED_UPDATED_PERIOD_STORE_ID_ORDER_STATUS` (`period`,`store_id`,`order_status`) USING BTREE,
-  ADD KEY `IDX_SALES_ORDER_AGGREGATED_UPDATED_STORE_ID` (`store_id`) USING BTREE;
+  ADD UNIQUE KEY `UNQ_SALES_ORDER_AGGREGATED_UPDATED_PERIOD_STORE_ID_ORDER_STATUS` (`period`,`store_id`,`order_status`),
+  ADD KEY `IDX_SALES_ORDER_AGGREGATED_UPDATED_STORE_ID` (`store_id`);
 
 --
 -- Indexes for table `sales_order_status`
@@ -9654,7 +8754,7 @@ ALTER TABLE `sales_order_status`
 --
 ALTER TABLE `sales_order_status_label`
   ADD PRIMARY KEY (`status`,`store_id`),
-  ADD KEY `IDX_SALES_ORDER_STATUS_LABEL_STORE_ID` (`store_id`) USING BTREE;
+  ADD KEY `IDX_SALES_ORDER_STATUS_LABEL_STORE_ID` (`store_id`);
 
 --
 -- Indexes for table `sales_order_status_state`
@@ -9667,175 +8767,168 @@ ALTER TABLE `sales_order_status_state`
 --
 ALTER TABLE `sales_order_tax`
   ADD PRIMARY KEY (`tax_id`),
-  ADD KEY `IDX_SALES_ORDER_TAX_ORDER_ID_PRIORITY_POSITION` (`order_id`,`priority`,`position`) USING BTREE;
+  ADD KEY `IDX_SALES_ORDER_TAX_ORDER_ID_PRIORITY_POSITION` (`order_id`,`priority`,`position`);
 
 --
 -- Indexes for table `sales_order_tax_item`
 --
 ALTER TABLE `sales_order_tax_item`
   ADD PRIMARY KEY (`tax_item_id`),
-  ADD UNIQUE KEY `UNQ_SALES_ORDER_TAX_ITEM_TAX_ID_ITEM_ID` (`tax_id`,`item_id`) USING BTREE,
-  ADD KEY `IDX_SALES_ORDER_TAX_ITEM_TAX_ID` (`tax_id`) USING BTREE,
-  ADD KEY `IDX_SALES_ORDER_TAX_ITEM_ITEM_ID` (`item_id`) USING BTREE;
+  ADD UNIQUE KEY `UNQ_SALES_ORDER_TAX_ITEM_TAX_ID_ITEM_ID` (`tax_id`,`item_id`),
+  ADD KEY `IDX_SALES_ORDER_TAX_ITEM_TAX_ID` (`tax_id`),
+  ADD KEY `IDX_SALES_ORDER_TAX_ITEM_ITEM_ID` (`item_id`);
 
 --
 -- Indexes for table `sales_payment_transaction`
 --
 ALTER TABLE `sales_payment_transaction`
   ADD PRIMARY KEY (`transaction_id`),
-  ADD UNIQUE KEY `UNQ_SALES_PAYMENT_TRANSACTION_ORDER_ID_PAYMENT_ID_TXN_ID` (`order_id`,`payment_id`,`txn_id`) USING BTREE,
-  ADD KEY `IDX_SALES_PAYMENT_TRANSACTION_ORDER_ID` (`order_id`) USING BTREE,
-  ADD KEY `IDX_SALES_PAYMENT_TRANSACTION_PARENT_ID` (`parent_id`) USING BTREE,
-  ADD KEY `IDX_SALES_PAYMENT_TRANSACTION_PAYMENT_ID` (`payment_id`) USING BTREE;
+  ADD UNIQUE KEY `UNQ_SALES_PAYMENT_TRANSACTION_ORDER_ID_PAYMENT_ID_TXN_ID` (`order_id`,`payment_id`,`txn_id`),
+  ADD KEY `IDX_SALES_PAYMENT_TRANSACTION_ORDER_ID` (`order_id`),
+  ADD KEY `IDX_SALES_PAYMENT_TRANSACTION_PARENT_ID` (`parent_id`),
+  ADD KEY `IDX_SALES_PAYMENT_TRANSACTION_PAYMENT_ID` (`payment_id`);
 
 --
 -- Indexes for table `sales_recurring_profile`
 --
 ALTER TABLE `sales_recurring_profile`
   ADD PRIMARY KEY (`profile_id`),
-  ADD UNIQUE KEY `UNQ_SALES_RECURRING_PROFILE_INTERNAL_REFERENCE_ID` (`internal_reference_id`) USING BTREE,
-  ADD KEY `IDX_SALES_RECURRING_PROFILE_CUSTOMER_ID` (`customer_id`) USING BTREE,
-  ADD KEY `IDX_SALES_RECURRING_PROFILE_STORE_ID` (`store_id`) USING BTREE;
+  ADD UNIQUE KEY `UNQ_SALES_RECURRING_PROFILE_INTERNAL_REFERENCE_ID` (`internal_reference_id`),
+  ADD KEY `IDX_SALES_RECURRING_PROFILE_CUSTOMER_ID` (`customer_id`),
+  ADD KEY `IDX_SALES_RECURRING_PROFILE_STORE_ID` (`store_id`);
 
 --
 -- Indexes for table `sales_recurring_profile_order`
 --
 ALTER TABLE `sales_recurring_profile_order`
   ADD PRIMARY KEY (`link_id`),
-  ADD UNIQUE KEY `UNQ_SALES_RECURRING_PROFILE_ORDER_PROFILE_ID_ORDER_ID` (`profile_id`,`order_id`) USING BTREE,
-  ADD KEY `IDX_SALES_RECURRING_PROFILE_ORDER_ORDER_ID` (`order_id`) USING BTREE;
+  ADD UNIQUE KEY `UNQ_SALES_RECURRING_PROFILE_ORDER_PROFILE_ID_ORDER_ID` (`profile_id`,`order_id`),
+  ADD KEY `IDX_SALES_RECURRING_PROFILE_ORDER_ORDER_ID` (`order_id`);
 
 --
 -- Indexes for table `sales_refunded_aggregated`
 --
 ALTER TABLE `sales_refunded_aggregated`
   ADD PRIMARY KEY (`id`),
-  ADD UNIQUE KEY `UNQ_SALES_REFUNDED_AGGREGATED_PERIOD_STORE_ID_ORDER_STATUS` (`period`,`store_id`,`order_status`) USING BTREE,
-  ADD KEY `IDX_SALES_REFUNDED_AGGREGATED_STORE_ID` (`store_id`) USING BTREE;
+  ADD UNIQUE KEY `UNQ_SALES_REFUNDED_AGGREGATED_PERIOD_STORE_ID_ORDER_STATUS` (`period`,`store_id`,`order_status`),
+  ADD KEY `IDX_SALES_REFUNDED_AGGREGATED_STORE_ID` (`store_id`);
 
 --
 -- Indexes for table `sales_refunded_aggregated_order`
 --
 ALTER TABLE `sales_refunded_aggregated_order`
   ADD PRIMARY KEY (`id`),
-  ADD UNIQUE KEY `UNQ_SALES_REFUNDED_AGGREGATED_ORDER_PERIOD_STORE_ID_ORDER_STATUS` (`period`,`store_id`,`order_status`) USING BTREE,
-  ADD KEY `IDX_SALES_REFUNDED_AGGREGATED_ORDER_STORE_ID` (`store_id`) USING BTREE;
+  ADD UNIQUE KEY `UNQ_SALES_REFUNDED_AGGREGATED_ORDER_PERIOD_STORE_ID_ORDER_STATUS` (`period`,`store_id`,`order_status`),
+  ADD KEY `IDX_SALES_REFUNDED_AGGREGATED_ORDER_STORE_ID` (`store_id`);
 
 --
 -- Indexes for table `sales_shipping_aggregated`
 --
 ALTER TABLE `sales_shipping_aggregated`
   ADD PRIMARY KEY (`id`),
-  ADD UNIQUE KEY `UNQ_SALES_SHPP_AGGRED_PERIOD_STORE_ID_ORDER_STS_SHPP_DESCRIPTION` (`period`,`store_id`,`order_status`,`shipping_description`) USING BTREE,
-  ADD KEY `IDX_SALES_SHIPPING_AGGREGATED_STORE_ID` (`store_id`) USING BTREE;
+  ADD UNIQUE KEY `UNQ_SALES_SHPP_AGGRED_PERIOD_STORE_ID_ORDER_STS_SHPP_DESCRIPTION` (`period`,`store_id`,`order_status`,`shipping_description`),
+  ADD KEY `IDX_SALES_SHIPPING_AGGREGATED_STORE_ID` (`store_id`);
 
 --
 -- Indexes for table `sales_shipping_aggregated_order`
 --
 ALTER TABLE `sales_shipping_aggregated_order`
   ADD PRIMARY KEY (`id`),
-  ADD UNIQUE KEY `C05FAE47282EEA68654D0924E946761F` (`period`,`store_id`,`order_status`,`shipping_description`) USING BTREE,
-  ADD KEY `IDX_SALES_SHIPPING_AGGREGATED_ORDER_STORE_ID` (`store_id`) USING BTREE;
+  ADD UNIQUE KEY `C05FAE47282EEA68654D0924E946761F` (`period`,`store_id`,`order_status`,`shipping_description`),
+  ADD KEY `IDX_SALES_SHIPPING_AGGREGATED_ORDER_STORE_ID` (`store_id`);
 
 --
 -- Indexes for table `sendfriend_log`
 --
 ALTER TABLE `sendfriend_log`
   ADD PRIMARY KEY (`log_id`),
-  ADD KEY `IDX_SENDFRIEND_LOG_IP` (`ip`) USING BTREE,
-  ADD KEY `IDX_SENDFRIEND_LOG_TIME` (`time`) USING BTREE;
+  ADD KEY `IDX_SENDFRIEND_LOG_IP` (`ip`),
+  ADD KEY `IDX_SENDFRIEND_LOG_TIME` (`time`);
 
 --
 -- Indexes for table `shipping_tablerate`
 --
 ALTER TABLE `shipping_tablerate`
   ADD PRIMARY KEY (`pk`),
-  ADD UNIQUE KEY `08FDB8CA90331E558947040377722574` (`website_id`,`dest_country_id`,`dest_region_id`,`dest_zip`,`condition_name`,`condition_value`) USING BTREE;
+  ADD UNIQUE KEY `D60821CDB2AFACEE1566CFC02D0D4CAA` (`website_id`,`dest_country_id`,`dest_region_id`,`dest_zip`,`condition_name`,`condition_value`);
 
 --
 -- Indexes for table `sitemap`
 --
 ALTER TABLE `sitemap`
   ADD PRIMARY KEY (`sitemap_id`),
-  ADD KEY `IDX_SITEMAP_STORE_ID` (`store_id`) USING BTREE;
-
---
--- Indexes for table `smtppro_email_log`
---
-ALTER TABLE `smtppro_email_log`
-  ADD PRIMARY KEY (`email_id`),
-  ADD KEY `log_at` (`log_at`);
+  ADD KEY `IDX_SITEMAP_STORE_ID` (`store_id`);
 
 --
 -- Indexes for table `tag`
 --
 ALTER TABLE `tag`
-  ADD PRIMARY KEY (`tag_id`),
-  ADD KEY `FK_TAG_FIRST_CUSTOMER_ID_CUSTOMER_ENTITY_ENTITY_ID` (`first_customer_id`) USING BTREE,
-  ADD KEY `FK_TAG_FIRST_STORE_ID_CORE_STORE_STORE_ID` (`first_store_id`) USING BTREE;
+  ADD PRIMARY KEY (`tag_id`) USING BTREE,
+  ADD KEY `FK_TAG_FIRST_CUSTOMER_ID_CUSTOMER_ENTITY_ENTITY_ID` (`first_customer_id`),
+  ADD KEY `FK_TAG_FIRST_STORE_ID_CORE_STORE_STORE_ID` (`first_store_id`);
 
 --
 -- Indexes for table `tag_properties`
 --
 ALTER TABLE `tag_properties`
   ADD PRIMARY KEY (`tag_id`,`store_id`),
-  ADD KEY `IDX_TAG_PROPERTIES_STORE_ID` (`store_id`) USING BTREE;
+  ADD KEY `IDX_TAG_PROPERTIES_STORE_ID` (`store_id`);
 
 --
 -- Indexes for table `tag_relation`
 --
 ALTER TABLE `tag_relation`
-  ADD PRIMARY KEY (`tag_relation_id`),
-  ADD UNIQUE KEY `UNQ_TAG_RELATION_TAG_ID_CUSTOMER_ID_PRODUCT_ID_STORE_ID` (`tag_id`,`customer_id`,`product_id`,`store_id`) USING BTREE,
-  ADD KEY `IDX_TAG_RELATION_PRODUCT_ID` (`product_id`) USING BTREE,
-  ADD KEY `IDX_TAG_RELATION_TAG_ID` (`tag_id`) USING BTREE,
-  ADD KEY `IDX_TAG_RELATION_CUSTOMER_ID` (`customer_id`) USING BTREE,
-  ADD KEY `IDX_TAG_RELATION_STORE_ID` (`store_id`) USING BTREE;
+  ADD PRIMARY KEY (`tag_relation_id`) USING BTREE,
+  ADD UNIQUE KEY `UNQ_TAG_RELATION_TAG_ID_CUSTOMER_ID_PRODUCT_ID_STORE_ID` (`tag_id`,`customer_id`,`product_id`,`store_id`),
+  ADD KEY `IDX_TAG_RELATION_PRODUCT_ID` (`product_id`),
+  ADD KEY `IDX_TAG_RELATION_TAG_ID` (`tag_id`),
+  ADD KEY `IDX_TAG_RELATION_CUSTOMER_ID` (`customer_id`),
+  ADD KEY `IDX_TAG_RELATION_STORE_ID` (`store_id`);
 
 --
 -- Indexes for table `tag_summary`
 --
 ALTER TABLE `tag_summary`
   ADD PRIMARY KEY (`tag_id`,`store_id`),
-  ADD KEY `IDX_TAG_SUMMARY_STORE_ID` (`store_id`) USING BTREE,
-  ADD KEY `IDX_TAG_SUMMARY_TAG_ID` (`tag_id`) USING BTREE;
+  ADD KEY `IDX_TAG_SUMMARY_STORE_ID` (`store_id`),
+  ADD KEY `IDX_TAG_SUMMARY_TAG_ID` (`tag_id`);
 
 --
 -- Indexes for table `tax_calculation`
 --
 ALTER TABLE `tax_calculation`
   ADD PRIMARY KEY (`tax_calculation_id`),
-  ADD KEY `IDX_TAX_CALCULATION_TAX_CALCULATION_RULE_ID` (`tax_calculation_rule_id`) USING BTREE,
-  ADD KEY `IDX_TAX_CALCULATION_TAX_CALCULATION_RATE_ID` (`tax_calculation_rate_id`) USING BTREE,
-  ADD KEY `IDX_TAX_CALCULATION_CUSTOMER_TAX_CLASS_ID` (`customer_tax_class_id`) USING BTREE,
-  ADD KEY `IDX_TAX_CALCULATION_PRODUCT_TAX_CLASS_ID` (`product_tax_class_id`) USING BTREE,
-  ADD KEY `BCF93A94DF49F4A77DAD57ED4B084D01` (`tax_calculation_rate_id`,`customer_tax_class_id`,`product_tax_class_id`) USING BTREE;
+  ADD KEY `IDX_TAX_CALCULATION_TAX_CALCULATION_RULE_ID` (`tax_calculation_rule_id`),
+  ADD KEY `IDX_TAX_CALCULATION_TAX_CALCULATION_RATE_ID` (`tax_calculation_rate_id`),
+  ADD KEY `IDX_TAX_CALCULATION_CUSTOMER_TAX_CLASS_ID` (`customer_tax_class_id`),
+  ADD KEY `IDX_TAX_CALCULATION_PRODUCT_TAX_CLASS_ID` (`product_tax_class_id`),
+  ADD KEY `IDX_TAX_CALC_TAX_CALC_RATE_ID_CSTR_TAX_CLASS_ID_PRD_TAX_CLASS_ID` (`tax_calculation_rate_id`,`customer_tax_class_id`,`product_tax_class_id`);
 
 --
 -- Indexes for table `tax_calculation_rate`
 --
 ALTER TABLE `tax_calculation_rate`
   ADD PRIMARY KEY (`tax_calculation_rate_id`),
-  ADD KEY `IDX_TAX_CALC_RATE_TAX_COUNTRY_ID_TAX_REGION_ID_TAX_POSTCODE` (`tax_country_id`,`tax_region_id`,`tax_postcode`) USING BTREE,
-  ADD KEY `IDX_TAX_CALCULATION_RATE_CODE` (`code`) USING BTREE,
-  ADD KEY `EC78E1FC53494F8BB696C98C5A358086` (`tax_calculation_rate_id`,`tax_country_id`,`tax_region_id`,`zip_is_range`,`tax_postcode`) USING BTREE;
+  ADD KEY `IDX_TAX_CALC_RATE_TAX_COUNTRY_ID_TAX_REGION_ID_TAX_POSTCODE` (`tax_country_id`,`tax_region_id`,`tax_postcode`),
+  ADD KEY `IDX_TAX_CALCULATION_RATE_CODE` (`code`),
+  ADD KEY `CA799F1E2CB843495F601E56C84A626D` (`tax_calculation_rate_id`,`tax_country_id`,`tax_region_id`,`zip_is_range`,`tax_postcode`);
 
 --
 -- Indexes for table `tax_calculation_rate_title`
 --
 ALTER TABLE `tax_calculation_rate_title`
   ADD PRIMARY KEY (`tax_calculation_rate_title_id`),
-  ADD KEY `IDX_TAX_CALC_RATE_TTL_TAX_CALC_RATE_ID_STORE_ID` (`tax_calculation_rate_id`,`store_id`) USING BTREE,
-  ADD KEY `IDX_TAX_CALCULATION_RATE_TITLE_TAX_CALCULATION_RATE_ID` (`tax_calculation_rate_id`) USING BTREE,
-  ADD KEY `IDX_TAX_CALCULATION_RATE_TITLE_STORE_ID` (`store_id`) USING BTREE;
+  ADD KEY `IDX_TAX_CALCULATION_RATE_TITLE_TAX_CALCULATION_RATE_ID_STORE_ID` (`tax_calculation_rate_id`,`store_id`),
+  ADD KEY `IDX_TAX_CALCULATION_RATE_TITLE_TAX_CALCULATION_RATE_ID` (`tax_calculation_rate_id`),
+  ADD KEY `IDX_TAX_CALCULATION_RATE_TITLE_STORE_ID` (`store_id`);
 
 --
 -- Indexes for table `tax_calculation_rule`
 --
 ALTER TABLE `tax_calculation_rule`
   ADD PRIMARY KEY (`tax_calculation_rule_id`),
-  ADD KEY `IDX_TAX_CALC_RULE_PRIORITY_POSITION_TAX_CALC_RULE_ID` (`priority`,`position`,`tax_calculation_rule_id`) USING BTREE,
-  ADD KEY `IDX_TAX_CALCULATION_RULE_CODE` (`code`) USING BTREE;
+  ADD KEY `IDX_TAX_CALC_RULE_PRIORITY_POSITION_TAX_CALC_RULE_ID` (`priority`,`position`,`tax_calculation_rule_id`),
+  ADD KEY `IDX_TAX_CALCULATION_RULE_CODE` (`code`);
 
 --
 -- Indexes for table `tax_class`
@@ -9848,90 +8941,41 @@ ALTER TABLE `tax_class`
 --
 ALTER TABLE `tax_order_aggregated_created`
   ADD PRIMARY KEY (`id`),
-  ADD UNIQUE KEY `BD563163601E4CC891B2F44244316FE1` (`period`,`store_id`,`code`,`percent`,`order_status`) USING BTREE,
-  ADD KEY `IDX_TAX_ORDER_AGGREGATED_CREATED_STORE_ID` (`store_id`) USING BTREE;
+  ADD UNIQUE KEY `FCA5E2C02689EB2641B30580D7AACF12` (`period`,`store_id`,`code`,`percent`,`order_status`),
+  ADD KEY `IDX_TAX_ORDER_AGGREGATED_CREATED_STORE_ID` (`store_id`);
 
 --
 -- Indexes for table `tax_order_aggregated_updated`
 --
 ALTER TABLE `tax_order_aggregated_updated`
   ADD PRIMARY KEY (`id`),
-  ADD UNIQUE KEY `D7D7F4424CB88F84D6DD3023E5A7D32F` (`period`,`store_id`,`code`,`percent`,`order_status`) USING BTREE,
-  ADD KEY `IDX_TAX_ORDER_AGGREGATED_UPDATED_STORE_ID` (`store_id`) USING BTREE;
-
---
--- Indexes for table `tmp_customer_log`
---
-ALTER TABLE `tmp_customer_log`
-  ADD PRIMARY KEY (`id`),
-  ADD KEY `module_name` (`customer_id`);
-
---
--- Indexes for table `tmp_price`
---
-ALTER TABLE `tmp_price`
-  ADD PRIMARY KEY (`sku`);
-
---
--- Indexes for table `ueb_newfrog_lover`
---
-ALTER TABLE `ueb_newfrog_lover`
-  ADD PRIMARY KEY (`id`);
-
---
--- Indexes for table `ueb_newfrog_lover_click`
---
-ALTER TABLE `ueb_newfrog_lover_click`
-  ADD PRIMARY KEY (`id`);
-
---
--- Indexes for table `ueb_newfrog_lover_remark`
---
-ALTER TABLE `ueb_newfrog_lover_remark`
-  ADD PRIMARY KEY (`id`);
-
---
--- Indexes for table `vakind_search_categories`
---
-ALTER TABLE `vakind_search_categories`
-  ADD PRIMARY KEY (`cat_position`);
-
---
--- Indexes for table `vakind_search_items`
---
-ALTER TABLE `vakind_search_items`
-  ADD PRIMARY KEY (`pk_id`);
-
---
--- Indexes for table `vakind_temporary_hot_result`
---
-ALTER TABLE `vakind_temporary_hot_result`
-  ADD PRIMARY KEY (`id`);
+  ADD UNIQUE KEY `DB0AF14011199AA6CD31D5078B90AA8D` (`period`,`store_id`,`code`,`percent`,`order_status`),
+  ADD KEY `IDX_TAX_ORDER_AGGREGATED_UPDATED_STORE_ID` (`store_id`);
 
 --
 -- Indexes for table `weee_discount`
 --
 ALTER TABLE `weee_discount`
-  ADD KEY `IDX_UEB_WEEE_DISCOUNT_WEBSITE_ID` (`website_id`) USING BTREE,
-  ADD KEY `IDX_UEB_WEEE_DISCOUNT_ENTITY_ID` (`entity_id`) USING BTREE,
-  ADD KEY `IDX_UEB_WEEE_DISCOUNT_CUSTOMER_GROUP_ID` (`customer_group_id`) USING BTREE;
+  ADD KEY `IDX_WEEE_DISCOUNT_WEBSITE_ID` (`website_id`),
+  ADD KEY `IDX_WEEE_DISCOUNT_ENTITY_ID` (`entity_id`),
+  ADD KEY `IDX_WEEE_DISCOUNT_CUSTOMER_GROUP_ID` (`customer_group_id`);
 
 --
 -- Indexes for table `weee_tax`
 --
 ALTER TABLE `weee_tax`
   ADD PRIMARY KEY (`value_id`),
-  ADD KEY `IDX_UEB_WEEE_TAX_WEBSITE_ID` (`website_id`) USING BTREE,
-  ADD KEY `IDX_UEB_WEEE_TAX_ENTITY_ID` (`entity_id`) USING BTREE,
-  ADD KEY `IDX_UEB_WEEE_TAX_COUNTRY` (`country`) USING BTREE,
-  ADD KEY `IDX_UEB_WEEE_TAX_ATTRIBUTE_ID` (`attribute_id`) USING BTREE;
+  ADD KEY `IDX_WEEE_TAX_WEBSITE_ID` (`website_id`),
+  ADD KEY `IDX_WEEE_TAX_ENTITY_ID` (`entity_id`),
+  ADD KEY `IDX_WEEE_TAX_COUNTRY` (`country`),
+  ADD KEY `IDX_WEEE_TAX_ATTRIBUTE_ID` (`attribute_id`);
 
 --
 -- Indexes for table `widget`
 --
 ALTER TABLE `widget`
   ADD PRIMARY KEY (`widget_id`),
-  ADD KEY `IDX_UEB_WIDGET_WIDGET_CODE` (`widget_code`) USING BTREE;
+  ADD KEY `IDX_WIDGET_WIDGET_CODE` (`widget_code`);
 
 --
 -- Indexes for table `widget_instance`
@@ -9944,74 +8988,74 @@ ALTER TABLE `widget_instance`
 --
 ALTER TABLE `widget_instance_page`
   ADD PRIMARY KEY (`page_id`),
-  ADD KEY `IDX_UEB_WIDGET_INSTANCE_PAGE_INSTANCE_ID` (`instance_id`) USING BTREE;
+  ADD KEY `IDX_WIDGET_INSTANCE_PAGE_INSTANCE_ID` (`instance_id`);
 
 --
 -- Indexes for table `widget_instance_page_layout`
 --
 ALTER TABLE `widget_instance_page_layout`
-  ADD UNIQUE KEY `UNQ_UEB_WIDGET_INSTANCE_PAGE_LAYOUT_LAYOUT_UPDATE_ID_PAGE_ID` (`layout_update_id`,`page_id`) USING BTREE,
-  ADD KEY `IDX_UEB_WIDGET_INSTANCE_PAGE_LAYOUT_PAGE_ID` (`page_id`) USING BTREE,
-  ADD KEY `IDX_UEB_WIDGET_INSTANCE_PAGE_LAYOUT_LAYOUT_UPDATE_ID` (`layout_update_id`) USING BTREE;
+  ADD UNIQUE KEY `UNQ_WIDGET_INSTANCE_PAGE_LAYOUT_LAYOUT_UPDATE_ID_PAGE_ID` (`layout_update_id`,`page_id`),
+  ADD KEY `IDX_WIDGET_INSTANCE_PAGE_LAYOUT_PAGE_ID` (`page_id`),
+  ADD KEY `IDX_WIDGET_INSTANCE_PAGE_LAYOUT_LAYOUT_UPDATE_ID` (`layout_update_id`);
 
 --
 -- Indexes for table `wishlist`
 --
 ALTER TABLE `wishlist`
   ADD PRIMARY KEY (`wishlist_id`),
-  ADD UNIQUE KEY `UNQ_WISHLIST_CUSTOMER_ID` (`customer_id`) USING BTREE,
-  ADD KEY `IDX_WISHLIST_SHARED` (`shared`) USING BTREE;
+  ADD UNIQUE KEY `UNQ_WISHLIST_CUSTOMER_ID` (`customer_id`),
+  ADD KEY `IDX_WISHLIST_SHARED` (`shared`);
 
 --
 -- Indexes for table `wishlist_item`
 --
 ALTER TABLE `wishlist_item`
   ADD PRIMARY KEY (`wishlist_item_id`),
-  ADD KEY `IDX_WISHLIST_ITEM_WISHLIST_ID` (`wishlist_id`) USING BTREE,
-  ADD KEY `IDX_WISHLIST_ITEM_PRODUCT_ID` (`product_id`) USING BTREE,
-  ADD KEY `IDX_WISHLIST_ITEM_STORE_ID` (`store_id`) USING BTREE;
+  ADD KEY `IDX_WISHLIST_ITEM_WISHLIST_ID` (`wishlist_id`),
+  ADD KEY `IDX_WISHLIST_ITEM_PRODUCT_ID` (`product_id`),
+  ADD KEY `IDX_WISHLIST_ITEM_STORE_ID` (`store_id`);
 
 --
 -- Indexes for table `wishlist_item_option`
 --
 ALTER TABLE `wishlist_item_option`
   ADD PRIMARY KEY (`option_id`),
-  ADD KEY `FK_A014B30B04B72DD0EAB3EECD779728D6` (`wishlist_item_id`) USING BTREE;
+  ADD KEY `FK_A014B30B04B72DD0EAB3EECD779728D6` (`wishlist_item_id`);
 
 --
 -- Indexes for table `xmlconnect_application`
 --
 ALTER TABLE `xmlconnect_application`
   ADD PRIMARY KEY (`application_id`),
-  ADD UNIQUE KEY `UNQ_UEB_UEB_XMLCONNECT_APPLICATION_CODE` (`code`) USING BTREE,
-  ADD KEY `FK_C1179F348161939978D6AD5BD3117B8F` (`store_id`) USING BTREE;
+  ADD UNIQUE KEY `UNQ_XMLCONNECT_APPLICATION_CODE` (`code`),
+  ADD KEY `FK_XMLCONNECT_APPLICATION_STORE_ID_CORE_STORE_STORE_ID` (`store_id`);
 
 --
 -- Indexes for table `xmlconnect_config_data`
 --
 ALTER TABLE `xmlconnect_config_data`
-  ADD UNIQUE KEY `UNQ_UEB_UEB_XMLCONNECT_CONFIG_DATA_APPLICATION_ID_CATEGORY_PATH` (`application_id`,`category`,`path`) USING BTREE;
+  ADD UNIQUE KEY `UNQ_XMLCONNECT_CONFIG_DATA_APPLICATION_ID_CATEGORY_PATH` (`application_id`,`category`,`path`);
 
 --
 -- Indexes for table `xmlconnect_history`
 --
 ALTER TABLE `xmlconnect_history`
   ADD PRIMARY KEY (`history_id`),
-  ADD KEY `FK_846D4AA62DF4448B0BFCE6D827B700EA` (`application_id`) USING BTREE;
+  ADD KEY `FK_8F08B9513373BC19F49EE3EF8340E270` (`application_id`);
 
 --
 -- Indexes for table `xmlconnect_notification_template`
 --
 ALTER TABLE `xmlconnect_notification_template`
   ADD PRIMARY KEY (`template_id`),
-  ADD KEY `FK_2965F93B9942B1FC04AF506BEB1A6BA2` (`application_id`) USING BTREE;
+  ADD KEY `FK_F9927C7518A907CF5C350942FD296DC3` (`application_id`);
 
 --
 -- Indexes for table `xmlconnect_queue`
 --
 ALTER TABLE `xmlconnect_queue`
   ADD PRIMARY KEY (`queue_id`),
-  ADD KEY `FK_C956A3E6AC9C3124851969E2303E2BF5` (`template_id`) USING BTREE;
+  ADD KEY `FK_2019AEC5FC55A516965583447CA26B14` (`template_id`);
 
 --
 -- AUTO_INCREMENT for dumped tables
@@ -10042,26 +9086,6 @@ ALTER TABLE `admin_rule`
 --
 ALTER TABLE `admin_user`
   MODIFY `user_id` int(10) unsigned NOT NULL AUTO_INCREMENT COMMENT 'User ID';
---
--- AUTO_INCREMENT for table `affiliate_admin_user`
---
-ALTER TABLE `affiliate_admin_user`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
---
--- AUTO_INCREMENT for table `affiliate_sales`
---
-ALTER TABLE `affiliate_sales`
-  MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT;
---
--- AUTO_INCREMENT for table `affiliate_user`
---
-ALTER TABLE `affiliate_user`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
---
--- AUTO_INCREMENT for table `affiliate_visitor`
---
-ALTER TABLE `affiliate_visitor`
-  MODIFY `visitor_id` bigint(20) NOT NULL AUTO_INCREMENT;
 --
 -- AUTO_INCREMENT for table `api2_acl_attribute`
 --
@@ -10097,31 +9121,6 @@ ALTER TABLE `api_rule`
 --
 ALTER TABLE `api_user`
   MODIFY `user_id` int(10) unsigned NOT NULL AUTO_INCREMENT COMMENT 'User id';
---
--- AUTO_INCREMENT for table `aw_blog`
---
-ALTER TABLE `aw_blog`
-  MODIFY `post_id` int(11) unsigned NOT NULL AUTO_INCREMENT;
---
--- AUTO_INCREMENT for table `aw_blog_cat`
---
-ALTER TABLE `aw_blog_cat`
-  MODIFY `cat_id` int(11) unsigned NOT NULL AUTO_INCREMENT;
---
--- AUTO_INCREMENT for table `aw_blog_comment`
---
-ALTER TABLE `aw_blog_comment`
-  MODIFY `comment_id` int(11) unsigned NOT NULL AUTO_INCREMENT;
---
--- AUTO_INCREMENT for table `aw_blog_tags`
---
-ALTER TABLE `aw_blog_tags`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
---
--- AUTO_INCREMENT for table `catalogindex_minimal_price`
---
-ALTER TABLE `catalogindex_minimal_price`
-  MODIFY `index_id` int(10) unsigned NOT NULL AUTO_INCREMENT;
 --
 -- AUTO_INCREMENT for table `cataloginventory_stock`
 --
@@ -10353,24 +9352,9 @@ ALTER TABLE `cms_block`
 ALTER TABLE `cms_page`
   MODIFY `page_id` smallint(6) NOT NULL AUTO_INCREMENT COMMENT 'Page ID';
 --
--- AUTO_INCREMENT for table `contacts`
---
-ALTER TABLE `contacts`
-  MODIFY `id` int(10) unsigned NOT NULL AUTO_INCREMENT;
---
--- AUTO_INCREMENT for table `contacts_feedback`
---
-ALTER TABLE `contacts_feedback`
-  MODIFY `id` int(11) unsigned NOT NULL AUTO_INCREMENT;
---
 -- AUTO_INCREMENT for table `core_config_data`
 --
 ALTER TABLE `core_config_data`
-  MODIFY `config_id` int(10) unsigned NOT NULL AUTO_INCREMENT COMMENT 'Config Id';
---
--- AUTO_INCREMENT for table `core_config_data_bak`
---
-ALTER TABLE `core_config_data_bak`
   MODIFY `config_id` int(10) unsigned NOT NULL AUTO_INCREMENT COMMENT 'Config Id';
 --
 -- AUTO_INCREMENT for table `core_email_template`
@@ -10411,11 +9395,6 @@ ALTER TABLE `core_translate`
 -- AUTO_INCREMENT for table `core_url_rewrite`
 --
 ALTER TABLE `core_url_rewrite`
-  MODIFY `url_rewrite_id` int(10) unsigned NOT NULL AUTO_INCREMENT COMMENT 'Rewrite Id';
---
--- AUTO_INCREMENT for table `core_url_rewrite_new`
---
-ALTER TABLE `core_url_rewrite_new`
   MODIFY `url_rewrite_id` int(10) unsigned NOT NULL AUTO_INCREMENT COMMENT 'Rewrite Id';
 --
 -- AUTO_INCREMENT for table `core_variable`
@@ -10693,30 +9672,10 @@ ALTER TABLE `eav_form_fieldset`
 ALTER TABLE `eav_form_type`
   MODIFY `type_id` smallint(5) unsigned NOT NULL AUTO_INCREMENT COMMENT 'Type Id';
 --
--- AUTO_INCREMENT for table `errorpay`
---
-ALTER TABLE `errorpay`
-  MODIFY `errorpay_id` int(11) unsigned NOT NULL AUTO_INCREMENT;
---
--- AUTO_INCREMENT for table `express_rates`
---
-ALTER TABLE `express_rates`
-  MODIFY `id` smallint(5) unsigned NOT NULL AUTO_INCREMENT;
---
 -- AUTO_INCREMENT for table `gift_message`
 --
 ALTER TABLE `gift_message`
   MODIFY `gift_message_id` int(10) unsigned NOT NULL AUTO_INCREMENT COMMENT 'GiftMessage Id';
---
--- AUTO_INCREMENT for table `globalcollect_payment_method`
---
-ALTER TABLE `globalcollect_payment_method`
-  MODIFY `payment_method_id` tinyint(3) unsigned NOT NULL AUTO_INCREMENT;
---
--- AUTO_INCREMENT for table `globalcollect_token`
---
-ALTER TABLE `globalcollect_token`
-  MODIFY `token_id` int(10) unsigned NOT NULL AUTO_INCREMENT COMMENT 'Token Id';
 --
 -- AUTO_INCREMENT for table `importexport_importdata`
 --
@@ -10763,81 +9722,6 @@ ALTER TABLE `log_visitor`
 ALTER TABLE `log_visitor_online`
   MODIFY `visitor_id` bigint(20) unsigned NOT NULL AUTO_INCREMENT COMMENT 'Visitor ID';
 --
--- AUTO_INCREMENT for table `mdg_giftregistry_entity`
---
-ALTER TABLE `mdg_giftregistry_entity`
-  MODIFY `entity_id` int(10) unsigned NOT NULL AUTO_INCREMENT COMMENT 'Entity Id';
---
--- AUTO_INCREMENT for table `mdg_giftregistry_type`
---
-ALTER TABLE `mdg_giftregistry_type`
-  MODIFY `type_id` int(10) unsigned NOT NULL AUTO_INCREMENT COMMENT 'Type Id';
---
--- AUTO_INCREMENT for table `newfrog_catalog_relation`
---
-ALTER TABLE `newfrog_catalog_relation`
-  MODIFY `id` int(10) unsigned NOT NULL AUTO_INCREMENT;
---
--- AUTO_INCREMENT for table `newfrog_clearance`
---
-ALTER TABLE `newfrog_clearance`
-  MODIFY `id` smallint(6) NOT NULL AUTO_INCREMENT;
---
--- AUTO_INCREMENT for table `newfrog_erorreport`
---
-ALTER TABLE `newfrog_erorreport`
-  MODIFY `id` int(10) NOT NULL AUTO_INCREMENT;
---
--- AUTO_INCREMENT for table `newfrog_lover`
---
-ALTER TABLE `newfrog_lover`
-  MODIFY `id` int(10) unsigned NOT NULL AUTO_INCREMENT;
---
--- AUTO_INCREMENT for table `newfrog_lover_click`
---
-ALTER TABLE `newfrog_lover_click`
-  MODIFY `id` int(10) unsigned NOT NULL AUTO_INCREMENT;
---
--- AUTO_INCREMENT for table `newfrog_lover_remark`
---
-ALTER TABLE `newfrog_lover_remark`
-  MODIFY `id` int(10) unsigned NOT NULL AUTO_INCREMENT;
---
--- AUTO_INCREMENT for table `newfrog_newzone_entity`
---
-ALTER TABLE `newfrog_newzone_entity`
-  MODIFY `entity_id` int(10) unsigned NOT NULL AUTO_INCREMENT COMMENT 'Entity Id';
---
--- AUTO_INCREMENT for table `newfrog_newzone_type`
---
-ALTER TABLE `newfrog_newzone_type`
-  MODIFY `type_id` int(10) unsigned NOT NULL AUTO_INCREMENT COMMENT 'Type Id';
---
--- AUTO_INCREMENT for table `newfrog_online_price_tmp`
---
-ALTER TABLE `newfrog_online_price_tmp`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
---
--- AUTO_INCREMENT for table `newfrog_pricematch`
---
-ALTER TABLE `newfrog_pricematch`
-  MODIFY `id` int(10) NOT NULL AUTO_INCREMENT;
---
--- AUTO_INCREMENT for table `newfrog_Saveproduct`
---
-ALTER TABLE `newfrog_Saveproduct`
-  MODIFY `id` int(10) unsigned NOT NULL AUTO_INCREMENT;
---
--- AUTO_INCREMENT for table `newfrog_save_product`
---
-ALTER TABLE `newfrog_save_product`
-  MODIFY `id` int(10) unsigned NOT NULL AUTO_INCREMENT;
---
--- AUTO_INCREMENT for table `newfrog_wholesale`
---
-ALTER TABLE `newfrog_wholesale`
-  MODIFY `id` int(10) NOT NULL AUTO_INCREMENT;
---
 -- AUTO_INCREMENT for table `newsletter_problem`
 --
 ALTER TABLE `newsletter_problem`
@@ -10873,11 +9757,6 @@ ALTER TABLE `oauth_consumer`
 ALTER TABLE `oauth_token`
   MODIFY `entity_id` int(10) unsigned NOT NULL AUTO_INCREMENT COMMENT 'Entity ID';
 --
--- AUTO_INCREMENT for table `outofstocksubscription_info`
---
-ALTER TABLE `outofstocksubscription_info`
-  MODIFY `id` int(10) unsigned NOT NULL AUTO_INCREMENT;
---
 -- AUTO_INCREMENT for table `paypal_cert`
 --
 ALTER TABLE `paypal_cert`
@@ -10907,6 +9786,11 @@ ALTER TABLE `persistent_session`
 --
 ALTER TABLE `poll`
   MODIFY `poll_id` int(10) unsigned NOT NULL AUTO_INCREMENT COMMENT 'Poll Id';
+--
+-- AUTO_INCREMENT for table `poll_answer`
+--
+ALTER TABLE `poll_answer`
+  MODIFY `answer_id` int(10) unsigned NOT NULL AUTO_INCREMENT COMMENT 'Answer Id';
 --
 -- AUTO_INCREMENT for table `poll_vote`
 --
@@ -11003,35 +9887,10 @@ ALTER TABLE `review_entity`
 ALTER TABLE `review_entity_summary`
   MODIFY `primary_id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT 'Summary review entity id';
 --
--- AUTO_INCREMENT for table `review_photo`
---
-ALTER TABLE `review_photo`
-  MODIFY `id` int(10) unsigned NOT NULL AUTO_INCREMENT;
---
--- AUTO_INCREMENT for table `review_photo_review`
---
-ALTER TABLE `review_photo_review`
-  MODIFY `pk_id` int(10) NOT NULL AUTO_INCREMENT;
---
 -- AUTO_INCREMENT for table `review_status`
 --
 ALTER TABLE `review_status`
   MODIFY `status_id` smallint(5) unsigned NOT NULL AUTO_INCREMENT COMMENT 'Status id';
---
--- AUTO_INCREMENT for table `rewardpoints_account`
---
-ALTER TABLE `rewardpoints_account`
-  MODIFY `rewardpoints_account_id` int(10) unsigned NOT NULL AUTO_INCREMENT;
---
--- AUTO_INCREMENT for table `rewardpoints_referral`
---
-ALTER TABLE `rewardpoints_referral`
-  MODIFY `rewardpoints_referral_id` int(11) unsigned NOT NULL AUTO_INCREMENT;
---
--- AUTO_INCREMENT for table `rewardpoints_rule`
---
-ALTER TABLE `rewardpoints_rule`
-  MODIFY `rewardpoints_rule_id` int(11) NOT NULL AUTO_INCREMENT;
 --
 -- AUTO_INCREMENT for table `salesrule`
 --
@@ -11263,11 +10122,6 @@ ALTER TABLE `shipping_tablerate`
 ALTER TABLE `sitemap`
   MODIFY `sitemap_id` int(10) unsigned NOT NULL AUTO_INCREMENT COMMENT 'Sitemap Id';
 --
--- AUTO_INCREMENT for table `smtppro_email_log`
---
-ALTER TABLE `smtppro_email_log`
-  MODIFY `email_id` int(10) unsigned NOT NULL AUTO_INCREMENT;
---
 -- AUTO_INCREMENT for table `tag`
 --
 ALTER TABLE `tag`
@@ -11312,41 +10166,6 @@ ALTER TABLE `tax_order_aggregated_created`
 --
 ALTER TABLE `tax_order_aggregated_updated`
   MODIFY `id` int(10) unsigned NOT NULL AUTO_INCREMENT COMMENT 'Id';
---
--- AUTO_INCREMENT for table `tmp_customer_log`
---
-ALTER TABLE `tmp_customer_log`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
---
--- AUTO_INCREMENT for table `ueb_newfrog_lover`
---
-ALTER TABLE `ueb_newfrog_lover`
-  MODIFY `id` int(10) unsigned NOT NULL AUTO_INCREMENT;
---
--- AUTO_INCREMENT for table `ueb_newfrog_lover_click`
---
-ALTER TABLE `ueb_newfrog_lover_click`
-  MODIFY `id` int(10) unsigned NOT NULL AUTO_INCREMENT;
---
--- AUTO_INCREMENT for table `ueb_newfrog_lover_remark`
---
-ALTER TABLE `ueb_newfrog_lover_remark`
-  MODIFY `id` int(10) unsigned NOT NULL AUTO_INCREMENT;
---
--- AUTO_INCREMENT for table `vakind_search_categories`
---
-ALTER TABLE `vakind_search_categories`
-  MODIFY `cat_position` int(8) unsigned NOT NULL AUTO_INCREMENT;
---
--- AUTO_INCREMENT for table `vakind_search_items`
---
-ALTER TABLE `vakind_search_items`
-  MODIFY `pk_id` int(10) unsigned NOT NULL AUTO_INCREMENT;
---
--- AUTO_INCREMENT for table `vakind_temporary_hot_result`
---
-ALTER TABLE `vakind_temporary_hot_result`
-  MODIFY `id` int(11) unsigned NOT NULL AUTO_INCREMENT;
 --
 -- AUTO_INCREMENT for table `weee_tax`
 --
@@ -11407,11 +10226,318 @@ ALTER TABLE `xmlconnect_queue`
 --
 
 --
+-- 限制表 `admin_rule`
+--
+ALTER TABLE `admin_rule`
+  ADD CONSTRAINT `FK_ADMIN_RULE_ROLE_ID_ADMIN_ROLE_ROLE_ID` FOREIGN KEY (`role_id`) REFERENCES `admin_role` (`role_id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
+-- 限制表 `api2_acl_rule`
+--
+ALTER TABLE `api2_acl_rule`
+  ADD CONSTRAINT `FK_API2_ACL_RULE_ROLE_ID_API2_ACL_ROLE_ENTITY_ID` FOREIGN KEY (`role_id`) REFERENCES `api2_acl_role` (`entity_id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
+-- 限制表 `api2_acl_user`
+--
+ALTER TABLE `api2_acl_user`
+  ADD CONSTRAINT `FK_API2_ACL_USER_ADMIN_ID_ADMIN_USER_USER_ID` FOREIGN KEY (`admin_id`) REFERENCES `admin_user` (`user_id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `FK_API2_ACL_USER_ROLE_ID_API2_ACL_ROLE_ENTITY_ID` FOREIGN KEY (`role_id`) REFERENCES `api2_acl_role` (`entity_id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
+-- 限制表 `api_rule`
+--
+ALTER TABLE `api_rule`
+  ADD CONSTRAINT `FK_API_RULE_ROLE_ID_API_ROLE_ROLE_ID` FOREIGN KEY (`role_id`) REFERENCES `api_role` (`role_id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
+-- 限制表 `api_session`
+--
+ALTER TABLE `api_session`
+  ADD CONSTRAINT `FK_API_SESSION_USER_ID_API_USER_USER_ID` FOREIGN KEY (`user_id`) REFERENCES `api_user` (`user_id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
+-- 限制表 `cataloginventory_stock_item`
+--
+ALTER TABLE `cataloginventory_stock_item`
+  ADD CONSTRAINT `FK_CATINV_STOCK_ITEM_PRD_ID_CAT_PRD_ENTT_ENTT_ID` FOREIGN KEY (`product_id`) REFERENCES `catalog_product_entity` (`entity_id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `FK_CATINV_STOCK_ITEM_STOCK_ID_CATINV_STOCK_STOCK_ID` FOREIGN KEY (`stock_id`) REFERENCES `cataloginventory_stock` (`stock_id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
+-- 限制表 `cataloginventory_stock_status`
+--
+ALTER TABLE `cataloginventory_stock_status`
+  ADD CONSTRAINT `FK_CATINV_STOCK_STS_PRD_ID_CAT_PRD_ENTT_ENTT_ID` FOREIGN KEY (`product_id`) REFERENCES `catalog_product_entity` (`entity_id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `FK_CATINV_STOCK_STS_STOCK_ID_CATINV_STOCK_STOCK_ID` FOREIGN KEY (`stock_id`) REFERENCES `cataloginventory_stock` (`stock_id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `FK_CATINV_STOCK_STS_WS_ID_CORE_WS_WS_ID` FOREIGN KEY (`website_id`) REFERENCES `core_website` (`website_id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
+-- 限制表 `catalogrule_customer_group`
+--
+ALTER TABLE `catalogrule_customer_group`
+  ADD CONSTRAINT `FK_CATALOGRULE_CUSTOMER_GROUP_RULE_ID_CATALOGRULE_RULE_ID` FOREIGN KEY (`rule_id`) REFERENCES `catalogrule` (`rule_id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `FK_CATRULE_CSTR_GROUP_CSTR_GROUP_ID_CSTR_GROUP_CSTR_GROUP_ID` FOREIGN KEY (`customer_group_id`) REFERENCES `customer_group` (`customer_group_id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
+-- 限制表 `catalogrule_group_website`
+--
+ALTER TABLE `catalogrule_group_website`
+  ADD CONSTRAINT `FK_CATALOGRULE_GROUP_WEBSITE_RULE_ID_CATALOGRULE_RULE_ID` FOREIGN KEY (`rule_id`) REFERENCES `catalogrule` (`rule_id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `FK_CATALOGRULE_GROUP_WEBSITE_WEBSITE_ID_CORE_WEBSITE_WEBSITE_ID` FOREIGN KEY (`website_id`) REFERENCES `core_website` (`website_id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `FK_CATRULE_GROUP_WS_CSTR_GROUP_ID_CSTR_GROUP_CSTR_GROUP_ID` FOREIGN KEY (`customer_group_id`) REFERENCES `customer_group` (`customer_group_id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
+-- 限制表 `catalogrule_product`
+--
+ALTER TABLE `catalogrule_product`
+  ADD CONSTRAINT `FK_CATALOGRULE_PRODUCT_RULE_ID_CATALOGRULE_RULE_ID` FOREIGN KEY (`rule_id`) REFERENCES `catalogrule` (`rule_id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `FK_CATALOGRULE_PRODUCT_WEBSITE_ID_CORE_WEBSITE_WEBSITE_ID` FOREIGN KEY (`website_id`) REFERENCES `core_website` (`website_id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `FK_CATRULE_PRD_CSTR_GROUP_ID_CSTR_GROUP_CSTR_GROUP_ID` FOREIGN KEY (`customer_group_id`) REFERENCES `customer_group` (`customer_group_id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `FK_CATRULE_PRD_PRD_ID_CAT_PRD_ENTT_ENTT_ID` FOREIGN KEY (`product_id`) REFERENCES `catalog_product_entity` (`entity_id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
+-- 限制表 `catalogrule_product_price`
+--
+ALTER TABLE `catalogrule_product_price`
+  ADD CONSTRAINT `FK_CATALOGRULE_PRODUCT_PRICE_WEBSITE_ID_CORE_WEBSITE_WEBSITE_ID` FOREIGN KEY (`website_id`) REFERENCES `core_website` (`website_id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `FK_CATRULE_PRD_PRICE_CSTR_GROUP_ID_CSTR_GROUP_CSTR_GROUP_ID` FOREIGN KEY (`customer_group_id`) REFERENCES `customer_group` (`customer_group_id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `FK_CATRULE_PRD_PRICE_PRD_ID_CAT_PRD_ENTT_ENTT_ID` FOREIGN KEY (`product_id`) REFERENCES `catalog_product_entity` (`entity_id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
+-- 限制表 `catalogrule_website`
+--
+ALTER TABLE `catalogrule_website`
+  ADD CONSTRAINT `FK_CATALOGRULE_WEBSITE_RULE_ID_CATALOGRULE_RULE_ID` FOREIGN KEY (`rule_id`) REFERENCES `catalogrule` (`rule_id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `FK_CATALOGRULE_WEBSITE_WEBSITE_ID_CORE_WEBSITE_WEBSITE_ID` FOREIGN KEY (`website_id`) REFERENCES `core_website` (`website_id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
+-- 限制表 `catalogsearch_query`
+--
+ALTER TABLE `catalogsearch_query`
+  ADD CONSTRAINT `FK_CATALOGSEARCH_QUERY_STORE_ID_CORE_STORE_STORE_ID` FOREIGN KEY (`store_id`) REFERENCES `core_store` (`store_id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
+-- 限制表 `catalogsearch_result`
+--
+ALTER TABLE `catalogsearch_result`
+  ADD CONSTRAINT `FK_CATALOGSEARCH_RESULT_QUERY_ID_CATALOGSEARCH_QUERY_QUERY_ID` FOREIGN KEY (`query_id`) REFERENCES `catalogsearch_query` (`query_id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `FK_CATSRCH_RESULT_PRD_ID_CAT_PRD_ENTT_ENTT_ID` FOREIGN KEY (`product_id`) REFERENCES `catalog_product_entity` (`entity_id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
+-- 限制表 `catalog_category_entity_datetime`
+--
+ALTER TABLE `catalog_category_entity_datetime`
+  ADD CONSTRAINT `FK_CATALOG_CATEGORY_ENTITY_DATETIME_STORE_ID_CORE_STORE_STORE_ID` FOREIGN KEY (`store_id`) REFERENCES `core_store` (`store_id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `FK_CAT_CTGR_ENTT_DTIME_ATTR_ID_EAV_ATTR_ATTR_ID` FOREIGN KEY (`attribute_id`) REFERENCES `eav_attribute` (`attribute_id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `FK_CAT_CTGR_ENTT_DTIME_ENTT_ID_CAT_CTGR_ENTT_ENTT_ID` FOREIGN KEY (`entity_id`) REFERENCES `catalog_category_entity` (`entity_id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
+-- 限制表 `catalog_category_entity_decimal`
+--
+ALTER TABLE `catalog_category_entity_decimal`
+  ADD CONSTRAINT `FK_CATALOG_CATEGORY_ENTITY_DECIMAL_STORE_ID_CORE_STORE_STORE_ID` FOREIGN KEY (`store_id`) REFERENCES `core_store` (`store_id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `FK_CAT_CTGR_ENTT_DEC_ATTR_ID_EAV_ATTR_ATTR_ID` FOREIGN KEY (`attribute_id`) REFERENCES `eav_attribute` (`attribute_id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `FK_CAT_CTGR_ENTT_DEC_ENTT_ID_CAT_CTGR_ENTT_ENTT_ID` FOREIGN KEY (`entity_id`) REFERENCES `catalog_category_entity` (`entity_id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
+-- 限制表 `catalog_category_entity_int`
+--
+ALTER TABLE `catalog_category_entity_int`
+  ADD CONSTRAINT `FK_CATALOG_CATEGORY_ENTITY_INT_STORE_ID_CORE_STORE_STORE_ID` FOREIGN KEY (`store_id`) REFERENCES `core_store` (`store_id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `FK_CAT_CTGR_ENTT_INT_ATTR_ID_EAV_ATTR_ATTR_ID` FOREIGN KEY (`attribute_id`) REFERENCES `eav_attribute` (`attribute_id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `FK_CAT_CTGR_ENTT_INT_ENTT_ID_CAT_CTGR_ENTT_ENTT_ID` FOREIGN KEY (`entity_id`) REFERENCES `catalog_category_entity` (`entity_id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
+-- 限制表 `catalog_category_entity_text`
+--
+ALTER TABLE `catalog_category_entity_text`
+  ADD CONSTRAINT `FK_CATALOG_CATEGORY_ENTITY_TEXT_STORE_ID_CORE_STORE_STORE_ID` FOREIGN KEY (`store_id`) REFERENCES `core_store` (`store_id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `FK_CAT_CTGR_ENTT_TEXT_ATTR_ID_EAV_ATTR_ATTR_ID` FOREIGN KEY (`attribute_id`) REFERENCES `eav_attribute` (`attribute_id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `FK_CAT_CTGR_ENTT_TEXT_ENTT_ID_CAT_CTGR_ENTT_ENTT_ID` FOREIGN KEY (`entity_id`) REFERENCES `catalog_category_entity` (`entity_id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
+-- 限制表 `catalog_category_entity_varchar`
+--
+ALTER TABLE `catalog_category_entity_varchar`
+  ADD CONSTRAINT `FK_CATALOG_CATEGORY_ENTITY_VARCHAR_STORE_ID_CORE_STORE_STORE_ID` FOREIGN KEY (`store_id`) REFERENCES `core_store` (`store_id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `FK_CAT_CTGR_ENTT_VCHR_ATTR_ID_EAV_ATTR_ATTR_ID` FOREIGN KEY (`attribute_id`) REFERENCES `eav_attribute` (`attribute_id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `FK_CAT_CTGR_ENTT_VCHR_ENTT_ID_CAT_CTGR_ENTT_ENTT_ID` FOREIGN KEY (`entity_id`) REFERENCES `catalog_category_entity` (`entity_id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
 -- 限制表 `catalog_category_flat_store_1`
 --
 ALTER TABLE `catalog_category_flat_store_1`
   ADD CONSTRAINT `FK_CATALOG_CATEGORY_FLAT_STORE_1_STORE_ID_CORE_STORE_STORE_ID` FOREIGN KEY (`store_id`) REFERENCES `core_store` (`store_id`) ON DELETE CASCADE ON UPDATE CASCADE,
   ADD CONSTRAINT `FK_CAT_CTGR_FLAT_STORE_1_ENTT_ID_CAT_CTGR_ENTT_ENTT_ID` FOREIGN KEY (`entity_id`) REFERENCES `catalog_category_entity` (`entity_id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
+-- 限制表 `catalog_category_flat_store_2`
+--
+ALTER TABLE `catalog_category_flat_store_2`
+  ADD CONSTRAINT `FK_CATALOG_CATEGORY_FLAT_STORE_2_STORE_ID_CORE_STORE_STORE_ID` FOREIGN KEY (`store_id`) REFERENCES `core_store` (`store_id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `FK_CAT_CTGR_FLAT_STORE_2_ENTT_ID_CAT_CTGR_ENTT_ENTT_ID` FOREIGN KEY (`entity_id`) REFERENCES `catalog_category_entity` (`entity_id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
+-- 限制表 `catalog_category_flat_store_3`
+--
+ALTER TABLE `catalog_category_flat_store_3`
+  ADD CONSTRAINT `FK_CATALOG_CATEGORY_FLAT_STORE_3_STORE_ID_CORE_STORE_STORE_ID` FOREIGN KEY (`store_id`) REFERENCES `core_store` (`store_id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `FK_CAT_CTGR_FLAT_STORE_3_ENTT_ID_CAT_CTGR_ENTT_ENTT_ID` FOREIGN KEY (`entity_id`) REFERENCES `catalog_category_entity` (`entity_id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
+-- 限制表 `catalog_category_product`
+--
+ALTER TABLE `catalog_category_product`
+  ADD CONSTRAINT `FK_CAT_CTGR_PRD_CTGR_ID_CAT_CTGR_ENTT_ENTT_ID` FOREIGN KEY (`category_id`) REFERENCES `catalog_category_entity` (`entity_id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `FK_CAT_CTGR_PRD_PRD_ID_CAT_PRD_ENTT_ENTT_ID` FOREIGN KEY (`product_id`) REFERENCES `catalog_product_entity` (`entity_id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
+-- 限制表 `catalog_category_product_index`
+--
+ALTER TABLE `catalog_category_product_index`
+  ADD CONSTRAINT `FK_CATALOG_CATEGORY_PRODUCT_INDEX_STORE_ID_CORE_STORE_STORE_ID` FOREIGN KEY (`store_id`) REFERENCES `core_store` (`store_id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `FK_CAT_CTGR_PRD_IDX_CTGR_ID_CAT_CTGR_ENTT_ENTT_ID` FOREIGN KEY (`category_id`) REFERENCES `catalog_category_entity` (`entity_id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `FK_CAT_CTGR_PRD_IDX_PRD_ID_CAT_PRD_ENTT_ENTT_ID` FOREIGN KEY (`product_id`) REFERENCES `catalog_product_entity` (`entity_id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
+-- 限制表 `catalog_compare_item`
+--
+ALTER TABLE `catalog_compare_item`
+  ADD CONSTRAINT `FK_CATALOG_COMPARE_ITEM_CUSTOMER_ID_CUSTOMER_ENTITY_ENTITY_ID` FOREIGN KEY (`customer_id`) REFERENCES `customer_entity` (`entity_id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `FK_CATALOG_COMPARE_ITEM_STORE_ID_CORE_STORE_STORE_ID` FOREIGN KEY (`store_id`) REFERENCES `core_store` (`store_id`) ON DELETE SET NULL ON UPDATE CASCADE,
+  ADD CONSTRAINT `FK_CAT_CMP_ITEM_PRD_ID_CAT_PRD_ENTT_ENTT_ID` FOREIGN KEY (`product_id`) REFERENCES `catalog_product_entity` (`entity_id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
+-- 限制表 `catalog_eav_attribute`
+--
+ALTER TABLE `catalog_eav_attribute`
+  ADD CONSTRAINT `FK_CATALOG_EAV_ATTRIBUTE_ATTRIBUTE_ID_EAV_ATTRIBUTE_ATTRIBUTE_ID` FOREIGN KEY (`attribute_id`) REFERENCES `eav_attribute` (`attribute_id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
+-- 限制表 `catalog_product_bundle_option`
+--
+ALTER TABLE `catalog_product_bundle_option`
+  ADD CONSTRAINT `FK_CAT_PRD_BNDL_OPT_PARENT_ID_CAT_PRD_ENTT_ENTT_ID` FOREIGN KEY (`parent_id`) REFERENCES `catalog_product_entity` (`entity_id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
+-- 限制表 `catalog_product_bundle_option_value`
+--
+ALTER TABLE `catalog_product_bundle_option_value`
+  ADD CONSTRAINT `FK_CAT_PRD_BNDL_OPT_VAL_OPT_ID_CAT_PRD_BNDL_OPT_OPT_ID` FOREIGN KEY (`option_id`) REFERENCES `catalog_product_bundle_option` (`option_id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
+-- 限制表 `catalog_product_bundle_price_index`
+--
+ALTER TABLE `catalog_product_bundle_price_index`
+  ADD CONSTRAINT `FK_CAT_PRD_BNDL_PRICE_IDX_CSTR_GROUP_ID_CSTR_GROUP_CSTR_GROUP_ID` FOREIGN KEY (`customer_group_id`) REFERENCES `customer_group` (`customer_group_id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `FK_CAT_PRD_BNDL_PRICE_IDX_ENTT_ID_CAT_PRD_ENTT_ENTT_ID` FOREIGN KEY (`entity_id`) REFERENCES `catalog_product_entity` (`entity_id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `FK_CAT_PRD_BNDL_PRICE_IDX_WS_ID_CORE_WS_WS_ID` FOREIGN KEY (`website_id`) REFERENCES `core_website` (`website_id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
+-- 限制表 `catalog_product_bundle_selection`
+--
+ALTER TABLE `catalog_product_bundle_selection`
+  ADD CONSTRAINT `FK_CAT_PRD_BNDL_SELECTION_OPT_ID_CAT_PRD_BNDL_OPT_OPT_ID` FOREIGN KEY (`option_id`) REFERENCES `catalog_product_bundle_option` (`option_id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `FK_CAT_PRD_BNDL_SELECTION_PRD_ID_CAT_PRD_ENTT_ENTT_ID` FOREIGN KEY (`product_id`) REFERENCES `catalog_product_entity` (`entity_id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
+-- 限制表 `catalog_product_bundle_selection_price`
+--
+ALTER TABLE `catalog_product_bundle_selection_price`
+  ADD CONSTRAINT `FK_CAT_PRD_BNDL_SELECTION_PRICE_WS_ID_CORE_WS_WS_ID` FOREIGN KEY (`website_id`) REFERENCES `core_website` (`website_id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `FK_DCF37523AA05D770A70AA4ED7C2616E4` FOREIGN KEY (`selection_id`) REFERENCES `catalog_product_bundle_selection` (`selection_id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
+-- 限制表 `catalog_product_enabled_index`
+--
+ALTER TABLE `catalog_product_enabled_index`
+  ADD CONSTRAINT `FK_CATALOG_PRODUCT_ENABLED_INDEX_STORE_ID_CORE_STORE_STORE_ID` FOREIGN KEY (`store_id`) REFERENCES `core_store` (`store_id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `FK_CAT_PRD_ENABLED_IDX_PRD_ID_CAT_PRD_ENTT_ENTT_ID` FOREIGN KEY (`product_id`) REFERENCES `catalog_product_entity` (`entity_id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
+-- 限制表 `catalog_product_entity`
+--
+ALTER TABLE `catalog_product_entity`
+  ADD CONSTRAINT `FK_CAT_PRD_ENTT_ATTR_SET_ID_EAV_ATTR_SET_ATTR_SET_ID` FOREIGN KEY (`attribute_set_id`) REFERENCES `eav_attribute_set` (`attribute_set_id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `FK_CAT_PRD_ENTT_ENTT_TYPE_ID_EAV_ENTT_TYPE_ENTT_TYPE_ID` FOREIGN KEY (`entity_type_id`) REFERENCES `eav_entity_type` (`entity_type_id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
+-- 限制表 `catalog_product_entity_datetime`
+--
+ALTER TABLE `catalog_product_entity_datetime`
+  ADD CONSTRAINT `FK_CATALOG_PRODUCT_ENTITY_DATETIME_STORE_ID_CORE_STORE_STORE_ID` FOREIGN KEY (`store_id`) REFERENCES `core_store` (`store_id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `FK_CAT_PRD_ENTT_DTIME_ATTR_ID_EAV_ATTR_ATTR_ID` FOREIGN KEY (`attribute_id`) REFERENCES `eav_attribute` (`attribute_id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `FK_CAT_PRD_ENTT_DTIME_ENTT_ID_CAT_PRD_ENTT_ENTT_ID` FOREIGN KEY (`entity_id`) REFERENCES `catalog_product_entity` (`entity_id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
+-- 限制表 `catalog_product_entity_decimal`
+--
+ALTER TABLE `catalog_product_entity_decimal`
+  ADD CONSTRAINT `FK_CATALOG_PRODUCT_ENTITY_DECIMAL_STORE_ID_CORE_STORE_STORE_ID` FOREIGN KEY (`store_id`) REFERENCES `core_store` (`store_id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `FK_CAT_PRD_ENTT_DEC_ATTR_ID_EAV_ATTR_ATTR_ID` FOREIGN KEY (`attribute_id`) REFERENCES `eav_attribute` (`attribute_id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `FK_CAT_PRD_ENTT_DEC_ENTT_ID_CAT_PRD_ENTT_ENTT_ID` FOREIGN KEY (`entity_id`) REFERENCES `catalog_product_entity` (`entity_id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
+-- 限制表 `catalog_product_entity_gallery`
+--
+ALTER TABLE `catalog_product_entity_gallery`
+  ADD CONSTRAINT `FK_CATALOG_PRODUCT_ENTITY_GALLERY_STORE_ID_CORE_STORE_STORE_ID` FOREIGN KEY (`store_id`) REFERENCES `core_store` (`store_id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `FK_CAT_PRD_ENTT_GLR_ATTR_ID_EAV_ATTR_ATTR_ID` FOREIGN KEY (`attribute_id`) REFERENCES `eav_attribute` (`attribute_id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `FK_CAT_PRD_ENTT_GLR_ENTT_ID_CAT_PRD_ENTT_ENTT_ID` FOREIGN KEY (`entity_id`) REFERENCES `catalog_product_entity` (`entity_id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
+-- 限制表 `catalog_product_entity_group_price`
+--
+ALTER TABLE `catalog_product_entity_group_price`
+  ADD CONSTRAINT `FK_CAT_PRD_ENTT_GROUP_PRICE_ENTT_ID_CAT_PRD_ENTT_ENTT_ID` FOREIGN KEY (`entity_id`) REFERENCES `catalog_product_entity` (`entity_id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `FK_CAT_PRD_ENTT_GROUP_PRICE_WS_ID_CORE_WS_WS_ID` FOREIGN KEY (`website_id`) REFERENCES `core_website` (`website_id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `FK_DF909D22C11B60B1E5E3EE64AB220ECE` FOREIGN KEY (`customer_group_id`) REFERENCES `customer_group` (`customer_group_id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
+-- 限制表 `catalog_product_entity_int`
+--
+ALTER TABLE `catalog_product_entity_int`
+  ADD CONSTRAINT `FK_CATALOG_PRODUCT_ENTITY_INT_STORE_ID_CORE_STORE_STORE_ID` FOREIGN KEY (`store_id`) REFERENCES `core_store` (`store_id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `FK_CAT_PRD_ENTT_INT_ATTR_ID_EAV_ATTR_ATTR_ID` FOREIGN KEY (`attribute_id`) REFERENCES `eav_attribute` (`attribute_id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `FK_CAT_PRD_ENTT_INT_ENTT_ID_CAT_PRD_ENTT_ENTT_ID` FOREIGN KEY (`entity_id`) REFERENCES `catalog_product_entity` (`entity_id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
+-- 限制表 `catalog_product_entity_media_gallery`
+--
+ALTER TABLE `catalog_product_entity_media_gallery`
+  ADD CONSTRAINT `FK_CAT_PRD_ENTT_MDA_GLR_ATTR_ID_EAV_ATTR_ATTR_ID` FOREIGN KEY (`attribute_id`) REFERENCES `eav_attribute` (`attribute_id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `FK_CAT_PRD_ENTT_MDA_GLR_ENTT_ID_CAT_PRD_ENTT_ENTT_ID` FOREIGN KEY (`entity_id`) REFERENCES `catalog_product_entity` (`entity_id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
+-- 限制表 `catalog_product_entity_media_gallery_value`
+--
+ALTER TABLE `catalog_product_entity_media_gallery_value`
+  ADD CONSTRAINT `FK_CAT_PRD_ENTT_MDA_GLR_VAL_STORE_ID_CORE_STORE_STORE_ID` FOREIGN KEY (`store_id`) REFERENCES `core_store` (`store_id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `FK_CAT_PRD_ENTT_MDA_GLR_VAL_VAL_ID_CAT_PRD_ENTT_MDA_GLR_VAL_ID` FOREIGN KEY (`value_id`) REFERENCES `catalog_product_entity_media_gallery` (`value_id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
+-- 限制表 `catalog_product_entity_text`
+--
+ALTER TABLE `catalog_product_entity_text`
+  ADD CONSTRAINT `FK_CATALOG_PRODUCT_ENTITY_TEXT_STORE_ID_CORE_STORE_STORE_ID` FOREIGN KEY (`store_id`) REFERENCES `core_store` (`store_id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `FK_CAT_PRD_ENTT_TEXT_ATTR_ID_EAV_ATTR_ATTR_ID` FOREIGN KEY (`attribute_id`) REFERENCES `eav_attribute` (`attribute_id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `FK_CAT_PRD_ENTT_TEXT_ENTT_ID_CAT_PRD_ENTT_ENTT_ID` FOREIGN KEY (`entity_id`) REFERENCES `catalog_product_entity` (`entity_id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
+-- 限制表 `catalog_product_entity_tier_price`
+--
+ALTER TABLE `catalog_product_entity_tier_price`
+  ADD CONSTRAINT `FK_6E08D719F0501DD1D8E6D4EFF2511C85` FOREIGN KEY (`customer_group_id`) REFERENCES `customer_group` (`customer_group_id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `FK_CAT_PRD_ENTT_TIER_PRICE_ENTT_ID_CAT_PRD_ENTT_ENTT_ID` FOREIGN KEY (`entity_id`) REFERENCES `catalog_product_entity` (`entity_id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `FK_CAT_PRD_ENTT_TIER_PRICE_WS_ID_CORE_WS_WS_ID` FOREIGN KEY (`website_id`) REFERENCES `core_website` (`website_id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
+-- 限制表 `catalog_product_entity_varchar`
+--
+ALTER TABLE `catalog_product_entity_varchar`
+  ADD CONSTRAINT `FK_CATALOG_PRODUCT_ENTITY_VARCHAR_STORE_ID_CORE_STORE_STORE_ID` FOREIGN KEY (`store_id`) REFERENCES `core_store` (`store_id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `FK_CAT_PRD_ENTT_VCHR_ATTR_ID_EAV_ATTR_ATTR_ID` FOREIGN KEY (`attribute_id`) REFERENCES `eav_attribute` (`attribute_id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `FK_CAT_PRD_ENTT_VCHR_ENTT_ID_CAT_PRD_ENTT_ENTT_ID` FOREIGN KEY (`entity_id`) REFERENCES `catalog_product_entity` (`entity_id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
 -- 限制表 `catalog_product_flat_1`
@@ -11420,314 +10546,1304 @@ ALTER TABLE `catalog_product_flat_1`
   ADD CONSTRAINT `FK_CAT_PRD_FLAT_1_ENTT_ID_CAT_PRD_ENTT_ENTT_ID` FOREIGN KEY (`entity_id`) REFERENCES `catalog_product_entity` (`entity_id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
+-- 限制表 `catalog_product_flat_2`
+--
+ALTER TABLE `catalog_product_flat_2`
+  ADD CONSTRAINT `FK_CAT_PRD_FLAT_2_ENTT_ID_CAT_PRD_ENTT_ENTT_ID` FOREIGN KEY (`entity_id`) REFERENCES `catalog_product_entity` (`entity_id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
+-- 限制表 `catalog_product_flat_3`
+--
+ALTER TABLE `catalog_product_flat_3`
+  ADD CONSTRAINT `FK_CAT_PRD_FLAT_3_ENTT_ID_CAT_PRD_ENTT_ENTT_ID` FOREIGN KEY (`entity_id`) REFERENCES `catalog_product_entity` (`entity_id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
+-- 限制表 `catalog_product_index_eav`
+--
+ALTER TABLE `catalog_product_index_eav`
+  ADD CONSTRAINT `FK_CATALOG_PRODUCT_INDEX_EAV_STORE_ID_CORE_STORE_STORE_ID` FOREIGN KEY (`store_id`) REFERENCES `core_store` (`store_id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `FK_CAT_PRD_IDX_EAV_ATTR_ID_EAV_ATTR_ATTR_ID` FOREIGN KEY (`attribute_id`) REFERENCES `eav_attribute` (`attribute_id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `FK_CAT_PRD_IDX_EAV_ENTT_ID_CAT_PRD_ENTT_ENTT_ID` FOREIGN KEY (`entity_id`) REFERENCES `catalog_product_entity` (`entity_id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
+-- 限制表 `catalog_product_index_eav_decimal`
+--
+ALTER TABLE `catalog_product_index_eav_decimal`
+  ADD CONSTRAINT `FK_CAT_PRD_IDX_EAV_DEC_ATTR_ID_EAV_ATTR_ATTR_ID` FOREIGN KEY (`attribute_id`) REFERENCES `eav_attribute` (`attribute_id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `FK_CAT_PRD_IDX_EAV_DEC_ENTT_ID_CAT_PRD_ENTT_ENTT_ID` FOREIGN KEY (`entity_id`) REFERENCES `catalog_product_entity` (`entity_id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `FK_CAT_PRD_IDX_EAV_DEC_STORE_ID_CORE_STORE_STORE_ID` FOREIGN KEY (`store_id`) REFERENCES `core_store` (`store_id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
+-- 限制表 `catalog_product_index_group_price`
+--
+ALTER TABLE `catalog_product_index_group_price`
+  ADD CONSTRAINT `FK_195DF97C81B0BDD6A2EEC50F870E16D1` FOREIGN KEY (`customer_group_id`) REFERENCES `customer_group` (`customer_group_id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `FK_CAT_PRD_IDX_GROUP_PRICE_ENTT_ID_CAT_PRD_ENTT_ENTT_ID` FOREIGN KEY (`entity_id`) REFERENCES `catalog_product_entity` (`entity_id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `FK_CAT_PRD_IDX_GROUP_PRICE_WS_ID_CORE_WS_WS_ID` FOREIGN KEY (`website_id`) REFERENCES `core_website` (`website_id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
+-- 限制表 `catalog_product_index_price`
+--
+ALTER TABLE `catalog_product_index_price`
+  ADD CONSTRAINT `FK_CAT_PRD_IDX_PRICE_CSTR_GROUP_ID_CSTR_GROUP_CSTR_GROUP_ID` FOREIGN KEY (`customer_group_id`) REFERENCES `customer_group` (`customer_group_id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `FK_CAT_PRD_IDX_PRICE_ENTT_ID_CAT_PRD_ENTT_ENTT_ID` FOREIGN KEY (`entity_id`) REFERENCES `catalog_product_entity` (`entity_id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `FK_CAT_PRD_IDX_PRICE_WS_ID_CORE_WS_WS_ID` FOREIGN KEY (`website_id`) REFERENCES `core_website` (`website_id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
+-- 限制表 `catalog_product_index_tier_price`
+--
+ALTER TABLE `catalog_product_index_tier_price`
+  ADD CONSTRAINT `FK_CAT_PRD_IDX_TIER_PRICE_CSTR_GROUP_ID_CSTR_GROUP_CSTR_GROUP_ID` FOREIGN KEY (`customer_group_id`) REFERENCES `customer_group` (`customer_group_id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `FK_CAT_PRD_IDX_TIER_PRICE_ENTT_ID_CAT_PRD_ENTT_ENTT_ID` FOREIGN KEY (`entity_id`) REFERENCES `catalog_product_entity` (`entity_id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `FK_CAT_PRD_IDX_TIER_PRICE_WS_ID_CORE_WS_WS_ID` FOREIGN KEY (`website_id`) REFERENCES `core_website` (`website_id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
+-- 限制表 `catalog_product_index_website`
+--
+ALTER TABLE `catalog_product_index_website`
+  ADD CONSTRAINT `FK_CAT_PRD_IDX_WS_WS_ID_CORE_WS_WS_ID` FOREIGN KEY (`website_id`) REFERENCES `core_website` (`website_id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
+-- 限制表 `catalog_product_link`
+--
+ALTER TABLE `catalog_product_link`
+  ADD CONSTRAINT `FK_CAT_PRD_LNK_LNKED_PRD_ID_CAT_PRD_ENTT_ENTT_ID` FOREIGN KEY (`linked_product_id`) REFERENCES `catalog_product_entity` (`entity_id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `FK_CAT_PRD_LNK_LNK_TYPE_ID_CAT_PRD_LNK_TYPE_LNK_TYPE_ID` FOREIGN KEY (`link_type_id`) REFERENCES `catalog_product_link_type` (`link_type_id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `FK_CAT_PRD_LNK_PRD_ID_CAT_PRD_ENTT_ENTT_ID` FOREIGN KEY (`product_id`) REFERENCES `catalog_product_entity` (`entity_id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
+-- 限制表 `catalog_product_link_attribute`
+--
+ALTER TABLE `catalog_product_link_attribute`
+  ADD CONSTRAINT `FK_CAT_PRD_LNK_ATTR_LNK_TYPE_ID_CAT_PRD_LNK_TYPE_LNK_TYPE_ID` FOREIGN KEY (`link_type_id`) REFERENCES `catalog_product_link_type` (`link_type_id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
+-- 限制表 `catalog_product_link_attribute_decimal`
+--
+ALTER TABLE `catalog_product_link_attribute_decimal`
+  ADD CONSTRAINT `FK_AB2EFA9A14F7BCF1D5400056203D14B6` FOREIGN KEY (`product_link_attribute_id`) REFERENCES `catalog_product_link_attribute` (`product_link_attribute_id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `FK_CAT_PRD_LNK_ATTR_DEC_LNK_ID_CAT_PRD_LNK_LNK_ID` FOREIGN KEY (`link_id`) REFERENCES `catalog_product_link` (`link_id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
+-- 限制表 `catalog_product_link_attribute_int`
+--
+ALTER TABLE `catalog_product_link_attribute_int`
+  ADD CONSTRAINT `FK_CAT_PRD_LNK_ATTR_INT_LNK_ID_CAT_PRD_LNK_LNK_ID` FOREIGN KEY (`link_id`) REFERENCES `catalog_product_link` (`link_id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `FK_D6D878F8BA2A4282F8DDED7E6E3DE35C` FOREIGN KEY (`product_link_attribute_id`) REFERENCES `catalog_product_link_attribute` (`product_link_attribute_id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
+-- 限制表 `catalog_product_link_attribute_varchar`
+--
+ALTER TABLE `catalog_product_link_attribute_varchar`
+  ADD CONSTRAINT `FK_CAT_PRD_LNK_ATTR_VCHR_LNK_ID_CAT_PRD_LNK_LNK_ID` FOREIGN KEY (`link_id`) REFERENCES `catalog_product_link` (`link_id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `FK_DEE9C4DA61CFCC01DFCF50F0D79CEA51` FOREIGN KEY (`product_link_attribute_id`) REFERENCES `catalog_product_link_attribute` (`product_link_attribute_id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
+-- 限制表 `catalog_product_option`
+--
+ALTER TABLE `catalog_product_option`
+  ADD CONSTRAINT `FK_CAT_PRD_OPT_PRD_ID_CAT_PRD_ENTT_ENTT_ID` FOREIGN KEY (`product_id`) REFERENCES `catalog_product_entity` (`entity_id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
+-- 限制表 `catalog_product_option_price`
+--
+ALTER TABLE `catalog_product_option_price`
+  ADD CONSTRAINT `FK_CATALOG_PRODUCT_OPTION_PRICE_STORE_ID_CORE_STORE_STORE_ID` FOREIGN KEY (`store_id`) REFERENCES `core_store` (`store_id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `FK_CAT_PRD_OPT_PRICE_OPT_ID_CAT_PRD_OPT_OPT_ID` FOREIGN KEY (`option_id`) REFERENCES `catalog_product_option` (`option_id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
+-- 限制表 `catalog_product_option_title`
+--
+ALTER TABLE `catalog_product_option_title`
+  ADD CONSTRAINT `FK_CATALOG_PRODUCT_OPTION_TITLE_STORE_ID_CORE_STORE_STORE_ID` FOREIGN KEY (`store_id`) REFERENCES `core_store` (`store_id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `FK_CAT_PRD_OPT_TTL_OPT_ID_CAT_PRD_OPT_OPT_ID` FOREIGN KEY (`option_id`) REFERENCES `catalog_product_option` (`option_id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
+-- 限制表 `catalog_product_option_type_price`
+--
+ALTER TABLE `catalog_product_option_type_price`
+  ADD CONSTRAINT `FK_B523E3378E8602F376CC415825576B7F` FOREIGN KEY (`option_type_id`) REFERENCES `catalog_product_option_type_value` (`option_type_id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `FK_CAT_PRD_OPT_TYPE_PRICE_STORE_ID_CORE_STORE_STORE_ID` FOREIGN KEY (`store_id`) REFERENCES `core_store` (`store_id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
+-- 限制表 `catalog_product_option_type_title`
+--
+ALTER TABLE `catalog_product_option_type_title`
+  ADD CONSTRAINT `FK_C085B9CF2C2A302E8043FDEA1937D6A2` FOREIGN KEY (`option_type_id`) REFERENCES `catalog_product_option_type_value` (`option_type_id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `FK_CAT_PRD_OPT_TYPE_TTL_STORE_ID_CORE_STORE_STORE_ID` FOREIGN KEY (`store_id`) REFERENCES `core_store` (`store_id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
+-- 限制表 `catalog_product_option_type_value`
+--
+ALTER TABLE `catalog_product_option_type_value`
+  ADD CONSTRAINT `FK_CAT_PRD_OPT_TYPE_VAL_OPT_ID_CAT_PRD_OPT_OPT_ID` FOREIGN KEY (`option_id`) REFERENCES `catalog_product_option` (`option_id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
+-- 限制表 `catalog_product_relation`
+--
+ALTER TABLE `catalog_product_relation`
+  ADD CONSTRAINT `FK_CAT_PRD_RELATION_CHILD_ID_CAT_PRD_ENTT_ENTT_ID` FOREIGN KEY (`child_id`) REFERENCES `catalog_product_entity` (`entity_id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `FK_CAT_PRD_RELATION_PARENT_ID_CAT_PRD_ENTT_ENTT_ID` FOREIGN KEY (`parent_id`) REFERENCES `catalog_product_entity` (`entity_id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
+-- 限制表 `catalog_product_super_attribute`
+--
+ALTER TABLE `catalog_product_super_attribute`
+  ADD CONSTRAINT `FK_CAT_PRD_SPR_ATTR_PRD_ID_CAT_PRD_ENTT_ENTT_ID` FOREIGN KEY (`product_id`) REFERENCES `catalog_product_entity` (`entity_id`) ON DELETE CASCADE ON UPDATE NO ACTION;
+
+--
+-- 限制表 `catalog_product_super_attribute_label`
+--
+ALTER TABLE `catalog_product_super_attribute_label`
+  ADD CONSTRAINT `FK_309442281DF7784210ED82B2CC51E5D5` FOREIGN KEY (`product_super_attribute_id`) REFERENCES `catalog_product_super_attribute` (`product_super_attribute_id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `FK_CAT_PRD_SPR_ATTR_LBL_STORE_ID_CORE_STORE_STORE_ID` FOREIGN KEY (`store_id`) REFERENCES `core_store` (`store_id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
+-- 限制表 `catalog_product_super_attribute_pricing`
+--
+ALTER TABLE `catalog_product_super_attribute_pricing`
+  ADD CONSTRAINT `FK_CAT_PRD_SPR_ATTR_PRICING_WS_ID_CORE_WS_WS_ID` FOREIGN KEY (`website_id`) REFERENCES `core_website` (`website_id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `FK_CDE8813117106CFAA3AD209358F66332` FOREIGN KEY (`product_super_attribute_id`) REFERENCES `catalog_product_super_attribute` (`product_super_attribute_id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
+-- 限制表 `catalog_product_super_link`
+--
+ALTER TABLE `catalog_product_super_link`
+  ADD CONSTRAINT `FK_CAT_PRD_SPR_LNK_PARENT_ID_CAT_PRD_ENTT_ENTT_ID` FOREIGN KEY (`parent_id`) REFERENCES `catalog_product_entity` (`entity_id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `FK_CAT_PRD_SPR_LNK_PRD_ID_CAT_PRD_ENTT_ENTT_ID` FOREIGN KEY (`product_id`) REFERENCES `catalog_product_entity` (`entity_id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
+-- 限制表 `catalog_product_website`
+--
+ALTER TABLE `catalog_product_website`
+  ADD CONSTRAINT `FK_CATALOG_PRODUCT_WEBSITE_WEBSITE_ID_CORE_WEBSITE_WEBSITE_ID` FOREIGN KEY (`website_id`) REFERENCES `core_website` (`website_id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `FK_CAT_PRD_WS_PRD_ID_CAT_PRD_ENTT_ENTT_ID` FOREIGN KEY (`product_id`) REFERENCES `catalog_product_entity` (`entity_id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
 -- 限制表 `checkout_agreement_store`
 --
 ALTER TABLE `checkout_agreement_store`
-  ADD CONSTRAINT `checkout_agreement_store_ibfk_1` FOREIGN KEY (`store_id`) REFERENCES `core_store` (`store_id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  ADD CONSTRAINT `checkout_agreement_store_ibfk_2` FOREIGN KEY (`agreement_id`) REFERENCES `checkout_agreement` (`agreement_id`) ON DELETE CASCADE ON UPDATE CASCADE;
+  ADD CONSTRAINT `FK_CHECKOUT_AGREEMENT_STORE_STORE_ID_CORE_STORE_STORE_ID` FOREIGN KEY (`store_id`) REFERENCES `core_store` (`store_id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `FK_CHKT_AGRT_STORE_AGRT_ID_CHKT_AGRT_AGRT_ID` FOREIGN KEY (`agreement_id`) REFERENCES `checkout_agreement` (`agreement_id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
+-- 限制表 `cms_block_store`
+--
+ALTER TABLE `cms_block_store`
+  ADD CONSTRAINT `FK_CMS_BLOCK_STORE_BLOCK_ID_CMS_BLOCK_BLOCK_ID` FOREIGN KEY (`block_id`) REFERENCES `cms_block` (`block_id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `FK_CMS_BLOCK_STORE_STORE_ID_CORE_STORE_STORE_ID` FOREIGN KEY (`store_id`) REFERENCES `core_store` (`store_id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
+-- 限制表 `cms_page_store`
+--
+ALTER TABLE `cms_page_store`
+  ADD CONSTRAINT `FK_CMS_PAGE_STORE_PAGE_ID_CMS_PAGE_PAGE_ID` FOREIGN KEY (`page_id`) REFERENCES `cms_page` (`page_id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `FK_CMS_PAGE_STORE_STORE_ID_CORE_STORE_STORE_ID` FOREIGN KEY (`store_id`) REFERENCES `core_store` (`store_id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
+-- 限制表 `core_layout_link`
+--
+ALTER TABLE `core_layout_link`
+  ADD CONSTRAINT `FK_CORE_LAYOUT_LINK_STORE_ID_CORE_STORE_STORE_ID` FOREIGN KEY (`store_id`) REFERENCES `core_store` (`store_id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `FK_CORE_LYT_LNK_LYT_UPDATE_ID_CORE_LYT_UPDATE_LYT_UPDATE_ID` FOREIGN KEY (`layout_update_id`) REFERENCES `core_layout_update` (`layout_update_id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
+-- 限制表 `core_store`
+--
+ALTER TABLE `core_store`
+  ADD CONSTRAINT `FK_CORE_STORE_GROUP_ID_CORE_STORE_GROUP_GROUP_ID` FOREIGN KEY (`group_id`) REFERENCES `core_store_group` (`group_id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `FK_CORE_STORE_WEBSITE_ID_CORE_WEBSITE_WEBSITE_ID` FOREIGN KEY (`website_id`) REFERENCES `core_website` (`website_id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
+-- 限制表 `core_store_group`
+--
+ALTER TABLE `core_store_group`
+  ADD CONSTRAINT `FK_CORE_STORE_GROUP_WEBSITE_ID_CORE_WEBSITE_WEBSITE_ID` FOREIGN KEY (`website_id`) REFERENCES `core_website` (`website_id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
+-- 限制表 `core_translate`
+--
+ALTER TABLE `core_translate`
+  ADD CONSTRAINT `FK_CORE_TRANSLATE_STORE_ID_CORE_STORE_STORE_ID` FOREIGN KEY (`store_id`) REFERENCES `core_store` (`store_id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
+-- 限制表 `core_url_rewrite`
+--
+ALTER TABLE `core_url_rewrite`
+  ADD CONSTRAINT `FK_CORE_URL_REWRITE_CTGR_ID_CAT_CTGR_ENTT_ENTT_ID` FOREIGN KEY (`category_id`) REFERENCES `catalog_category_entity` (`entity_id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `FK_CORE_URL_REWRITE_PRODUCT_ID_CATALOG_PRODUCT_ENTITY_ENTITY_ID` FOREIGN KEY (`product_id`) REFERENCES `catalog_product_entity` (`entity_id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `FK_CORE_URL_REWRITE_STORE_ID_CORE_STORE_STORE_ID` FOREIGN KEY (`store_id`) REFERENCES `core_store` (`store_id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
+-- 限制表 `core_variable_value`
+--
+ALTER TABLE `core_variable_value`
+  ADD CONSTRAINT `FK_CORE_VARIABLE_VALUE_STORE_ID_CORE_STORE_STORE_ID` FOREIGN KEY (`store_id`) REFERENCES `core_store` (`store_id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `FK_CORE_VARIABLE_VALUE_VARIABLE_ID_CORE_VARIABLE_VARIABLE_ID` FOREIGN KEY (`variable_id`) REFERENCES `core_variable` (`variable_id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
 -- 限制表 `coupon_aggregated`
 --
 ALTER TABLE `coupon_aggregated`
-  ADD CONSTRAINT `coupon_aggregated_ibfk_1` FOREIGN KEY (`store_id`) REFERENCES `core_store` (`store_id`) ON DELETE CASCADE ON UPDATE CASCADE;
+  ADD CONSTRAINT `FK_COUPON_AGGREGATED_STORE_ID_CORE_STORE_STORE_ID` FOREIGN KEY (`store_id`) REFERENCES `core_store` (`store_id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
 -- 限制表 `coupon_aggregated_order`
 --
 ALTER TABLE `coupon_aggregated_order`
-  ADD CONSTRAINT `coupon_aggregated_order_ibfk_1` FOREIGN KEY (`store_id`) REFERENCES `core_store` (`store_id`) ON DELETE CASCADE ON UPDATE CASCADE;
+  ADD CONSTRAINT `FK_COUPON_AGGREGATED_ORDER_STORE_ID_CORE_STORE_STORE_ID` FOREIGN KEY (`store_id`) REFERENCES `core_store` (`store_id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
 -- 限制表 `coupon_aggregated_updated`
 --
 ALTER TABLE `coupon_aggregated_updated`
-  ADD CONSTRAINT `coupon_aggregated_updated_ibfk_1` FOREIGN KEY (`store_id`) REFERENCES `core_store` (`store_id`) ON DELETE CASCADE ON UPDATE CASCADE;
+  ADD CONSTRAINT `FK_COUPON_AGGREGATED_UPDATED_STORE_ID_CORE_STORE_STORE_ID` FOREIGN KEY (`store_id`) REFERENCES `core_store` (`store_id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
+-- 限制表 `customer_address_entity`
+--
+ALTER TABLE `customer_address_entity`
+  ADD CONSTRAINT `FK_CUSTOMER_ADDRESS_ENTITY_PARENT_ID_CUSTOMER_ENTITY_ENTITY_ID` FOREIGN KEY (`parent_id`) REFERENCES `customer_entity` (`entity_id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
+-- 限制表 `customer_address_entity_datetime`
+--
+ALTER TABLE `customer_address_entity_datetime`
+  ADD CONSTRAINT `FK_CSTR_ADDR_ENTT_DTIME_ATTR_ID_EAV_ATTR_ATTR_ID` FOREIGN KEY (`attribute_id`) REFERENCES `eav_attribute` (`attribute_id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `FK_CSTR_ADDR_ENTT_DTIME_ENTT_ID_CSTR_ADDR_ENTT_ENTT_ID` FOREIGN KEY (`entity_id`) REFERENCES `customer_address_entity` (`entity_id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `FK_CSTR_ADDR_ENTT_DTIME_ENTT_TYPE_ID_EAV_ENTT_TYPE_ENTT_TYPE_ID` FOREIGN KEY (`entity_type_id`) REFERENCES `eav_entity_type` (`entity_type_id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
+-- 限制表 `customer_address_entity_decimal`
+--
+ALTER TABLE `customer_address_entity_decimal`
+  ADD CONSTRAINT `FK_CSTR_ADDR_ENTT_DEC_ATTR_ID_EAV_ATTR_ATTR_ID` FOREIGN KEY (`attribute_id`) REFERENCES `eav_attribute` (`attribute_id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `FK_CSTR_ADDR_ENTT_DEC_ENTT_ID_CSTR_ADDR_ENTT_ENTT_ID` FOREIGN KEY (`entity_id`) REFERENCES `customer_address_entity` (`entity_id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `FK_CSTR_ADDR_ENTT_DEC_ENTT_TYPE_ID_EAV_ENTT_TYPE_ENTT_TYPE_ID` FOREIGN KEY (`entity_type_id`) REFERENCES `eav_entity_type` (`entity_type_id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
+-- 限制表 `customer_address_entity_int`
+--
+ALTER TABLE `customer_address_entity_int`
+  ADD CONSTRAINT `FK_CSTR_ADDR_ENTT_INT_ATTR_ID_EAV_ATTR_ATTR_ID` FOREIGN KEY (`attribute_id`) REFERENCES `eav_attribute` (`attribute_id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `FK_CSTR_ADDR_ENTT_INT_ENTT_ID_CSTR_ADDR_ENTT_ENTT_ID` FOREIGN KEY (`entity_id`) REFERENCES `customer_address_entity` (`entity_id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `FK_CSTR_ADDR_ENTT_INT_ENTT_TYPE_ID_EAV_ENTT_TYPE_ENTT_TYPE_ID` FOREIGN KEY (`entity_type_id`) REFERENCES `eav_entity_type` (`entity_type_id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
+-- 限制表 `customer_address_entity_text`
+--
+ALTER TABLE `customer_address_entity_text`
+  ADD CONSTRAINT `FK_CSTR_ADDR_ENTT_TEXT_ATTR_ID_EAV_ATTR_ATTR_ID` FOREIGN KEY (`attribute_id`) REFERENCES `eav_attribute` (`attribute_id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `FK_CSTR_ADDR_ENTT_TEXT_ENTT_ID_CSTR_ADDR_ENTT_ENTT_ID` FOREIGN KEY (`entity_id`) REFERENCES `customer_address_entity` (`entity_id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `FK_CSTR_ADDR_ENTT_TEXT_ENTT_TYPE_ID_EAV_ENTT_TYPE_ENTT_TYPE_ID` FOREIGN KEY (`entity_type_id`) REFERENCES `eav_entity_type` (`entity_type_id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
+-- 限制表 `customer_address_entity_varchar`
+--
+ALTER TABLE `customer_address_entity_varchar`
+  ADD CONSTRAINT `FK_CSTR_ADDR_ENTT_VCHR_ATTR_ID_EAV_ATTR_ATTR_ID` FOREIGN KEY (`attribute_id`) REFERENCES `eav_attribute` (`attribute_id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `FK_CSTR_ADDR_ENTT_VCHR_ENTT_ID_CSTR_ADDR_ENTT_ENTT_ID` FOREIGN KEY (`entity_id`) REFERENCES `customer_address_entity` (`entity_id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `FK_CSTR_ADDR_ENTT_VCHR_ENTT_TYPE_ID_EAV_ENTT_TYPE_ENTT_TYPE_ID` FOREIGN KEY (`entity_type_id`) REFERENCES `eav_entity_type` (`entity_type_id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
+-- 限制表 `customer_eav_attribute`
+--
+ALTER TABLE `customer_eav_attribute`
+  ADD CONSTRAINT `FK_CSTR_EAV_ATTR_ATTR_ID_EAV_ATTR_ATTR_ID` FOREIGN KEY (`attribute_id`) REFERENCES `eav_attribute` (`attribute_id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
+-- 限制表 `customer_eav_attribute_website`
+--
+ALTER TABLE `customer_eav_attribute_website`
+  ADD CONSTRAINT `FK_CSTR_EAV_ATTR_WS_ATTR_ID_EAV_ATTR_ATTR_ID` FOREIGN KEY (`attribute_id`) REFERENCES `eav_attribute` (`attribute_id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `FK_CSTR_EAV_ATTR_WS_WS_ID_CORE_WS_WS_ID` FOREIGN KEY (`website_id`) REFERENCES `core_website` (`website_id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
+-- 限制表 `customer_entity`
+--
+ALTER TABLE `customer_entity`
+  ADD CONSTRAINT `FK_CUSTOMER_ENTITY_STORE_ID_CORE_STORE_STORE_ID` FOREIGN KEY (`store_id`) REFERENCES `core_store` (`store_id`) ON DELETE SET NULL ON UPDATE CASCADE,
+  ADD CONSTRAINT `FK_CUSTOMER_ENTITY_WEBSITE_ID_CORE_WEBSITE_WEBSITE_ID` FOREIGN KEY (`website_id`) REFERENCES `core_website` (`website_id`) ON DELETE SET NULL ON UPDATE CASCADE;
+
+--
+-- 限制表 `customer_entity_datetime`
+--
+ALTER TABLE `customer_entity_datetime`
+  ADD CONSTRAINT `FK_CSTR_ENTT_DTIME_ATTR_ID_EAV_ATTR_ATTR_ID` FOREIGN KEY (`attribute_id`) REFERENCES `eav_attribute` (`attribute_id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `FK_CSTR_ENTT_DTIME_ENTT_TYPE_ID_EAV_ENTT_TYPE_ENTT_TYPE_ID` FOREIGN KEY (`entity_type_id`) REFERENCES `eav_entity_type` (`entity_type_id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `FK_CUSTOMER_ENTITY_DATETIME_ENTITY_ID_CUSTOMER_ENTITY_ENTITY_ID` FOREIGN KEY (`entity_id`) REFERENCES `customer_entity` (`entity_id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
+-- 限制表 `customer_entity_decimal`
+--
+ALTER TABLE `customer_entity_decimal`
+  ADD CONSTRAINT `FK_CSTR_ENTT_DEC_ATTR_ID_EAV_ATTR_ATTR_ID` FOREIGN KEY (`attribute_id`) REFERENCES `eav_attribute` (`attribute_id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `FK_CSTR_ENTT_DEC_ENTT_TYPE_ID_EAV_ENTT_TYPE_ENTT_TYPE_ID` FOREIGN KEY (`entity_type_id`) REFERENCES `eav_entity_type` (`entity_type_id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `FK_CUSTOMER_ENTITY_DECIMAL_ENTITY_ID_CUSTOMER_ENTITY_ENTITY_ID` FOREIGN KEY (`entity_id`) REFERENCES `customer_entity` (`entity_id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
+-- 限制表 `customer_entity_int`
+--
+ALTER TABLE `customer_entity_int`
+  ADD CONSTRAINT `FK_CSTR_ENTT_INT_ENTT_TYPE_ID_EAV_ENTT_TYPE_ENTT_TYPE_ID` FOREIGN KEY (`entity_type_id`) REFERENCES `eav_entity_type` (`entity_type_id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `FK_CUSTOMER_ENTITY_INT_ATTRIBUTE_ID_EAV_ATTRIBUTE_ATTRIBUTE_ID` FOREIGN KEY (`attribute_id`) REFERENCES `eav_attribute` (`attribute_id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `FK_CUSTOMER_ENTITY_INT_ENTITY_ID_CUSTOMER_ENTITY_ENTITY_ID` FOREIGN KEY (`entity_id`) REFERENCES `customer_entity` (`entity_id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
+-- 限制表 `customer_entity_text`
+--
+ALTER TABLE `customer_entity_text`
+  ADD CONSTRAINT `FK_CSTR_ENTT_TEXT_ENTT_TYPE_ID_EAV_ENTT_TYPE_ENTT_TYPE_ID` FOREIGN KEY (`entity_type_id`) REFERENCES `eav_entity_type` (`entity_type_id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `FK_CUSTOMER_ENTITY_TEXT_ATTRIBUTE_ID_EAV_ATTRIBUTE_ATTRIBUTE_ID` FOREIGN KEY (`attribute_id`) REFERENCES `eav_attribute` (`attribute_id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `FK_CUSTOMER_ENTITY_TEXT_ENTITY_ID_CUSTOMER_ENTITY_ENTITY_ID` FOREIGN KEY (`entity_id`) REFERENCES `customer_entity` (`entity_id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
+-- 限制表 `customer_entity_varchar`
+--
+ALTER TABLE `customer_entity_varchar`
+  ADD CONSTRAINT `FK_CSTR_ENTT_VCHR_ATTR_ID_EAV_ATTR_ATTR_ID` FOREIGN KEY (`attribute_id`) REFERENCES `eav_attribute` (`attribute_id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `FK_CSTR_ENTT_VCHR_ENTT_TYPE_ID_EAV_ENTT_TYPE_ENTT_TYPE_ID` FOREIGN KEY (`entity_type_id`) REFERENCES `eav_entity_type` (`entity_type_id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `FK_CUSTOMER_ENTITY_VARCHAR_ENTITY_ID_CUSTOMER_ENTITY_ENTITY_ID` FOREIGN KEY (`entity_id`) REFERENCES `customer_entity` (`entity_id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
+-- 限制表 `customer_form_attribute`
+--
+ALTER TABLE `customer_form_attribute`
+  ADD CONSTRAINT `FK_CSTR_FORM_ATTR_ATTR_ID_EAV_ATTR_ATTR_ID` FOREIGN KEY (`attribute_id`) REFERENCES `eav_attribute` (`attribute_id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
 -- 限制表 `dataflow_batch`
 --
 ALTER TABLE `dataflow_batch`
-  ADD CONSTRAINT `dataflow_batch_ibfk_1` FOREIGN KEY (`profile_id`) REFERENCES `dataflow_profile` (`profile_id`) ON DELETE CASCADE ON UPDATE NO ACTION,
-  ADD CONSTRAINT `dataflow_batch_ibfk_2` FOREIGN KEY (`store_id`) REFERENCES `core_store` (`store_id`) ON DELETE CASCADE ON UPDATE NO ACTION;
+  ADD CONSTRAINT `FK_DATAFLOW_BATCH_PROFILE_ID_DATAFLOW_PROFILE_PROFILE_ID` FOREIGN KEY (`profile_id`) REFERENCES `dataflow_profile` (`profile_id`) ON DELETE CASCADE ON UPDATE NO ACTION,
+  ADD CONSTRAINT `FK_DATAFLOW_BATCH_STORE_ID_CORE_STORE_STORE_ID` FOREIGN KEY (`store_id`) REFERENCES `core_store` (`store_id`) ON DELETE CASCADE ON UPDATE NO ACTION;
 
 --
 -- 限制表 `dataflow_batch_export`
 --
 ALTER TABLE `dataflow_batch_export`
-  ADD CONSTRAINT `dataflow_batch_export_ibfk_1` FOREIGN KEY (`batch_id`) REFERENCES `dataflow_batch` (`batch_id`) ON DELETE CASCADE ON UPDATE NO ACTION;
+  ADD CONSTRAINT `FK_DATAFLOW_BATCH_EXPORT_BATCH_ID_DATAFLOW_BATCH_BATCH_ID` FOREIGN KEY (`batch_id`) REFERENCES `dataflow_batch` (`batch_id`) ON DELETE CASCADE ON UPDATE NO ACTION;
 
 --
 -- 限制表 `dataflow_batch_import`
 --
 ALTER TABLE `dataflow_batch_import`
-  ADD CONSTRAINT `dataflow_batch_import_ibfk_1` FOREIGN KEY (`batch_id`) REFERENCES `dataflow_batch` (`batch_id`) ON DELETE CASCADE ON UPDATE NO ACTION;
+  ADD CONSTRAINT `FK_DATAFLOW_BATCH_IMPORT_BATCH_ID_DATAFLOW_BATCH_BATCH_ID` FOREIGN KEY (`batch_id`) REFERENCES `dataflow_batch` (`batch_id`) ON DELETE CASCADE ON UPDATE NO ACTION;
 
 --
 -- 限制表 `dataflow_import_data`
 --
 ALTER TABLE `dataflow_import_data`
-  ADD CONSTRAINT `dataflow_import_data_ibfk_1` FOREIGN KEY (`session_id`) REFERENCES `dataflow_session` (`session_id`) ON DELETE NO ACTION ON UPDATE NO ACTION;
+  ADD CONSTRAINT `FK_DATAFLOW_IMPORT_DATA_SESSION_ID_DATAFLOW_SESSION_SESSION_ID` FOREIGN KEY (`session_id`) REFERENCES `dataflow_session` (`session_id`) ON DELETE NO ACTION ON UPDATE NO ACTION;
 
 --
 -- 限制表 `dataflow_profile_history`
 --
 ALTER TABLE `dataflow_profile_history`
-  ADD CONSTRAINT `dataflow_profile_history_ibfk_1` FOREIGN KEY (`profile_id`) REFERENCES `dataflow_profile` (`profile_id`) ON DELETE CASCADE ON UPDATE CASCADE;
+  ADD CONSTRAINT `FK_AEA06B0C500063D3CE6EA671AE776645` FOREIGN KEY (`profile_id`) REFERENCES `dataflow_profile` (`profile_id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
 -- 限制表 `design_change`
 --
 ALTER TABLE `design_change`
-  ADD CONSTRAINT `design_change_ibfk_1` FOREIGN KEY (`store_id`) REFERENCES `core_store` (`store_id`) ON DELETE CASCADE ON UPDATE CASCADE;
+  ADD CONSTRAINT `FK_DESIGN_CHANGE_STORE_ID_CORE_STORE_STORE_ID` FOREIGN KEY (`store_id`) REFERENCES `core_store` (`store_id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
 -- 限制表 `directory_country_region_name`
 --
 ALTER TABLE `directory_country_region_name`
-  ADD CONSTRAINT `directory_country_region_name_ibfk_1` FOREIGN KEY (`region_id`) REFERENCES `directory_country_region` (`region_id`) ON DELETE CASCADE ON UPDATE CASCADE;
+  ADD CONSTRAINT `FK_D7CFDEB379F775328EB6F62695E2B3E1` FOREIGN KEY (`region_id`) REFERENCES `directory_country_region` (`region_id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
 -- 限制表 `downloadable_link`
 --
 ALTER TABLE `downloadable_link`
-  ADD CONSTRAINT `downloadable_link_ibfk_1` FOREIGN KEY (`product_id`) REFERENCES `catalog_product_entity` (`entity_id`) ON DELETE CASCADE ON UPDATE CASCADE;
+  ADD CONSTRAINT `FK_DOWNLOADABLE_LINK_PRODUCT_ID_CATALOG_PRODUCT_ENTITY_ENTITY_ID` FOREIGN KEY (`product_id`) REFERENCES `catalog_product_entity` (`entity_id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
 -- 限制表 `downloadable_link_price`
 --
 ALTER TABLE `downloadable_link_price`
-  ADD CONSTRAINT `downloadable_link_price_ibfk_1` FOREIGN KEY (`link_id`) REFERENCES `downloadable_link` (`link_id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  ADD CONSTRAINT `downloadable_link_price_ibfk_2` FOREIGN KEY (`website_id`) REFERENCES `core_website` (`website_id`) ON DELETE CASCADE ON UPDATE CASCADE;
+  ADD CONSTRAINT `FK_DOWNLOADABLE_LINK_PRICE_LINK_ID_DOWNLOADABLE_LINK_LINK_ID` FOREIGN KEY (`link_id`) REFERENCES `downloadable_link` (`link_id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `FK_DOWNLOADABLE_LINK_PRICE_WEBSITE_ID_CORE_WEBSITE_WEBSITE_ID` FOREIGN KEY (`website_id`) REFERENCES `core_website` (`website_id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
 -- 限制表 `downloadable_link_purchased`
 --
 ALTER TABLE `downloadable_link_purchased`
-  ADD CONSTRAINT `downloadable_link_purchased_ibfk_1` FOREIGN KEY (`customer_id`) REFERENCES `customer_entity` (`entity_id`) ON DELETE SET NULL ON UPDATE CASCADE,
-  ADD CONSTRAINT `downloadable_link_purchased_ibfk_2` FOREIGN KEY (`order_id`) REFERENCES `sales_flat_order` (`entity_id`) ON DELETE SET NULL ON UPDATE CASCADE;
+  ADD CONSTRAINT `FK_DL_LNK_PURCHASED_CSTR_ID_CSTR_ENTT_ENTT_ID` FOREIGN KEY (`customer_id`) REFERENCES `customer_entity` (`entity_id`) ON DELETE SET NULL ON UPDATE CASCADE,
+  ADD CONSTRAINT `FK_DL_LNK_PURCHASED_ORDER_ID_SALES_FLAT_ORDER_ENTT_ID` FOREIGN KEY (`order_id`) REFERENCES `sales_flat_order` (`entity_id`) ON DELETE SET NULL ON UPDATE CASCADE;
 
 --
 -- 限制表 `downloadable_link_purchased_item`
 --
 ALTER TABLE `downloadable_link_purchased_item`
-  ADD CONSTRAINT `downloadable_link_purchased_item_ibfk_1` FOREIGN KEY (`purchased_id`) REFERENCES `downloadable_link_purchased` (`purchased_id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  ADD CONSTRAINT `downloadable_link_purchased_item_ibfk_2` FOREIGN KEY (`order_item_id`) REFERENCES `sales_flat_order_item` (`item_id`) ON DELETE SET NULL ON UPDATE CASCADE;
+  ADD CONSTRAINT `FK_46CC8E252307CE62F00A8F1887512A39` FOREIGN KEY (`purchased_id`) REFERENCES `downloadable_link_purchased` (`purchased_id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `FK_B219BF25756700DEE44550B21220ECCE` FOREIGN KEY (`order_item_id`) REFERENCES `sales_flat_order_item` (`item_id`) ON DELETE SET NULL ON UPDATE CASCADE;
 
 --
 -- 限制表 `downloadable_link_title`
 --
 ALTER TABLE `downloadable_link_title`
-  ADD CONSTRAINT `downloadable_link_title_ibfk_1` FOREIGN KEY (`link_id`) REFERENCES `downloadable_link` (`link_id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  ADD CONSTRAINT `downloadable_link_title_ibfk_2` FOREIGN KEY (`store_id`) REFERENCES `core_store` (`store_id`) ON DELETE CASCADE ON UPDATE CASCADE;
+  ADD CONSTRAINT `FK_DOWNLOADABLE_LINK_TITLE_LINK_ID_DOWNLOADABLE_LINK_LINK_ID` FOREIGN KEY (`link_id`) REFERENCES `downloadable_link` (`link_id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `FK_DOWNLOADABLE_LINK_TITLE_STORE_ID_CORE_STORE_STORE_ID` FOREIGN KEY (`store_id`) REFERENCES `core_store` (`store_id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
 -- 限制表 `downloadable_sample`
 --
 ALTER TABLE `downloadable_sample`
-  ADD CONSTRAINT `downloadable_sample_ibfk_1` FOREIGN KEY (`product_id`) REFERENCES `catalog_product_entity` (`entity_id`) ON DELETE CASCADE ON UPDATE CASCADE;
+  ADD CONSTRAINT `FK_DL_SAMPLE_PRD_ID_CAT_PRD_ENTT_ENTT_ID` FOREIGN KEY (`product_id`) REFERENCES `catalog_product_entity` (`entity_id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
 -- 限制表 `downloadable_sample_title`
 --
 ALTER TABLE `downloadable_sample_title`
-  ADD CONSTRAINT `downloadable_sample_title_ibfk_1` FOREIGN KEY (`sample_id`) REFERENCES `downloadable_sample` (`sample_id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  ADD CONSTRAINT `downloadable_sample_title_ibfk_2` FOREIGN KEY (`store_id`) REFERENCES `core_store` (`store_id`) ON DELETE CASCADE ON UPDATE CASCADE;
+  ADD CONSTRAINT `FK_DL_SAMPLE_TTL_SAMPLE_ID_DL_SAMPLE_SAMPLE_ID` FOREIGN KEY (`sample_id`) REFERENCES `downloadable_sample` (`sample_id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `FK_DOWNLOADABLE_SAMPLE_TITLE_STORE_ID_CORE_STORE_STORE_ID` FOREIGN KEY (`store_id`) REFERENCES `core_store` (`store_id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
+-- 限制表 `eav_attribute`
+--
+ALTER TABLE `eav_attribute`
+  ADD CONSTRAINT `FK_EAV_ATTRIBUTE_ENTITY_TYPE_ID_EAV_ENTITY_TYPE_ENTITY_TYPE_ID` FOREIGN KEY (`entity_type_id`) REFERENCES `eav_entity_type` (`entity_type_id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
+-- 限制表 `eav_attribute_group`
+--
+ALTER TABLE `eav_attribute_group`
+  ADD CONSTRAINT `FK_EAV_ATTR_GROUP_ATTR_SET_ID_EAV_ATTR_SET_ATTR_SET_ID` FOREIGN KEY (`attribute_set_id`) REFERENCES `eav_attribute_set` (`attribute_set_id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
+-- 限制表 `eav_attribute_label`
+--
+ALTER TABLE `eav_attribute_label`
+  ADD CONSTRAINT `FK_EAV_ATTRIBUTE_LABEL_ATTRIBUTE_ID_EAV_ATTRIBUTE_ATTRIBUTE_ID` FOREIGN KEY (`attribute_id`) REFERENCES `eav_attribute` (`attribute_id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `FK_EAV_ATTRIBUTE_LABEL_STORE_ID_CORE_STORE_STORE_ID` FOREIGN KEY (`store_id`) REFERENCES `core_store` (`store_id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
+-- 限制表 `eav_attribute_option`
+--
+ALTER TABLE `eav_attribute_option`
+  ADD CONSTRAINT `FK_EAV_ATTRIBUTE_OPTION_ATTRIBUTE_ID_EAV_ATTRIBUTE_ATTRIBUTE_ID` FOREIGN KEY (`attribute_id`) REFERENCES `eav_attribute` (`attribute_id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
+-- 限制表 `eav_attribute_option_value`
+--
+ALTER TABLE `eav_attribute_option_value`
+  ADD CONSTRAINT `FK_EAV_ATTRIBUTE_OPTION_VALUE_STORE_ID_CORE_STORE_STORE_ID` FOREIGN KEY (`store_id`) REFERENCES `core_store` (`store_id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `FK_EAV_ATTR_OPT_VAL_OPT_ID_EAV_ATTR_OPT_OPT_ID` FOREIGN KEY (`option_id`) REFERENCES `eav_attribute_option` (`option_id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
+-- 限制表 `eav_attribute_set`
+--
+ALTER TABLE `eav_attribute_set`
+  ADD CONSTRAINT `FK_EAV_ATTR_SET_ENTT_TYPE_ID_EAV_ENTT_TYPE_ENTT_TYPE_ID` FOREIGN KEY (`entity_type_id`) REFERENCES `eav_entity_type` (`entity_type_id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
+-- 限制表 `eav_entity`
+--
+ALTER TABLE `eav_entity`
+  ADD CONSTRAINT `FK_EAV_ENTITY_ENTITY_TYPE_ID_EAV_ENTITY_TYPE_ENTITY_TYPE_ID` FOREIGN KEY (`entity_type_id`) REFERENCES `eav_entity_type` (`entity_type_id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `FK_EAV_ENTITY_STORE_ID_CORE_STORE_STORE_ID` FOREIGN KEY (`store_id`) REFERENCES `core_store` (`store_id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
+-- 限制表 `eav_entity_attribute`
+--
+ALTER TABLE `eav_entity_attribute`
+  ADD CONSTRAINT `FK_EAV_ENTITY_ATTRIBUTE_ATTRIBUTE_ID_EAV_ATTRIBUTE_ATTRIBUTE_ID` FOREIGN KEY (`attribute_id`) REFERENCES `eav_attribute` (`attribute_id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `FK_EAV_ENTT_ATTR_ATTR_GROUP_ID_EAV_ATTR_GROUP_ATTR_GROUP_ID` FOREIGN KEY (`attribute_group_id`) REFERENCES `eav_attribute_group` (`attribute_group_id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
+-- 限制表 `eav_entity_datetime`
+--
+ALTER TABLE `eav_entity_datetime`
+  ADD CONSTRAINT `FK_EAV_ENTITY_DATETIME_ENTITY_ID_EAV_ENTITY_ENTITY_ID` FOREIGN KEY (`entity_id`) REFERENCES `eav_entity` (`entity_id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `FK_EAV_ENTITY_DATETIME_STORE_ID_CORE_STORE_STORE_ID` FOREIGN KEY (`store_id`) REFERENCES `core_store` (`store_id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `FK_EAV_ENTT_DTIME_ENTT_TYPE_ID_EAV_ENTT_TYPE_ENTT_TYPE_ID` FOREIGN KEY (`entity_type_id`) REFERENCES `eav_entity_type` (`entity_type_id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
+-- 限制表 `eav_entity_decimal`
+--
+ALTER TABLE `eav_entity_decimal`
+  ADD CONSTRAINT `FK_EAV_ENTITY_DECIMAL_ENTITY_ID_EAV_ENTITY_ENTITY_ID` FOREIGN KEY (`entity_id`) REFERENCES `eav_entity` (`entity_id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `FK_EAV_ENTITY_DECIMAL_STORE_ID_CORE_STORE_STORE_ID` FOREIGN KEY (`store_id`) REFERENCES `core_store` (`store_id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `FK_EAV_ENTT_DEC_ENTT_TYPE_ID_EAV_ENTT_TYPE_ENTT_TYPE_ID` FOREIGN KEY (`entity_type_id`) REFERENCES `eav_entity_type` (`entity_type_id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
+-- 限制表 `eav_entity_int`
+--
+ALTER TABLE `eav_entity_int`
+  ADD CONSTRAINT `FK_EAV_ENTITY_INT_ENTITY_ID_EAV_ENTITY_ENTITY_ID` FOREIGN KEY (`entity_id`) REFERENCES `eav_entity` (`entity_id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `FK_EAV_ENTITY_INT_ENTITY_TYPE_ID_EAV_ENTITY_TYPE_ENTITY_TYPE_ID` FOREIGN KEY (`entity_type_id`) REFERENCES `eav_entity_type` (`entity_type_id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `FK_EAV_ENTITY_INT_STORE_ID_CORE_STORE_STORE_ID` FOREIGN KEY (`store_id`) REFERENCES `core_store` (`store_id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
+-- 限制表 `eav_entity_store`
+--
+ALTER TABLE `eav_entity_store`
+  ADD CONSTRAINT `FK_EAV_ENTITY_STORE_STORE_ID_CORE_STORE_STORE_ID` FOREIGN KEY (`store_id`) REFERENCES `core_store` (`store_id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `FK_EAV_ENTT_STORE_ENTT_TYPE_ID_EAV_ENTT_TYPE_ENTT_TYPE_ID` FOREIGN KEY (`entity_type_id`) REFERENCES `eav_entity_type` (`entity_type_id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
+-- 限制表 `eav_entity_text`
+--
+ALTER TABLE `eav_entity_text`
+  ADD CONSTRAINT `FK_EAV_ENTITY_TEXT_ENTITY_ID_EAV_ENTITY_ENTITY_ID` FOREIGN KEY (`entity_id`) REFERENCES `eav_entity` (`entity_id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `FK_EAV_ENTITY_TEXT_ENTITY_TYPE_ID_EAV_ENTITY_TYPE_ENTITY_TYPE_ID` FOREIGN KEY (`entity_type_id`) REFERENCES `eav_entity_type` (`entity_type_id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `FK_EAV_ENTITY_TEXT_STORE_ID_CORE_STORE_STORE_ID` FOREIGN KEY (`store_id`) REFERENCES `core_store` (`store_id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
+-- 限制表 `eav_entity_varchar`
+--
+ALTER TABLE `eav_entity_varchar`
+  ADD CONSTRAINT `FK_EAV_ENTITY_VARCHAR_ENTITY_ID_EAV_ENTITY_ENTITY_ID` FOREIGN KEY (`entity_id`) REFERENCES `eav_entity` (`entity_id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `FK_EAV_ENTITY_VARCHAR_STORE_ID_CORE_STORE_STORE_ID` FOREIGN KEY (`store_id`) REFERENCES `core_store` (`store_id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `FK_EAV_ENTT_VCHR_ENTT_TYPE_ID_EAV_ENTT_TYPE_ENTT_TYPE_ID` FOREIGN KEY (`entity_type_id`) REFERENCES `eav_entity_type` (`entity_type_id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
+-- 限制表 `eav_form_element`
+--
+ALTER TABLE `eav_form_element`
+  ADD CONSTRAINT `FK_EAV_FORM_ELEMENT_ATTRIBUTE_ID_EAV_ATTRIBUTE_ATTRIBUTE_ID` FOREIGN KEY (`attribute_id`) REFERENCES `eav_attribute` (`attribute_id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `FK_EAV_FORM_ELEMENT_FIELDSET_ID_EAV_FORM_FIELDSET_FIELDSET_ID` FOREIGN KEY (`fieldset_id`) REFERENCES `eav_form_fieldset` (`fieldset_id`) ON DELETE SET NULL ON UPDATE CASCADE,
+  ADD CONSTRAINT `FK_EAV_FORM_ELEMENT_TYPE_ID_EAV_FORM_TYPE_TYPE_ID` FOREIGN KEY (`type_id`) REFERENCES `eav_form_type` (`type_id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
+-- 限制表 `eav_form_fieldset`
+--
+ALTER TABLE `eav_form_fieldset`
+  ADD CONSTRAINT `FK_EAV_FORM_FIELDSET_TYPE_ID_EAV_FORM_TYPE_TYPE_ID` FOREIGN KEY (`type_id`) REFERENCES `eav_form_type` (`type_id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
+-- 限制表 `eav_form_fieldset_label`
+--
+ALTER TABLE `eav_form_fieldset_label`
+  ADD CONSTRAINT `FK_EAV_FORM_FIELDSET_LABEL_STORE_ID_CORE_STORE_STORE_ID` FOREIGN KEY (`store_id`) REFERENCES `core_store` (`store_id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `FK_EAV_FORM_FSET_LBL_FSET_ID_EAV_FORM_FSET_FSET_ID` FOREIGN KEY (`fieldset_id`) REFERENCES `eav_form_fieldset` (`fieldset_id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
+-- 限制表 `eav_form_type`
+--
+ALTER TABLE `eav_form_type`
+  ADD CONSTRAINT `FK_EAV_FORM_TYPE_STORE_ID_CORE_STORE_STORE_ID` FOREIGN KEY (`store_id`) REFERENCES `core_store` (`store_id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
+-- 限制表 `eav_form_type_entity`
+--
+ALTER TABLE `eav_form_type_entity`
+  ADD CONSTRAINT `FK_EAV_FORM_TYPE_ENTITY_TYPE_ID_EAV_FORM_TYPE_TYPE_ID` FOREIGN KEY (`type_id`) REFERENCES `eav_form_type` (`type_id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `FK_EAV_FORM_TYPE_ENTT_ENTT_TYPE_ID_EAV_ENTT_TYPE_ENTT_TYPE_ID` FOREIGN KEY (`entity_type_id`) REFERENCES `eav_entity_type` (`entity_type_id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
 -- 限制表 `index_process_event`
 --
 ALTER TABLE `index_process_event`
-  ADD CONSTRAINT `index_process_event_ibfk_1` FOREIGN KEY (`process_id`) REFERENCES `index_process` (`process_id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  ADD CONSTRAINT `index_process_event_ibfk_2` FOREIGN KEY (`event_id`) REFERENCES `index_event` (`event_id`) ON DELETE CASCADE ON UPDATE CASCADE;
-
---
--- 限制表 `mdg_giftregistry_entity`
---
-ALTER TABLE `mdg_giftregistry_entity`
-  ADD CONSTRAINT `FK_MDG_GIFTREGISTRY_ENTITY_CUSTOMER_ID_CUSTOMER_ENTITY_ENTITY_ID` FOREIGN KEY (`customer_id`) REFERENCES `customer_entity` (`entity_id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  ADD CONSTRAINT `FK_MDG_GIFTREGISTRY_ENTITY_TYPE_ID_MDG_GIFTREGISTRY_TYPE_TYPE_ID` FOREIGN KEY (`type_id`) REFERENCES `mdg_giftregistry_type` (`type_id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  ADD CONSTRAINT `FK_MDG_GIFTREGISTRY_ENTITY_WEBSITE_ID_CORE_WEBSITE_WEBSITE_ID` FOREIGN KEY (`website_id`) REFERENCES `core_website` (`website_id`) ON DELETE CASCADE ON UPDATE CASCADE;
-
---
--- 限制表 `newfrog_newzone_entity`
---
-ALTER TABLE `newfrog_newzone_entity`
-  ADD CONSTRAINT `FK_NEWFROG_NEWZONE_ENTITY_TYPE_ID_NEWFROG_NEWZONE_TYPE_TYPE_ID` FOREIGN KEY (`type_id`) REFERENCES `newfrog_newzone_type` (`type_id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  ADD CONSTRAINT `FK_NEWFROG_NEWZONE_ENTITY_WEBSITE_ID_CORE_WEBSITE_WEBSITE_ID` FOREIGN KEY (`website_id`) REFERENCES `core_website` (`website_id`) ON DELETE CASCADE ON UPDATE CASCADE;
+  ADD CONSTRAINT `FK_INDEX_PROCESS_EVENT_EVENT_ID_INDEX_EVENT_EVENT_ID` FOREIGN KEY (`event_id`) REFERENCES `index_event` (`event_id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `FK_INDEX_PROCESS_EVENT_PROCESS_ID_INDEX_PROCESS_PROCESS_ID` FOREIGN KEY (`process_id`) REFERENCES `index_process` (`process_id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
 -- 限制表 `newsletter_problem`
 --
 ALTER TABLE `newsletter_problem`
-  ADD CONSTRAINT `newsletter_problem_ibfk_1` FOREIGN KEY (`subscriber_id`) REFERENCES `newsletter_subscriber` (`subscriber_id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  ADD CONSTRAINT `newsletter_problem_ibfk_2` FOREIGN KEY (`queue_id`) REFERENCES `newsletter_queue` (`queue_id`) ON DELETE CASCADE ON UPDATE CASCADE;
+  ADD CONSTRAINT `FK_NEWSLETTER_PROBLEM_QUEUE_ID_NEWSLETTER_QUEUE_QUEUE_ID` FOREIGN KEY (`queue_id`) REFERENCES `newsletter_queue` (`queue_id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `FK_NLTTR_PROBLEM_SUBSCRIBER_ID_NLTTR_SUBSCRIBER_SUBSCRIBER_ID` FOREIGN KEY (`subscriber_id`) REFERENCES `newsletter_subscriber` (`subscriber_id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
 -- 限制表 `newsletter_queue`
 --
 ALTER TABLE `newsletter_queue`
-  ADD CONSTRAINT `newsletter_queue_ibfk_1` FOREIGN KEY (`template_id`) REFERENCES `newsletter_template` (`template_id`) ON DELETE CASCADE ON UPDATE CASCADE;
+  ADD CONSTRAINT `FK_NEWSLETTER_QUEUE_TEMPLATE_ID_NEWSLETTER_TEMPLATE_TEMPLATE_ID` FOREIGN KEY (`template_id`) REFERENCES `newsletter_template` (`template_id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
 -- 限制表 `newsletter_queue_link`
 --
 ALTER TABLE `newsletter_queue_link`
-  ADD CONSTRAINT `newsletter_queue_link_ibfk_1` FOREIGN KEY (`subscriber_id`) REFERENCES `newsletter_subscriber` (`subscriber_id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  ADD CONSTRAINT `newsletter_queue_link_ibfk_2` FOREIGN KEY (`queue_id`) REFERENCES `newsletter_queue` (`queue_id`) ON DELETE CASCADE ON UPDATE CASCADE;
+  ADD CONSTRAINT `FK_NEWSLETTER_QUEUE_LINK_QUEUE_ID_NEWSLETTER_QUEUE_QUEUE_ID` FOREIGN KEY (`queue_id`) REFERENCES `newsletter_queue` (`queue_id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `FK_NLTTR_QUEUE_LNK_SUBSCRIBER_ID_NLTTR_SUBSCRIBER_SUBSCRIBER_ID` FOREIGN KEY (`subscriber_id`) REFERENCES `newsletter_subscriber` (`subscriber_id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
 -- 限制表 `newsletter_queue_store_link`
 --
 ALTER TABLE `newsletter_queue_store_link`
-  ADD CONSTRAINT `newsletter_queue_store_link_ibfk_1` FOREIGN KEY (`queue_id`) REFERENCES `newsletter_queue` (`queue_id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  ADD CONSTRAINT `newsletter_queue_store_link_ibfk_2` FOREIGN KEY (`store_id`) REFERENCES `core_store` (`store_id`) ON DELETE CASCADE ON UPDATE CASCADE;
+  ADD CONSTRAINT `FK_NEWSLETTER_QUEUE_STORE_LINK_STORE_ID_CORE_STORE_STORE_ID` FOREIGN KEY (`store_id`) REFERENCES `core_store` (`store_id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `FK_NLTTR_QUEUE_STORE_LNK_QUEUE_ID_NLTTR_QUEUE_QUEUE_ID` FOREIGN KEY (`queue_id`) REFERENCES `newsletter_queue` (`queue_id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
 -- 限制表 `newsletter_subscriber`
 --
 ALTER TABLE `newsletter_subscriber`
-  ADD CONSTRAINT `newsletter_subscriber_ibfk_1` FOREIGN KEY (`store_id`) REFERENCES `core_store` (`store_id`) ON DELETE SET NULL ON UPDATE CASCADE;
+  ADD CONSTRAINT `FK_NEWSLETTER_SUBSCRIBER_STORE_ID_CORE_STORE_STORE_ID` FOREIGN KEY (`store_id`) REFERENCES `core_store` (`store_id`) ON DELETE SET NULL ON UPDATE CASCADE;
 
 --
 -- 限制表 `oauth_token`
 --
 ALTER TABLE `oauth_token`
-  ADD CONSTRAINT `oauth_token_ibfk_1` FOREIGN KEY (`admin_id`) REFERENCES `admin_user` (`user_id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  ADD CONSTRAINT `oauth_token_ibfk_2` FOREIGN KEY (`consumer_id`) REFERENCES `oauth_consumer` (`entity_id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  ADD CONSTRAINT `oauth_token_ibfk_3` FOREIGN KEY (`customer_id`) REFERENCES `customer_entity` (`entity_id`) ON DELETE CASCADE ON UPDATE CASCADE;
-
---
--- 限制表 `outofstocksubscription_info`
---
-ALTER TABLE `outofstocksubscription_info`
-  ADD CONSTRAINT `FK_OUTOFSTOCKSUBSCRIPTION_PRODUCT_ID` FOREIGN KEY (`product_id`) REFERENCES `catalog_product_entity` (`entity_id`) ON DELETE CASCADE ON UPDATE CASCADE;
+  ADD CONSTRAINT `FK_OAUTH_TOKEN_ADMIN_ID_ADMIN_USER_USER_ID` FOREIGN KEY (`admin_id`) REFERENCES `admin_user` (`user_id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `FK_OAUTH_TOKEN_CONSUMER_ID_OAUTH_CONSUMER_ENTITY_ID` FOREIGN KEY (`consumer_id`) REFERENCES `oauth_consumer` (`entity_id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `FK_OAUTH_TOKEN_CUSTOMER_ID_CUSTOMER_ENTITY_ENTITY_ID` FOREIGN KEY (`customer_id`) REFERENCES `customer_entity` (`entity_id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
 -- 限制表 `paypal_cert`
 --
 ALTER TABLE `paypal_cert`
-  ADD CONSTRAINT `paypal_cert_ibfk_1` FOREIGN KEY (`website_id`) REFERENCES `core_website` (`website_id`) ON DELETE CASCADE ON UPDATE CASCADE;
+  ADD CONSTRAINT `FK_PAYPAL_CERT_WEBSITE_ID_CORE_WEBSITE_WEBSITE_ID` FOREIGN KEY (`website_id`) REFERENCES `core_website` (`website_id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
 -- 限制表 `paypal_settlement_report_row`
 --
 ALTER TABLE `paypal_settlement_report_row`
-  ADD CONSTRAINT `paypal_settlement_report_row_ibfk_1` FOREIGN KEY (`report_id`) REFERENCES `paypal_settlement_report` (`report_id`) ON DELETE CASCADE ON UPDATE CASCADE;
+  ADD CONSTRAINT `FK_E183E488F593E0DE10C6EBFFEBAC9B55` FOREIGN KEY (`report_id`) REFERENCES `paypal_settlement_report` (`report_id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
 -- 限制表 `persistent_session`
 --
 ALTER TABLE `persistent_session`
-  ADD CONSTRAINT `persistent_session_ibfk_1` FOREIGN KEY (`website_id`) REFERENCES `core_website` (`website_id`) ON DELETE CASCADE ON UPDATE NO ACTION,
-  ADD CONSTRAINT `persistent_session_ibfk_2` FOREIGN KEY (`customer_id`) REFERENCES `customer_entity` (`entity_id`) ON DELETE CASCADE ON UPDATE NO ACTION;
+  ADD CONSTRAINT `FK_PERSISTENT_SESSION_CUSTOMER_ID_CUSTOMER_ENTITY_ENTITY_ID` FOREIGN KEY (`customer_id`) REFERENCES `customer_entity` (`entity_id`) ON DELETE CASCADE ON UPDATE NO ACTION,
+  ADD CONSTRAINT `FK_PERSISTENT_SESSION_WEBSITE_ID_CORE_WEBSITE_WEBSITE_ID` FOREIGN KEY (`website_id`) REFERENCES `core_website` (`website_id`) ON DELETE CASCADE ON UPDATE NO ACTION;
+
+--
+-- 限制表 `poll`
+--
+ALTER TABLE `poll`
+  ADD CONSTRAINT `FK_POLL_STORE_ID_CORE_STORE_STORE_ID` FOREIGN KEY (`store_id`) REFERENCES `core_store` (`store_id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
+-- 限制表 `poll_answer`
+--
+ALTER TABLE `poll_answer`
+  ADD CONSTRAINT `FK_POLL_ANSWER_POLL_ID_POLL_POLL_ID` FOREIGN KEY (`poll_id`) REFERENCES `poll` (`poll_id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
 -- 限制表 `poll_store`
 --
 ALTER TABLE `poll_store`
-  ADD CONSTRAINT `poll_store_ibfk_1` FOREIGN KEY (`poll_id`) REFERENCES `poll` (`poll_id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  ADD CONSTRAINT `poll_store_ibfk_2` FOREIGN KEY (`store_id`) REFERENCES `core_store` (`store_id`) ON DELETE CASCADE ON UPDATE CASCADE;
+  ADD CONSTRAINT `FK_POLL_STORE_POLL_ID_POLL_POLL_ID` FOREIGN KEY (`poll_id`) REFERENCES `poll` (`poll_id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `FK_POLL_STORE_STORE_ID_CORE_STORE_STORE_ID` FOREIGN KEY (`store_id`) REFERENCES `core_store` (`store_id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
 -- 限制表 `poll_vote`
 --
 ALTER TABLE `poll_vote`
-  ADD CONSTRAINT `poll_vote_ibfk_1` FOREIGN KEY (`poll_answer_id`) REFERENCES `poll_answer` (`answer_id`) ON DELETE CASCADE ON UPDATE CASCADE;
+  ADD CONSTRAINT `FK_POLL_VOTE_POLL_ANSWER_ID_POLL_ANSWER_ANSWER_ID` FOREIGN KEY (`poll_answer_id`) REFERENCES `poll_answer` (`answer_id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
 -- 限制表 `product_alert_price`
 --
 ALTER TABLE `product_alert_price`
-  ADD CONSTRAINT `product_alert_price_ibfk_1` FOREIGN KEY (`customer_id`) REFERENCES `customer_entity` (`entity_id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  ADD CONSTRAINT `product_alert_price_ibfk_2` FOREIGN KEY (`product_id`) REFERENCES `catalog_product_entity` (`entity_id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  ADD CONSTRAINT `product_alert_price_ibfk_3` FOREIGN KEY (`website_id`) REFERENCES `core_website` (`website_id`) ON DELETE CASCADE ON UPDATE CASCADE;
+  ADD CONSTRAINT `FK_PRD_ALERT_PRICE_PRD_ID_CAT_PRD_ENTT_ENTT_ID` FOREIGN KEY (`product_id`) REFERENCES `catalog_product_entity` (`entity_id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `FK_PRODUCT_ALERT_PRICE_CUSTOMER_ID_CUSTOMER_ENTITY_ENTITY_ID` FOREIGN KEY (`customer_id`) REFERENCES `customer_entity` (`entity_id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `FK_PRODUCT_ALERT_PRICE_WEBSITE_ID_CORE_WEBSITE_WEBSITE_ID` FOREIGN KEY (`website_id`) REFERENCES `core_website` (`website_id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
 -- 限制表 `product_alert_stock`
 --
 ALTER TABLE `product_alert_stock`
-  ADD CONSTRAINT `product_alert_stock_ibfk_1` FOREIGN KEY (`customer_id`) REFERENCES `customer_entity` (`entity_id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  ADD CONSTRAINT `product_alert_stock_ibfk_2` FOREIGN KEY (`product_id`) REFERENCES `catalog_product_entity` (`entity_id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  ADD CONSTRAINT `product_alert_stock_ibfk_3` FOREIGN KEY (`website_id`) REFERENCES `core_website` (`website_id`) ON DELETE CASCADE ON UPDATE CASCADE;
+  ADD CONSTRAINT `FK_PRD_ALERT_STOCK_PRD_ID_CAT_PRD_ENTT_ENTT_ID` FOREIGN KEY (`product_id`) REFERENCES `catalog_product_entity` (`entity_id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `FK_PRODUCT_ALERT_STOCK_CUSTOMER_ID_CUSTOMER_ENTITY_ENTITY_ID` FOREIGN KEY (`customer_id`) REFERENCES `customer_entity` (`entity_id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `FK_PRODUCT_ALERT_STOCK_WEBSITE_ID_CORE_WEBSITE_WEBSITE_ID` FOREIGN KEY (`website_id`) REFERENCES `core_website` (`website_id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
+-- 限制表 `rating`
+--
+ALTER TABLE `rating`
+  ADD CONSTRAINT `FK_RATING_ENTITY_ID_RATING_ENTITY_ENTITY_ID` FOREIGN KEY (`entity_id`) REFERENCES `rating_entity` (`entity_id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
+-- 限制表 `rating_option`
+--
+ALTER TABLE `rating_option`
+  ADD CONSTRAINT `FK_RATING_OPTION_RATING_ID_RATING_RATING_ID` FOREIGN KEY (`rating_id`) REFERENCES `rating` (`rating_id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
+-- 限制表 `rating_option_vote`
+--
+ALTER TABLE `rating_option_vote`
+  ADD CONSTRAINT `FK_RATING_OPTION_VOTE_OPTION_ID_RATING_OPTION_OPTION_ID` FOREIGN KEY (`option_id`) REFERENCES `rating_option` (`option_id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `FK_RATING_OPTION_VOTE_REVIEW_ID_REVIEW_REVIEW_ID` FOREIGN KEY (`review_id`) REFERENCES `review` (`review_id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
+-- 限制表 `rating_option_vote_aggregated`
+--
+ALTER TABLE `rating_option_vote_aggregated`
+  ADD CONSTRAINT `FK_RATING_OPTION_VOTE_AGGREGATED_RATING_ID_RATING_RATING_ID` FOREIGN KEY (`rating_id`) REFERENCES `rating` (`rating_id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `FK_RATING_OPTION_VOTE_AGGREGATED_STORE_ID_CORE_STORE_STORE_ID` FOREIGN KEY (`store_id`) REFERENCES `core_store` (`store_id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
+-- 限制表 `rating_store`
+--
+ALTER TABLE `rating_store`
+  ADD CONSTRAINT `FK_RATING_STORE_RATING_ID_RATING_RATING_ID` FOREIGN KEY (`rating_id`) REFERENCES `rating` (`rating_id`) ON DELETE CASCADE ON UPDATE NO ACTION,
+  ADD CONSTRAINT `FK_RATING_STORE_STORE_ID_CORE_STORE_STORE_ID` FOREIGN KEY (`store_id`) REFERENCES `core_store` (`store_id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
+-- 限制表 `rating_title`
+--
+ALTER TABLE `rating_title`
+  ADD CONSTRAINT `FK_RATING_TITLE_RATING_ID_RATING_RATING_ID` FOREIGN KEY (`rating_id`) REFERENCES `rating` (`rating_id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `FK_RATING_TITLE_STORE_ID_CORE_STORE_STORE_ID` FOREIGN KEY (`store_id`) REFERENCES `core_store` (`store_id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
 -- 限制表 `report_compared_product_index`
 --
 ALTER TABLE `report_compared_product_index`
-  ADD CONSTRAINT `report_compared_product_index_ibfk_1` FOREIGN KEY (`customer_id`) REFERENCES `customer_entity` (`entity_id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  ADD CONSTRAINT `report_compared_product_index_ibfk_2` FOREIGN KEY (`product_id`) REFERENCES `catalog_product_entity` (`entity_id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  ADD CONSTRAINT `report_compared_product_index_ibfk_3` FOREIGN KEY (`store_id`) REFERENCES `core_store` (`store_id`) ON DELETE SET NULL ON UPDATE CASCADE;
+  ADD CONSTRAINT `FK_REPORT_CMPD_PRD_IDX_CSTR_ID_CSTR_ENTT_ENTT_ID` FOREIGN KEY (`customer_id`) REFERENCES `customer_entity` (`entity_id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `FK_REPORT_CMPD_PRD_IDX_PRD_ID_CAT_PRD_ENTT_ENTT_ID` FOREIGN KEY (`product_id`) REFERENCES `catalog_product_entity` (`entity_id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `FK_REPORT_COMPARED_PRODUCT_INDEX_STORE_ID_CORE_STORE_STORE_ID` FOREIGN KEY (`store_id`) REFERENCES `core_store` (`store_id`) ON DELETE SET NULL ON UPDATE CASCADE;
 
 --
 -- 限制表 `report_event`
 --
 ALTER TABLE `report_event`
-  ADD CONSTRAINT `report_event_ibfk_1` FOREIGN KEY (`event_type_id`) REFERENCES `report_event_types` (`event_type_id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  ADD CONSTRAINT `report_event_ibfk_2` FOREIGN KEY (`store_id`) REFERENCES `core_store` (`store_id`) ON DELETE CASCADE ON UPDATE CASCADE;
+  ADD CONSTRAINT `FK_REPORT_EVENT_EVENT_TYPE_ID_REPORT_EVENT_TYPES_EVENT_TYPE_ID` FOREIGN KEY (`event_type_id`) REFERENCES `report_event_types` (`event_type_id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `FK_REPORT_EVENT_STORE_ID_CORE_STORE_STORE_ID` FOREIGN KEY (`store_id`) REFERENCES `core_store` (`store_id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
 -- 限制表 `report_viewed_product_aggregated_daily`
 --
 ALTER TABLE `report_viewed_product_aggregated_daily`
-  ADD CONSTRAINT `report_viewed_product_aggregated_daily_ibfk_1` FOREIGN KEY (`product_id`) REFERENCES `catalog_product_entity` (`entity_id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  ADD CONSTRAINT `report_viewed_product_aggregated_daily_ibfk_2` FOREIGN KEY (`store_id`) REFERENCES `core_store` (`store_id`) ON DELETE CASCADE ON UPDATE CASCADE;
+  ADD CONSTRAINT `FK_REPORT_VIEWED_PRD_AGGRED_DAILY_PRD_ID_CAT_PRD_ENTT_ENTT_ID` FOREIGN KEY (`product_id`) REFERENCES `catalog_product_entity` (`entity_id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `FK_REPORT_VIEWED_PRD_AGGRED_DAILY_STORE_ID_CORE_STORE_STORE_ID` FOREIGN KEY (`store_id`) REFERENCES `core_store` (`store_id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
 -- 限制表 `report_viewed_product_aggregated_monthly`
 --
 ALTER TABLE `report_viewed_product_aggregated_monthly`
-  ADD CONSTRAINT `report_viewed_product_aggregated_monthly_ibfk_1` FOREIGN KEY (`store_id`) REFERENCES `core_store` (`store_id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  ADD CONSTRAINT `report_viewed_product_aggregated_monthly_ibfk_2` FOREIGN KEY (`product_id`) REFERENCES `catalog_product_entity` (`entity_id`) ON DELETE CASCADE ON UPDATE CASCADE;
+  ADD CONSTRAINT `FK_REPORT_VIEWED_PRD_AGGRED_MONTHLY_PRD_ID_CAT_PRD_ENTT_ENTT_ID` FOREIGN KEY (`product_id`) REFERENCES `catalog_product_entity` (`entity_id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `FK_REPORT_VIEWED_PRD_AGGRED_MONTHLY_STORE_ID_CORE_STORE_STORE_ID` FOREIGN KEY (`store_id`) REFERENCES `core_store` (`store_id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
 -- 限制表 `report_viewed_product_aggregated_yearly`
 --
 ALTER TABLE `report_viewed_product_aggregated_yearly`
-  ADD CONSTRAINT `report_viewed_product_aggregated_yearly_ibfk_1` FOREIGN KEY (`product_id`) REFERENCES `catalog_product_entity` (`entity_id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  ADD CONSTRAINT `report_viewed_product_aggregated_yearly_ibfk_2` FOREIGN KEY (`store_id`) REFERENCES `core_store` (`store_id`) ON DELETE CASCADE ON UPDATE CASCADE;
+  ADD CONSTRAINT `FK_REPORT_VIEWED_PRD_AGGRED_YEARLY_PRD_ID_CAT_PRD_ENTT_ENTT_ID` FOREIGN KEY (`product_id`) REFERENCES `catalog_product_entity` (`entity_id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `FK_REPORT_VIEWED_PRD_AGGRED_YEARLY_STORE_ID_CORE_STORE_STORE_ID` FOREIGN KEY (`store_id`) REFERENCES `core_store` (`store_id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
 -- 限制表 `report_viewed_product_index`
 --
 ALTER TABLE `report_viewed_product_index`
-  ADD CONSTRAINT `report_viewed_product_index_ibfk_1` FOREIGN KEY (`customer_id`) REFERENCES `customer_entity` (`entity_id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  ADD CONSTRAINT `report_viewed_product_index_ibfk_2` FOREIGN KEY (`product_id`) REFERENCES `catalog_product_entity` (`entity_id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  ADD CONSTRAINT `report_viewed_product_index_ibfk_3` FOREIGN KEY (`store_id`) REFERENCES `core_store` (`store_id`) ON DELETE SET NULL ON UPDATE CASCADE;
+  ADD CONSTRAINT `FK_REPORT_VIEWED_PRD_IDX_CSTR_ID_CSTR_ENTT_ENTT_ID` FOREIGN KEY (`customer_id`) REFERENCES `customer_entity` (`entity_id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `FK_REPORT_VIEWED_PRD_IDX_PRD_ID_CAT_PRD_ENTT_ENTT_ID` FOREIGN KEY (`product_id`) REFERENCES `catalog_product_entity` (`entity_id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `FK_REPORT_VIEWED_PRODUCT_INDEX_STORE_ID_CORE_STORE_STORE_ID` FOREIGN KEY (`store_id`) REFERENCES `core_store` (`store_id`) ON DELETE SET NULL ON UPDATE CASCADE;
+
+--
+-- 限制表 `review`
+--
+ALTER TABLE `review`
+  ADD CONSTRAINT `FK_REVIEW_ENTITY_ID_REVIEW_ENTITY_ENTITY_ID` FOREIGN KEY (`entity_id`) REFERENCES `review_entity` (`entity_id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `FK_REVIEW_STATUS_ID_REVIEW_STATUS_STATUS_ID` FOREIGN KEY (`status_id`) REFERENCES `review_status` (`status_id`) ON DELETE NO ACTION ON UPDATE NO ACTION;
+
+--
+-- 限制表 `review_detail`
+--
+ALTER TABLE `review_detail`
+  ADD CONSTRAINT `FK_REVIEW_DETAIL_CUSTOMER_ID_CUSTOMER_ENTITY_ENTITY_ID` FOREIGN KEY (`customer_id`) REFERENCES `customer_entity` (`entity_id`) ON DELETE SET NULL ON UPDATE CASCADE,
+  ADD CONSTRAINT `FK_REVIEW_DETAIL_REVIEW_ID_REVIEW_REVIEW_ID` FOREIGN KEY (`review_id`) REFERENCES `review` (`review_id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `FK_REVIEW_DETAIL_STORE_ID_CORE_STORE_STORE_ID` FOREIGN KEY (`store_id`) REFERENCES `core_store` (`store_id`) ON DELETE SET NULL ON UPDATE CASCADE;
+
+--
+-- 限制表 `review_entity_summary`
+--
+ALTER TABLE `review_entity_summary`
+  ADD CONSTRAINT `FK_REVIEW_ENTITY_SUMMARY_STORE_ID_CORE_STORE_STORE_ID` FOREIGN KEY (`store_id`) REFERENCES `core_store` (`store_id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
+-- 限制表 `review_store`
+--
+ALTER TABLE `review_store`
+  ADD CONSTRAINT `FK_REVIEW_STORE_REVIEW_ID_REVIEW_REVIEW_ID` FOREIGN KEY (`review_id`) REFERENCES `review` (`review_id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `FK_REVIEW_STORE_STORE_ID_CORE_STORE_STORE_ID` FOREIGN KEY (`store_id`) REFERENCES `core_store` (`store_id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
+-- 限制表 `salesrule_coupon`
+--
+ALTER TABLE `salesrule_coupon`
+  ADD CONSTRAINT `FK_SALESRULE_COUPON_RULE_ID_SALESRULE_RULE_ID` FOREIGN KEY (`rule_id`) REFERENCES `salesrule` (`rule_id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
+-- 限制表 `salesrule_coupon_usage`
+--
+ALTER TABLE `salesrule_coupon_usage`
+  ADD CONSTRAINT `FK_SALESRULE_COUPON_USAGE_COUPON_ID_SALESRULE_COUPON_COUPON_ID` FOREIGN KEY (`coupon_id`) REFERENCES `salesrule_coupon` (`coupon_id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `FK_SALESRULE_COUPON_USAGE_CUSTOMER_ID_CUSTOMER_ENTITY_ENTITY_ID` FOREIGN KEY (`customer_id`) REFERENCES `customer_entity` (`entity_id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
+-- 限制表 `salesrule_customer`
+--
+ALTER TABLE `salesrule_customer`
+  ADD CONSTRAINT `FK_SALESRULE_CUSTOMER_CUSTOMER_ID_CUSTOMER_ENTITY_ENTITY_ID` FOREIGN KEY (`customer_id`) REFERENCES `customer_entity` (`entity_id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `FK_SALESRULE_CUSTOMER_RULE_ID_SALESRULE_RULE_ID` FOREIGN KEY (`rule_id`) REFERENCES `salesrule` (`rule_id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
+-- 限制表 `salesrule_customer_group`
+--
+ALTER TABLE `salesrule_customer_group`
+  ADD CONSTRAINT `FK_SALESRULE_CSTR_GROUP_CSTR_GROUP_ID_CSTR_GROUP_CSTR_GROUP_ID` FOREIGN KEY (`customer_group_id`) REFERENCES `customer_group` (`customer_group_id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `FK_SALESRULE_CUSTOMER_GROUP_RULE_ID_SALESRULE_RULE_ID` FOREIGN KEY (`rule_id`) REFERENCES `salesrule` (`rule_id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
+-- 限制表 `salesrule_label`
+--
+ALTER TABLE `salesrule_label`
+  ADD CONSTRAINT `FK_SALESRULE_LABEL_RULE_ID_SALESRULE_RULE_ID` FOREIGN KEY (`rule_id`) REFERENCES `salesrule` (`rule_id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `FK_SALESRULE_LABEL_STORE_ID_CORE_STORE_STORE_ID` FOREIGN KEY (`store_id`) REFERENCES `core_store` (`store_id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
+-- 限制表 `salesrule_product_attribute`
+--
+ALTER TABLE `salesrule_product_attribute`
+  ADD CONSTRAINT `FK_SALESRULE_PRD_ATTR_ATTR_ID_EAV_ATTR_ATTR_ID` FOREIGN KEY (`attribute_id`) REFERENCES `eav_attribute` (`attribute_id`) ON DELETE CASCADE ON UPDATE NO ACTION,
+  ADD CONSTRAINT `FK_SALESRULE_PRD_ATTR_CSTR_GROUP_ID_CSTR_GROUP_CSTR_GROUP_ID` FOREIGN KEY (`customer_group_id`) REFERENCES `customer_group` (`customer_group_id`) ON DELETE CASCADE ON UPDATE NO ACTION,
+  ADD CONSTRAINT `FK_SALESRULE_PRD_ATTR_WS_ID_CORE_WS_WS_ID` FOREIGN KEY (`website_id`) REFERENCES `core_website` (`website_id`) ON DELETE CASCADE ON UPDATE NO ACTION,
+  ADD CONSTRAINT `FK_SALESRULE_PRODUCT_ATTRIBUTE_RULE_ID_SALESRULE_RULE_ID` FOREIGN KEY (`rule_id`) REFERENCES `salesrule` (`rule_id`) ON DELETE CASCADE ON UPDATE NO ACTION;
+
+--
+-- 限制表 `salesrule_website`
+--
+ALTER TABLE `salesrule_website`
+  ADD CONSTRAINT `FK_SALESRULE_WEBSITE_RULE_ID_SALESRULE_RULE_ID` FOREIGN KEY (`rule_id`) REFERENCES `salesrule` (`rule_id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `FK_SALESRULE_WEBSITE_WEBSITE_ID_CORE_WEBSITE_WEBSITE_ID` FOREIGN KEY (`website_id`) REFERENCES `core_website` (`website_id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
+-- 限制表 `sales_bestsellers_aggregated_daily`
+--
+ALTER TABLE `sales_bestsellers_aggregated_daily`
+  ADD CONSTRAINT `FK_SALES_BESTSELLERS_AGGRED_DAILY_PRD_ID_CAT_PRD_ENTT_ENTT_ID` FOREIGN KEY (`product_id`) REFERENCES `catalog_product_entity` (`entity_id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `FK_SALES_BESTSELLERS_AGGRED_DAILY_STORE_ID_CORE_STORE_STORE_ID` FOREIGN KEY (`store_id`) REFERENCES `core_store` (`store_id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
+-- 限制表 `sales_bestsellers_aggregated_monthly`
+--
+ALTER TABLE `sales_bestsellers_aggregated_monthly`
+  ADD CONSTRAINT `FK_SALES_BESTSELLERS_AGGRED_MONTHLY_PRD_ID_CAT_PRD_ENTT_ENTT_ID` FOREIGN KEY (`product_id`) REFERENCES `catalog_product_entity` (`entity_id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `FK_SALES_BESTSELLERS_AGGRED_MONTHLY_STORE_ID_CORE_STORE_STORE_ID` FOREIGN KEY (`store_id`) REFERENCES `core_store` (`store_id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
+-- 限制表 `sales_bestsellers_aggregated_yearly`
+--
+ALTER TABLE `sales_bestsellers_aggregated_yearly`
+  ADD CONSTRAINT `FK_SALES_BESTSELLERS_AGGRED_YEARLY_PRD_ID_CAT_PRD_ENTT_ENTT_ID` FOREIGN KEY (`product_id`) REFERENCES `catalog_product_entity` (`entity_id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `FK_SALES_BESTSELLERS_AGGRED_YEARLY_STORE_ID_CORE_STORE_STORE_ID` FOREIGN KEY (`store_id`) REFERENCES `core_store` (`store_id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
+-- 限制表 `sales_billing_agreement`
+--
+ALTER TABLE `sales_billing_agreement`
+  ADD CONSTRAINT `FK_SALES_BILLING_AGREEMENT_CUSTOMER_ID_CUSTOMER_ENTITY_ENTITY_ID` FOREIGN KEY (`customer_id`) REFERENCES `customer_entity` (`entity_id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `FK_SALES_BILLING_AGREEMENT_STORE_ID_CORE_STORE_STORE_ID` FOREIGN KEY (`store_id`) REFERENCES `core_store` (`store_id`) ON DELETE SET NULL ON UPDATE CASCADE;
+
+--
+-- 限制表 `sales_billing_agreement_order`
+--
+ALTER TABLE `sales_billing_agreement_order`
+  ADD CONSTRAINT `FK_SALES_BILLING_AGRT_ORDER_AGRT_ID_SALES_BILLING_AGRT_AGRT_ID` FOREIGN KEY (`agreement_id`) REFERENCES `sales_billing_agreement` (`agreement_id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `FK_SALES_BILLING_AGRT_ORDER_ORDER_ID_SALES_FLAT_ORDER_ENTT_ID` FOREIGN KEY (`order_id`) REFERENCES `sales_flat_order` (`entity_id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
+-- 限制表 `sales_flat_creditmemo`
+--
+ALTER TABLE `sales_flat_creditmemo`
+  ADD CONSTRAINT `FK_SALES_FLAT_CREDITMEMO_ORDER_ID_SALES_FLAT_ORDER_ENTITY_ID` FOREIGN KEY (`order_id`) REFERENCES `sales_flat_order` (`entity_id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `FK_SALES_FLAT_CREDITMEMO_STORE_ID_CORE_STORE_STORE_ID` FOREIGN KEY (`store_id`) REFERENCES `core_store` (`store_id`) ON DELETE SET NULL ON UPDATE CASCADE;
+
+--
+-- 限制表 `sales_flat_creditmemo_comment`
+--
+ALTER TABLE `sales_flat_creditmemo_comment`
+  ADD CONSTRAINT `FK_B0FCB0B5467075BE63D474F2CD5F7804` FOREIGN KEY (`parent_id`) REFERENCES `sales_flat_creditmemo` (`entity_id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
+-- 限制表 `sales_flat_creditmemo_grid`
+--
+ALTER TABLE `sales_flat_creditmemo_grid`
+  ADD CONSTRAINT `FK_78C711B225167A11CC077B03D1C8E1CC` FOREIGN KEY (`entity_id`) REFERENCES `sales_flat_creditmemo` (`entity_id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `FK_SALES_FLAT_CREDITMEMO_GRID_STORE_ID_CORE_STORE_STORE_ID` FOREIGN KEY (`store_id`) REFERENCES `core_store` (`store_id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
+-- 限制表 `sales_flat_creditmemo_item`
+--
+ALTER TABLE `sales_flat_creditmemo_item`
+  ADD CONSTRAINT `FK_306DAC836C699F0B5E13BE486557AC8A` FOREIGN KEY (`parent_id`) REFERENCES `sales_flat_creditmemo` (`entity_id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
+-- 限制表 `sales_flat_invoice`
+--
+ALTER TABLE `sales_flat_invoice`
+  ADD CONSTRAINT `FK_SALES_FLAT_INVOICE_ORDER_ID_SALES_FLAT_ORDER_ENTITY_ID` FOREIGN KEY (`order_id`) REFERENCES `sales_flat_order` (`entity_id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `FK_SALES_FLAT_INVOICE_STORE_ID_CORE_STORE_STORE_ID` FOREIGN KEY (`store_id`) REFERENCES `core_store` (`store_id`) ON DELETE SET NULL ON UPDATE CASCADE;
+
+--
+-- 限制表 `sales_flat_invoice_comment`
+--
+ALTER TABLE `sales_flat_invoice_comment`
+  ADD CONSTRAINT `FK_5C4B36BBE5231A76AB8018B281ED50BC` FOREIGN KEY (`parent_id`) REFERENCES `sales_flat_invoice` (`entity_id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
+-- 限制表 `sales_flat_invoice_grid`
+--
+ALTER TABLE `sales_flat_invoice_grid`
+  ADD CONSTRAINT `FK_SALES_FLAT_INVOICE_GRID_ENTT_ID_SALES_FLAT_INVOICE_ENTT_ID` FOREIGN KEY (`entity_id`) REFERENCES `sales_flat_invoice` (`entity_id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `FK_SALES_FLAT_INVOICE_GRID_STORE_ID_CORE_STORE_STORE_ID` FOREIGN KEY (`store_id`) REFERENCES `core_store` (`store_id`) ON DELETE SET NULL ON UPDATE CASCADE;
+
+--
+-- 限制表 `sales_flat_invoice_item`
+--
+ALTER TABLE `sales_flat_invoice_item`
+  ADD CONSTRAINT `FK_SALES_FLAT_INVOICE_ITEM_PARENT_ID_SALES_FLAT_INVOICE_ENTT_ID` FOREIGN KEY (`parent_id`) REFERENCES `sales_flat_invoice` (`entity_id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
+-- 限制表 `sales_flat_order`
+--
+ALTER TABLE `sales_flat_order`
+  ADD CONSTRAINT `FK_SALES_FLAT_ORDER_CUSTOMER_ID_CUSTOMER_ENTITY_ENTITY_ID` FOREIGN KEY (`customer_id`) REFERENCES `customer_entity` (`entity_id`) ON DELETE SET NULL ON UPDATE CASCADE,
+  ADD CONSTRAINT `FK_SALES_FLAT_ORDER_STORE_ID_CORE_STORE_STORE_ID` FOREIGN KEY (`store_id`) REFERENCES `core_store` (`store_id`) ON DELETE SET NULL ON UPDATE CASCADE;
+
+--
+-- 限制表 `sales_flat_order_address`
+--
+ALTER TABLE `sales_flat_order_address`
+  ADD CONSTRAINT `FK_SALES_FLAT_ORDER_ADDRESS_PARENT_ID_SALES_FLAT_ORDER_ENTITY_ID` FOREIGN KEY (`parent_id`) REFERENCES `sales_flat_order` (`entity_id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
+-- 限制表 `sales_flat_order_grid`
+--
+ALTER TABLE `sales_flat_order_grid`
+  ADD CONSTRAINT `FK_SALES_FLAT_ORDER_GRID_CUSTOMER_ID_CUSTOMER_ENTITY_ENTITY_ID` FOREIGN KEY (`customer_id`) REFERENCES `customer_entity` (`entity_id`) ON DELETE SET NULL ON UPDATE CASCADE,
+  ADD CONSTRAINT `FK_SALES_FLAT_ORDER_GRID_ENTITY_ID_SALES_FLAT_ORDER_ENTITY_ID` FOREIGN KEY (`entity_id`) REFERENCES `sales_flat_order` (`entity_id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `FK_SALES_FLAT_ORDER_GRID_STORE_ID_CORE_STORE_STORE_ID` FOREIGN KEY (`store_id`) REFERENCES `core_store` (`store_id`) ON DELETE SET NULL ON UPDATE CASCADE;
+
+--
+-- 限制表 `sales_flat_order_item`
+--
+ALTER TABLE `sales_flat_order_item`
+  ADD CONSTRAINT `FK_SALES_FLAT_ORDER_ITEM_ORDER_ID_SALES_FLAT_ORDER_ENTITY_ID` FOREIGN KEY (`order_id`) REFERENCES `sales_flat_order` (`entity_id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `FK_SALES_FLAT_ORDER_ITEM_STORE_ID_CORE_STORE_STORE_ID` FOREIGN KEY (`store_id`) REFERENCES `core_store` (`store_id`) ON DELETE SET NULL ON UPDATE CASCADE;
+
+--
+-- 限制表 `sales_flat_order_payment`
+--
+ALTER TABLE `sales_flat_order_payment`
+  ADD CONSTRAINT `FK_SALES_FLAT_ORDER_PAYMENT_PARENT_ID_SALES_FLAT_ORDER_ENTITY_ID` FOREIGN KEY (`parent_id`) REFERENCES `sales_flat_order` (`entity_id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
+-- 限制表 `sales_flat_order_status_history`
+--
+ALTER TABLE `sales_flat_order_status_history`
+  ADD CONSTRAINT `FK_CE7C71E74CB74DDACED337CEE6753D5E` FOREIGN KEY (`parent_id`) REFERENCES `sales_flat_order` (`entity_id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
+-- 限制表 `sales_flat_quote`
+--
+ALTER TABLE `sales_flat_quote`
+  ADD CONSTRAINT `FK_SALES_FLAT_QUOTE_STORE_ID_CORE_STORE_STORE_ID` FOREIGN KEY (`store_id`) REFERENCES `core_store` (`store_id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
+-- 限制表 `sales_flat_quote_address`
+--
+ALTER TABLE `sales_flat_quote_address`
+  ADD CONSTRAINT `FK_SALES_FLAT_QUOTE_ADDRESS_QUOTE_ID_SALES_FLAT_QUOTE_ENTITY_ID` FOREIGN KEY (`quote_id`) REFERENCES `sales_flat_quote` (`entity_id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
+-- 限制表 `sales_flat_quote_address_item`
+--
+ALTER TABLE `sales_flat_quote_address_item`
+  ADD CONSTRAINT `FK_2EF8E28181D666D94D4E30DC2B0F80BF` FOREIGN KEY (`quote_item_id`) REFERENCES `sales_flat_quote_item` (`item_id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `FK_A345FC758F20C314169CE27DCE53477F` FOREIGN KEY (`parent_item_id`) REFERENCES `sales_flat_quote_address_item` (`address_item_id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `FK_B521389746C00700D1B2B76EBBE53854` FOREIGN KEY (`quote_address_id`) REFERENCES `sales_flat_quote_address` (`address_id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
+-- 限制表 `sales_flat_quote_item`
+--
+ALTER TABLE `sales_flat_quote_item`
+  ADD CONSTRAINT `FK_B201DEB5DE51B791AF5C5BF87053C5A7` FOREIGN KEY (`parent_item_id`) REFERENCES `sales_flat_quote_item` (`item_id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `FK_SALES_FLAT_QUOTE_ITEM_PRD_ID_CAT_PRD_ENTT_ENTT_ID` FOREIGN KEY (`product_id`) REFERENCES `catalog_product_entity` (`entity_id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `FK_SALES_FLAT_QUOTE_ITEM_QUOTE_ID_SALES_FLAT_QUOTE_ENTITY_ID` FOREIGN KEY (`quote_id`) REFERENCES `sales_flat_quote` (`entity_id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `FK_SALES_FLAT_QUOTE_ITEM_STORE_ID_CORE_STORE_STORE_ID` FOREIGN KEY (`store_id`) REFERENCES `core_store` (`store_id`) ON DELETE SET NULL ON UPDATE CASCADE;
+
+--
+-- 限制表 `sales_flat_quote_item_option`
+--
+ALTER TABLE `sales_flat_quote_item_option`
+  ADD CONSTRAINT `FK_5F20E478CA64B6891EA8A9D6C2735739` FOREIGN KEY (`item_id`) REFERENCES `sales_flat_quote_item` (`item_id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
+-- 限制表 `sales_flat_quote_payment`
+--
+ALTER TABLE `sales_flat_quote_payment`
+  ADD CONSTRAINT `FK_SALES_FLAT_QUOTE_PAYMENT_QUOTE_ID_SALES_FLAT_QUOTE_ENTITY_ID` FOREIGN KEY (`quote_id`) REFERENCES `sales_flat_quote` (`entity_id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
+-- 限制表 `sales_flat_quote_shipping_rate`
+--
+ALTER TABLE `sales_flat_quote_shipping_rate`
+  ADD CONSTRAINT `FK_B1F177EFB73D3EDF5322BA64AC48D150` FOREIGN KEY (`address_id`) REFERENCES `sales_flat_quote_address` (`address_id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
+-- 限制表 `sales_flat_shipment`
+--
+ALTER TABLE `sales_flat_shipment`
+  ADD CONSTRAINT `FK_SALES_FLAT_SHIPMENT_ORDER_ID_SALES_FLAT_ORDER_ENTITY_ID` FOREIGN KEY (`order_id`) REFERENCES `sales_flat_order` (`entity_id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `FK_SALES_FLAT_SHIPMENT_STORE_ID_CORE_STORE_STORE_ID` FOREIGN KEY (`store_id`) REFERENCES `core_store` (`store_id`) ON DELETE SET NULL ON UPDATE CASCADE;
+
+--
+-- 限制表 `sales_flat_shipment_comment`
+--
+ALTER TABLE `sales_flat_shipment_comment`
+  ADD CONSTRAINT `FK_C2D69CC1FB03D2B2B794B0439F6650CF` FOREIGN KEY (`parent_id`) REFERENCES `sales_flat_shipment` (`entity_id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
+-- 限制表 `sales_flat_shipment_grid`
+--
+ALTER TABLE `sales_flat_shipment_grid`
+  ADD CONSTRAINT `FK_SALES_FLAT_SHIPMENT_GRID_ENTT_ID_SALES_FLAT_SHIPMENT_ENTT_ID` FOREIGN KEY (`entity_id`) REFERENCES `sales_flat_shipment` (`entity_id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `FK_SALES_FLAT_SHIPMENT_GRID_STORE_ID_CORE_STORE_STORE_ID` FOREIGN KEY (`store_id`) REFERENCES `core_store` (`store_id`) ON DELETE SET NULL ON UPDATE CASCADE;
+
+--
+-- 限制表 `sales_flat_shipment_item`
+--
+ALTER TABLE `sales_flat_shipment_item`
+  ADD CONSTRAINT `FK_3AECE5007D18F159231B87E8306FC02A` FOREIGN KEY (`parent_id`) REFERENCES `sales_flat_shipment` (`entity_id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
+-- 限制表 `sales_flat_shipment_track`
+--
+ALTER TABLE `sales_flat_shipment_track`
+  ADD CONSTRAINT `FK_BCD2FA28717D29F37E10A153E6F2F841` FOREIGN KEY (`parent_id`) REFERENCES `sales_flat_shipment` (`entity_id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
+-- 限制表 `sales_invoiced_aggregated`
+--
+ALTER TABLE `sales_invoiced_aggregated`
+  ADD CONSTRAINT `FK_SALES_INVOICED_AGGREGATED_STORE_ID_CORE_STORE_STORE_ID` FOREIGN KEY (`store_id`) REFERENCES `core_store` (`store_id`) ON DELETE SET NULL ON UPDATE CASCADE;
+
+--
+-- 限制表 `sales_invoiced_aggregated_order`
+--
+ALTER TABLE `sales_invoiced_aggregated_order`
+  ADD CONSTRAINT `FK_SALES_INVOICED_AGGREGATED_ORDER_STORE_ID_CORE_STORE_STORE_ID` FOREIGN KEY (`store_id`) REFERENCES `core_store` (`store_id`) ON DELETE SET NULL ON UPDATE CASCADE;
+
+--
+-- 限制表 `sales_order_aggregated_created`
+--
+ALTER TABLE `sales_order_aggregated_created`
+  ADD CONSTRAINT `FK_SALES_ORDER_AGGREGATED_CREATED_STORE_ID_CORE_STORE_STORE_ID` FOREIGN KEY (`store_id`) REFERENCES `core_store` (`store_id`) ON DELETE SET NULL ON UPDATE CASCADE;
+
+--
+-- 限制表 `sales_order_aggregated_updated`
+--
+ALTER TABLE `sales_order_aggregated_updated`
+  ADD CONSTRAINT `FK_SALES_ORDER_AGGREGATED_UPDATED_STORE_ID_CORE_STORE_STORE_ID` FOREIGN KEY (`store_id`) REFERENCES `core_store` (`store_id`) ON DELETE SET NULL ON UPDATE CASCADE;
+
+--
+-- 限制表 `sales_order_status_label`
+--
+ALTER TABLE `sales_order_status_label`
+  ADD CONSTRAINT `FK_SALES_ORDER_STATUS_LABEL_STATUS_SALES_ORDER_STATUS_STATUS` FOREIGN KEY (`status`) REFERENCES `sales_order_status` (`status`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `FK_SALES_ORDER_STATUS_LABEL_STORE_ID_CORE_STORE_STORE_ID` FOREIGN KEY (`store_id`) REFERENCES `core_store` (`store_id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
+-- 限制表 `sales_order_status_state`
+--
+ALTER TABLE `sales_order_status_state`
+  ADD CONSTRAINT `FK_SALES_ORDER_STATUS_STATE_STATUS_SALES_ORDER_STATUS_STATUS` FOREIGN KEY (`status`) REFERENCES `sales_order_status` (`status`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
+-- 限制表 `sales_order_tax_item`
+--
+ALTER TABLE `sales_order_tax_item`
+  ADD CONSTRAINT `FK_SALES_ORDER_TAX_ITEM_ITEM_ID_SALES_FLAT_ORDER_ITEM_ITEM_ID` FOREIGN KEY (`item_id`) REFERENCES `sales_flat_order_item` (`item_id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `FK_SALES_ORDER_TAX_ITEM_TAX_ID_SALES_ORDER_TAX_TAX_ID` FOREIGN KEY (`tax_id`) REFERENCES `sales_order_tax` (`tax_id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
+-- 限制表 `sales_payment_transaction`
+--
+ALTER TABLE `sales_payment_transaction`
+  ADD CONSTRAINT `FK_B99FF1A06402D725EBDB0F3A7ECD47A2` FOREIGN KEY (`parent_id`) REFERENCES `sales_payment_transaction` (`transaction_id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `FK_DA51A10B2405B64A4DAEF77A64F0DAAD` FOREIGN KEY (`payment_id`) REFERENCES `sales_flat_order_payment` (`entity_id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `FK_SALES_PAYMENT_TRANSACTION_ORDER_ID_SALES_FLAT_ORDER_ENTITY_ID` FOREIGN KEY (`order_id`) REFERENCES `sales_flat_order` (`entity_id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
+-- 限制表 `sales_recurring_profile`
+--
+ALTER TABLE `sales_recurring_profile`
+  ADD CONSTRAINT `FK_SALES_RECURRING_PROFILE_CUSTOMER_ID_CUSTOMER_ENTITY_ENTITY_ID` FOREIGN KEY (`customer_id`) REFERENCES `customer_entity` (`entity_id`) ON DELETE SET NULL ON UPDATE CASCADE,
+  ADD CONSTRAINT `FK_SALES_RECURRING_PROFILE_STORE_ID_CORE_STORE_STORE_ID` FOREIGN KEY (`store_id`) REFERENCES `core_store` (`store_id`) ON DELETE SET NULL ON UPDATE CASCADE;
+
+--
+-- 限制表 `sales_recurring_profile_order`
+--
+ALTER TABLE `sales_recurring_profile_order`
+  ADD CONSTRAINT `FK_7FF85741C66DCD37A4FBE3E3255A5A01` FOREIGN KEY (`order_id`) REFERENCES `sales_flat_order` (`entity_id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `FK_B8A7A5397B67455786E55461748C59F4` FOREIGN KEY (`profile_id`) REFERENCES `sales_recurring_profile` (`profile_id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
+-- 限制表 `sales_refunded_aggregated`
+--
+ALTER TABLE `sales_refunded_aggregated`
+  ADD CONSTRAINT `FK_SALES_REFUNDED_AGGREGATED_STORE_ID_CORE_STORE_STORE_ID` FOREIGN KEY (`store_id`) REFERENCES `core_store` (`store_id`) ON DELETE SET NULL ON UPDATE CASCADE;
+
+--
+-- 限制表 `sales_refunded_aggregated_order`
+--
+ALTER TABLE `sales_refunded_aggregated_order`
+  ADD CONSTRAINT `FK_SALES_REFUNDED_AGGREGATED_ORDER_STORE_ID_CORE_STORE_STORE_ID` FOREIGN KEY (`store_id`) REFERENCES `core_store` (`store_id`) ON DELETE SET NULL ON UPDATE CASCADE;
+
+--
+-- 限制表 `sales_shipping_aggregated`
+--
+ALTER TABLE `sales_shipping_aggregated`
+  ADD CONSTRAINT `FK_SALES_SHIPPING_AGGREGATED_STORE_ID_CORE_STORE_STORE_ID` FOREIGN KEY (`store_id`) REFERENCES `core_store` (`store_id`) ON DELETE SET NULL ON UPDATE CASCADE;
+
+--
+-- 限制表 `sales_shipping_aggregated_order`
+--
+ALTER TABLE `sales_shipping_aggregated_order`
+  ADD CONSTRAINT `FK_SALES_SHIPPING_AGGREGATED_ORDER_STORE_ID_CORE_STORE_STORE_ID` FOREIGN KEY (`store_id`) REFERENCES `core_store` (`store_id`) ON DELETE SET NULL ON UPDATE CASCADE;
 
 --
 -- 限制表 `sitemap`
 --
 ALTER TABLE `sitemap`
-  ADD CONSTRAINT `sitemap_ibfk_1` FOREIGN KEY (`store_id`) REFERENCES `core_store` (`store_id`) ON DELETE CASCADE ON UPDATE CASCADE;
+  ADD CONSTRAINT `FK_SITEMAP_STORE_ID_CORE_STORE_STORE_ID` FOREIGN KEY (`store_id`) REFERENCES `core_store` (`store_id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
+-- 限制表 `tag`
+--
+ALTER TABLE `tag`
+  ADD CONSTRAINT `FK_TAG_FIRST_CUSTOMER_ID_CUSTOMER_ENTITY_ENTITY_ID` FOREIGN KEY (`first_customer_id`) REFERENCES `customer_entity` (`entity_id`) ON DELETE SET NULL ON UPDATE NO ACTION,
+  ADD CONSTRAINT `FK_TAG_FIRST_STORE_ID_CORE_STORE_STORE_ID` FOREIGN KEY (`first_store_id`) REFERENCES `core_store` (`store_id`) ON DELETE SET NULL ON UPDATE NO ACTION;
+
+--
+-- 限制表 `tag_properties`
+--
+ALTER TABLE `tag_properties`
+  ADD CONSTRAINT `FK_TAG_PROPERTIES_STORE_ID_CORE_STORE_STORE_ID` FOREIGN KEY (`store_id`) REFERENCES `core_store` (`store_id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `FK_TAG_PROPERTIES_TAG_ID_TAG_TAG_ID` FOREIGN KEY (`tag_id`) REFERENCES `tag` (`tag_id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
+-- 限制表 `tag_relation`
+--
+ALTER TABLE `tag_relation`
+  ADD CONSTRAINT `FK_TAG_RELATION_CUSTOMER_ID_CUSTOMER_ENTITY_ENTITY_ID` FOREIGN KEY (`customer_id`) REFERENCES `customer_entity` (`entity_id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `FK_TAG_RELATION_PRODUCT_ID_CATALOG_PRODUCT_ENTITY_ENTITY_ID` FOREIGN KEY (`product_id`) REFERENCES `catalog_product_entity` (`entity_id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `FK_TAG_RELATION_STORE_ID_CORE_STORE_STORE_ID` FOREIGN KEY (`store_id`) REFERENCES `core_store` (`store_id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `FK_TAG_RELATION_TAG_ID_TAG_TAG_ID` FOREIGN KEY (`tag_id`) REFERENCES `tag` (`tag_id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
+-- 限制表 `tag_summary`
+--
+ALTER TABLE `tag_summary`
+  ADD CONSTRAINT `FK_TAG_SUMMARY_STORE_ID_CORE_STORE_STORE_ID` FOREIGN KEY (`store_id`) REFERENCES `core_store` (`store_id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `FK_TAG_SUMMARY_TAG_ID_TAG_TAG_ID` FOREIGN KEY (`tag_id`) REFERENCES `tag` (`tag_id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
 -- 限制表 `tax_calculation`
 --
 ALTER TABLE `tax_calculation`
-  ADD CONSTRAINT `tax_calculation_ibfk_1` FOREIGN KEY (`tax_calculation_rule_id`) REFERENCES `tax_calculation_rule` (`tax_calculation_rule_id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  ADD CONSTRAINT `tax_calculation_ibfk_2` FOREIGN KEY (`tax_calculation_rate_id`) REFERENCES `tax_calculation_rate` (`tax_calculation_rate_id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  ADD CONSTRAINT `tax_calculation_ibfk_3` FOREIGN KEY (`customer_tax_class_id`) REFERENCES `tax_class` (`class_id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  ADD CONSTRAINT `tax_calculation_ibfk_4` FOREIGN KEY (`product_tax_class_id`) REFERENCES `tax_class` (`class_id`) ON DELETE CASCADE ON UPDATE CASCADE;
+  ADD CONSTRAINT `FK_TAX_CALCULATION_CUSTOMER_TAX_CLASS_ID_TAX_CLASS_CLASS_ID` FOREIGN KEY (`customer_tax_class_id`) REFERENCES `tax_class` (`class_id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `FK_TAX_CALCULATION_PRODUCT_TAX_CLASS_ID_TAX_CLASS_CLASS_ID` FOREIGN KEY (`product_tax_class_id`) REFERENCES `tax_class` (`class_id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `FK_TAX_CALC_TAX_CALC_RATE_ID_TAX_CALC_RATE_TAX_CALC_RATE_ID` FOREIGN KEY (`tax_calculation_rate_id`) REFERENCES `tax_calculation_rate` (`tax_calculation_rate_id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `FK_TAX_CALC_TAX_CALC_RULE_ID_TAX_CALC_RULE_TAX_CALC_RULE_ID` FOREIGN KEY (`tax_calculation_rule_id`) REFERENCES `tax_calculation_rule` (`tax_calculation_rule_id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
 -- 限制表 `tax_calculation_rate_title`
 --
 ALTER TABLE `tax_calculation_rate_title`
-  ADD CONSTRAINT `tax_calculation_rate_title_ibfk_1` FOREIGN KEY (`tax_calculation_rate_id`) REFERENCES `tax_calculation_rate` (`tax_calculation_rate_id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  ADD CONSTRAINT `tax_calculation_rate_title_ibfk_2` FOREIGN KEY (`store_id`) REFERENCES `core_store` (`store_id`) ON DELETE CASCADE ON UPDATE CASCADE;
+  ADD CONSTRAINT `FK_37FB965F786AD5897BB3AE90470C42AB` FOREIGN KEY (`tax_calculation_rate_id`) REFERENCES `tax_calculation_rate` (`tax_calculation_rate_id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `FK_TAX_CALCULATION_RATE_TITLE_STORE_ID_CORE_STORE_STORE_ID` FOREIGN KEY (`store_id`) REFERENCES `core_store` (`store_id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
 -- 限制表 `tax_order_aggregated_created`
 --
 ALTER TABLE `tax_order_aggregated_created`
-  ADD CONSTRAINT `tax_order_aggregated_created_ibfk_1` FOREIGN KEY (`store_id`) REFERENCES `core_store` (`store_id`) ON DELETE CASCADE ON UPDATE CASCADE;
+  ADD CONSTRAINT `FK_TAX_ORDER_AGGREGATED_CREATED_STORE_ID_CORE_STORE_STORE_ID` FOREIGN KEY (`store_id`) REFERENCES `core_store` (`store_id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
 -- 限制表 `tax_order_aggregated_updated`
 --
 ALTER TABLE `tax_order_aggregated_updated`
-  ADD CONSTRAINT `tax_order_aggregated_updated_ibfk_1` FOREIGN KEY (`store_id`) REFERENCES `core_store` (`store_id`) ON DELETE CASCADE ON UPDATE CASCADE;
+  ADD CONSTRAINT `FK_TAX_ORDER_AGGREGATED_UPDATED_STORE_ID_CORE_STORE_STORE_ID` FOREIGN KEY (`store_id`) REFERENCES `core_store` (`store_id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
+-- 限制表 `weee_discount`
+--
+ALTER TABLE `weee_discount`
+  ADD CONSTRAINT `FK_WEEE_DISCOUNT_CSTR_GROUP_ID_CSTR_GROUP_CSTR_GROUP_ID` FOREIGN KEY (`customer_group_id`) REFERENCES `customer_group` (`customer_group_id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `FK_WEEE_DISCOUNT_ENTITY_ID_CATALOG_PRODUCT_ENTITY_ENTITY_ID` FOREIGN KEY (`entity_id`) REFERENCES `catalog_product_entity` (`entity_id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `FK_WEEE_DISCOUNT_WEBSITE_ID_CORE_WEBSITE_WEBSITE_ID` FOREIGN KEY (`website_id`) REFERENCES `core_website` (`website_id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
+-- 限制表 `weee_tax`
+--
+ALTER TABLE `weee_tax`
+  ADD CONSTRAINT `FK_WEEE_TAX_ATTRIBUTE_ID_EAV_ATTRIBUTE_ATTRIBUTE_ID` FOREIGN KEY (`attribute_id`) REFERENCES `eav_attribute` (`attribute_id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `FK_WEEE_TAX_COUNTRY_DIRECTORY_COUNTRY_COUNTRY_ID` FOREIGN KEY (`country`) REFERENCES `directory_country` (`country_id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `FK_WEEE_TAX_ENTITY_ID_CATALOG_PRODUCT_ENTITY_ENTITY_ID` FOREIGN KEY (`entity_id`) REFERENCES `catalog_product_entity` (`entity_id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `FK_WEEE_TAX_WEBSITE_ID_CORE_WEBSITE_WEBSITE_ID` FOREIGN KEY (`website_id`) REFERENCES `core_website` (`website_id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
+-- 限制表 `widget_instance_page`
+--
+ALTER TABLE `widget_instance_page`
+  ADD CONSTRAINT `FK_WIDGET_INSTANCE_PAGE_INSTANCE_ID_WIDGET_INSTANCE_INSTANCE_ID` FOREIGN KEY (`instance_id`) REFERENCES `widget_instance` (`instance_id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
+-- 限制表 `widget_instance_page_layout`
+--
+ALTER TABLE `widget_instance_page_layout`
+  ADD CONSTRAINT `FK_0A5D06DCEC6A6845F50E5FAAC5A1C96D` FOREIGN KEY (`layout_update_id`) REFERENCES `core_layout_update` (`layout_update_id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `FK_WIDGET_INSTANCE_PAGE_LYT_PAGE_ID_WIDGET_INSTANCE_PAGE_PAGE_ID` FOREIGN KEY (`page_id`) REFERENCES `widget_instance_page` (`page_id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
+-- 限制表 `wishlist`
+--
+ALTER TABLE `wishlist`
+  ADD CONSTRAINT `FK_WISHLIST_CUSTOMER_ID_CUSTOMER_ENTITY_ENTITY_ID` FOREIGN KEY (`customer_id`) REFERENCES `customer_entity` (`entity_id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
+-- 限制表 `wishlist_item`
+--
+ALTER TABLE `wishlist_item`
+  ADD CONSTRAINT `FK_WISHLIST_ITEM_PRODUCT_ID_CATALOG_PRODUCT_ENTITY_ENTITY_ID` FOREIGN KEY (`product_id`) REFERENCES `catalog_product_entity` (`entity_id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `FK_WISHLIST_ITEM_STORE_ID_CORE_STORE_STORE_ID` FOREIGN KEY (`store_id`) REFERENCES `core_store` (`store_id`) ON DELETE SET NULL ON UPDATE CASCADE,
+  ADD CONSTRAINT `FK_WISHLIST_ITEM_WISHLIST_ID_WISHLIST_WISHLIST_ID` FOREIGN KEY (`wishlist_id`) REFERENCES `wishlist` (`wishlist_id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
+-- 限制表 `wishlist_item_option`
+--
+ALTER TABLE `wishlist_item_option`
+  ADD CONSTRAINT `FK_A014B30B04B72DD0EAB3EECD779728D6` FOREIGN KEY (`wishlist_item_id`) REFERENCES `wishlist_item` (`wishlist_item_id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
+-- 限制表 `xmlconnect_application`
+--
+ALTER TABLE `xmlconnect_application`
+  ADD CONSTRAINT `FK_XMLCONNECT_APPLICATION_STORE_ID_CORE_STORE_STORE_ID` FOREIGN KEY (`store_id`) REFERENCES `core_store` (`store_id`) ON DELETE SET NULL ON UPDATE SET NULL;
+
+--
+-- 限制表 `xmlconnect_config_data`
+--
+ALTER TABLE `xmlconnect_config_data`
+  ADD CONSTRAINT `FK_31EE36D814216200D7C0723145AC510E` FOREIGN KEY (`application_id`) REFERENCES `xmlconnect_application` (`application_id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
+-- 限制表 `xmlconnect_history`
+--
+ALTER TABLE `xmlconnect_history`
+  ADD CONSTRAINT `FK_8F08B9513373BC19F49EE3EF8340E270` FOREIGN KEY (`application_id`) REFERENCES `xmlconnect_application` (`application_id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
+-- 限制表 `xmlconnect_notification_template`
+--
+ALTER TABLE `xmlconnect_notification_template`
+  ADD CONSTRAINT `FK_F9927C7518A907CF5C350942FD296DC3` FOREIGN KEY (`application_id`) REFERENCES `xmlconnect_application` (`application_id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
+-- 限制表 `xmlconnect_queue`
+--
+ALTER TABLE `xmlconnect_queue`
+  ADD CONSTRAINT `FK_2019AEC5FC55A516965583447CA26B14` FOREIGN KEY (`template_id`) REFERENCES `xmlconnect_notification_template` (`template_id`) ON DELETE CASCADE ON UPDATE CASCADE;
+SET FOREIGN_KEY_CHECKS=1;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
