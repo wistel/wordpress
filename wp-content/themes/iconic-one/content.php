@@ -33,7 +33,7 @@
          <?php echo get_the_date(); ?> 
          </div>
 		 <div class="adt-comment">
-		 <a class="link-comments" href="<?php  comments_link(); ?>"><?php comments_number(__('0 Comment','themonic'),__('1 Comment'),__('% Comments')); ?></a> 
+		 <a class="link-comments" href="<?php  comments_link(); ?>"><?php comments_number(__('0 Comment','themonic'),__('1 Comment','themonic'),__('% Comments','themonic')); ?></a> 
          </div>       
      </div><!-- below title meta end -->
 			

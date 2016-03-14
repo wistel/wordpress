@@ -344,36 +344,6 @@ add_action( 'template_redirect', 'themonic_content_width' );
 if ( is_admin() && isset($_GET['activated'] ) && $pagenow ==	"themes.php" )
 	wp_redirect( 'themes.php?page=iconic_one_theme_options');
 
-
-// Include the Google Analytics Tracking Code (ga.js)
-// @ http://code.google.com/apis/analytics/docs/tracking/asyncUsageGuide.html
-function google_analytics_tracking_code(){
-
-
-	if (1) { ?>
-
-		<script>
-			(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-						(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-					m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-			})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
-
-			ga('create', 'UA-71896011-1', 'auto');
-			ga('send', 'pageview');
-
-		</script>
-
-	<?php }
-}
-
-// include GA tracking code before the closing head tag
-add_action('wp_head', 'google_analytics_tracking_code');
-
-// OR include GA tracking code before the closing body tag
-// add_action('wp_footer', 'google_analytics_tracking_code');
-
 require_once( get_template_directory() . '/inc/iconic-one-options.php' );
-
-
 
 
